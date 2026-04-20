@@ -1,0 +1,1679 @@
+WARNING: This will overwrite your current data!
+Enter the path to your backup .tar.gz file: /home/ubuntu/test/backups/caava-backup-20260419-120211.tar.gz
+Preparing restoration...
+Restoring Uploads...
+Restoring Database...
+SET
+SET
+SET
+SET
+SET
+ set_config
+------------
+
+(1 row)
+
+SET
+SET
+SET
+SET
+SET
+SET
+ERROR:  relation "accounts" already exists
+ALTER TABLE
+ERROR:  relation "analytic_views" already exists
+ALTER TABLE
+ERROR:  relation "api_activity_logs" already exists
+ALTER TABLE
+ERROR:  relation "api_tokens" already exists
+ALTER TABLE
+ERROR:  relation "auth_group" already exists
+ALTER TABLE
+ERROR:  relation "auth_group_id_seq" already exists
+ERROR:  relation "auth_group_permissions" already exists
+ALTER TABLE
+ERROR:  relation "auth_group_permissions_id_seq" already exists
+ERROR:  relation "auth_permission" already exists
+ALTER TABLE
+ERROR:  relation "auth_permission_id_seq" already exists
+ERROR:  relation "changelogs" already exists
+ALTER TABLE
+ERROR:  relation "comment_reactions" already exists
+ALTER TABLE
+ERROR:  relation "cycle_issues" already exists
+ALTER TABLE
+ERROR:  relation "cycle_user_properties" already exists
+ALTER TABLE
+ERROR:  relation "cycles" already exists
+ALTER TABLE
+ERROR:  relation "deploy_boards" already exists
+ALTER TABLE
+ERROR:  relation "description_versions" already exists
+ALTER TABLE
+ERROR:  relation "descriptions" already exists
+ALTER TABLE
+ERROR:  relation "device_sessions" already exists
+ALTER TABLE
+ERROR:  relation "devices" already exists
+ALTER TABLE
+ERROR:  relation "django_celery_beat_clockedschedule" already exists
+ALTER TABLE
+ERROR:  relation "django_celery_beat_clockedschedule_id_seq" already exists
+ERROR:  relation "django_celery_beat_crontabschedule" already exists
+ALTER TABLE
+ERROR:  relation "django_celery_beat_crontabschedule_id_seq" already exists
+ERROR:  relation "django_celery_beat_intervalschedule" already exists
+ALTER TABLE
+ERROR:  relation "django_celery_beat_intervalschedule_id_seq" already exists
+ERROR:  relation "django_celery_beat_periodictask" already exists
+ALTER TABLE
+ERROR:  relation "django_celery_beat_periodictask_id_seq" already exists
+ERROR:  relation "django_celery_beat_periodictasks" already exists
+ALTER TABLE
+ERROR:  relation "django_celery_beat_solarschedule" already exists
+ALTER TABLE
+ERROR:  relation "django_celery_beat_solarschedule_id_seq" already exists
+ERROR:  relation "django_content_type" already exists
+ALTER TABLE
+ERROR:  relation "django_content_type_id_seq" already exists
+ERROR:  relation "django_migrations" already exists
+ALTER TABLE
+ERROR:  relation "django_migrations_id_seq" already exists
+ERROR:  relation "django_session" already exists
+ALTER TABLE
+ERROR:  relation "draft_issue_assignees" already exists
+ALTER TABLE
+ERROR:  relation "draft_issue_cycles" already exists
+ALTER TABLE
+ERROR:  relation "draft_issue_labels" already exists
+ALTER TABLE
+ERROR:  relation "draft_issue_modules" already exists
+ALTER TABLE
+ERROR:  relation "draft_issues" already exists
+ALTER TABLE
+ERROR:  relation "email_notification_logs" already exists
+ALTER TABLE
+ERROR:  relation "estimate_points" already exists
+ALTER TABLE
+ERROR:  relation "estimates" already exists
+ALTER TABLE
+ERROR:  relation "exporters" already exists
+ALTER TABLE
+ERROR:  relation "file_assets" already exists
+ALTER TABLE
+ERROR:  relation "github_comment_syncs" already exists
+ALTER TABLE
+ERROR:  relation "github_issue_syncs" already exists
+ALTER TABLE
+ERROR:  relation "github_repositories" already exists
+ALTER TABLE
+ERROR:  relation "github_repository_syncs" already exists
+ALTER TABLE
+ERROR:  relation "importers" already exists
+ALTER TABLE
+ERROR:  relation "instance_admins" already exists
+ALTER TABLE
+ERROR:  relation "instance_configurations" already exists
+ALTER TABLE
+ERROR:  relation "instances" already exists
+ALTER TABLE
+ERROR:  relation "intake_issues" already exists
+ALTER TABLE
+ERROR:  relation "intakes" already exists
+ALTER TABLE
+ERROR:  relation "integrations" already exists
+ALTER TABLE
+ERROR:  relation "issue_activities" already exists
+ALTER TABLE
+ERROR:  relation "issue_assignees" already exists
+ALTER TABLE
+ERROR:  relation "issue_attachments" already exists
+ALTER TABLE
+ERROR:  relation "issue_blockers" already exists
+ALTER TABLE
+ERROR:  relation "issue_comments" already exists
+ALTER TABLE
+ERROR:  relation "issue_description_versions" already exists
+ALTER TABLE
+ERROR:  relation "issue_labels" already exists
+ALTER TABLE
+ERROR:  relation "issue_links" already exists
+ALTER TABLE
+ERROR:  relation "issue_mentions" already exists
+ALTER TABLE
+ERROR:  relation "issue_reactions" already exists
+ALTER TABLE
+ERROR:  relation "issue_relations" already exists
+ALTER TABLE
+ERROR:  relation "issue_sequences" already exists
+ALTER TABLE
+ERROR:  relation "issue_subscribers" already exists
+ALTER TABLE
+ERROR:  relation "issue_types" already exists
+ALTER TABLE
+ERROR:  relation "issue_versions" already exists
+ALTER TABLE
+ERROR:  relation "issue_views" already exists
+ALTER TABLE
+ERROR:  relation "issue_votes" already exists
+ALTER TABLE
+ERROR:  relation "issues" already exists
+ALTER TABLE
+ERROR:  relation "labels" already exists
+ALTER TABLE
+ERROR:  relation "module_issues" already exists
+ALTER TABLE
+ERROR:  relation "module_links" already exists
+ALTER TABLE
+ERROR:  relation "module_members" already exists
+ALTER TABLE
+ERROR:  relation "module_user_properties" already exists
+ALTER TABLE
+ERROR:  relation "modules" already exists
+ALTER TABLE
+ERROR:  relation "notifications" already exists
+ALTER TABLE
+ERROR:  relation "page_labels" already exists
+ALTER TABLE
+ERROR:  relation "page_logs" already exists
+ALTER TABLE
+ERROR:  relation "page_versions" already exists
+ALTER TABLE
+ERROR:  relation "pages" already exists
+ALTER TABLE
+ERROR:  relation "profiles" already exists
+ALTER TABLE
+ERROR:  relation "project_deploy_boards" already exists
+ALTER TABLE
+ERROR:  relation "project_identifiers" already exists
+ALTER TABLE
+ERROR:  relation "project_identifier_id_seq" already exists
+ERROR:  relation "project_issue_types" already exists
+ALTER TABLE
+ERROR:  relation "project_member_invites" already exists
+ALTER TABLE
+ERROR:  relation "project_members" already exists
+ALTER TABLE
+ERROR:  relation "project_pages" already exists
+ALTER TABLE
+ERROR:  relation "project_public_members" already exists
+ALTER TABLE
+ERROR:  relation "project_user_properties" already exists
+ALTER TABLE
+ERROR:  relation "project_webhooks" already exists
+ALTER TABLE
+ERROR:  relation "projects" already exists
+ALTER TABLE
+ERROR:  relation "sessions" already exists
+ALTER TABLE
+ERROR:  relation "slack_project_syncs" already exists
+ALTER TABLE
+ERROR:  relation "social_login_connections" already exists
+ALTER TABLE
+ERROR:  relation "states" already exists
+ALTER TABLE
+ERROR:  relation "stickies" already exists
+ALTER TABLE
+ERROR:  relation "teams" already exists
+ALTER TABLE
+ERROR:  relation "user_favorites" already exists
+ALTER TABLE
+ERROR:  relation "users_groups" already exists
+ALTER TABLE
+ERROR:  relation "user_groups_id_seq" already exists
+ERROR:  relation "user_notification_preferences" already exists
+ALTER TABLE
+ERROR:  relation "user_recent_visits" already exists
+ALTER TABLE
+ERROR:  relation "users_user_permissions" already exists
+ALTER TABLE
+ERROR:  relation "user_user_permissions_id_seq" already exists
+ERROR:  relation "users" already exists
+ALTER TABLE
+ERROR:  relation "webhook_logs" already exists
+ALTER TABLE
+ERROR:  relation "webhooks" already exists
+ALTER TABLE
+ERROR:  relation "workspace_home_preferences" already exists
+ALTER TABLE
+ERROR:  relation "workspace_integrations" already exists
+ALTER TABLE
+ERROR:  relation "workspace_member_invites" already exists
+ALTER TABLE
+ERROR:  relation "workspace_members" already exists
+ALTER TABLE
+ERROR:  relation "workspace_themes" already exists
+ALTER TABLE
+ERROR:  relation "workspace_user_links" already exists
+ALTER TABLE
+ERROR:  relation "workspace_user_preferences" already exists
+ALTER TABLE
+ERROR:  relation "workspace_user_properties" already exists
+ALTER TABLE
+ERROR:  relation "workspaces" already exists
+ALTER TABLE
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+ERROR:  duplicate key value violates unique constraint "auth_permission_pkey"
+DETAIL:  Key (id)=(1) already exists.
+CONTEXT:  COPY auth_permission, line 1
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+ERROR:  duplicate key value violates unique constraint "django_celery_beat_crontabschedule_pkey"
+DETAIL:  Key (id)=(1) already exists.
+CONTEXT:  COPY django_celery_beat_crontabschedule, line 1
+COPY 0
+ERROR:  duplicate key value violates unique constraint "django_celery_beat_periodictask_pkey"
+DETAIL:  Key (id)=(10) already exists.
+CONTEXT:  COPY django_celery_beat_periodictask, line 1
+ERROR:  duplicate key value violates unique constraint "django_celery_beat_periodictasks_pkey"
+DETAIL:  Key (ident)=(1) already exists.
+CONTEXT:  COPY django_celery_beat_periodictasks, line 1
+COPY 0
+ERROR:  duplicate key value violates unique constraint "django_content_type_pkey"
+DETAIL:  Key (id)=(1) already exists.
+CONTEXT:  COPY django_content_type, line 1
+ERROR:  duplicate key value violates unique constraint "django_migrations_pkey"
+DETAIL:  Key (id)=(1) already exists.
+CONTEXT:  COPY django_migrations, line 1
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+ERROR:  duplicate key value violates unique constraint "file_asset_pkey"
+DETAIL:  Key (id)=(16126bde-1b12-45a8-8148-7e8e6524da57) already exists.
+CONTEXT:  COPY file_assets, line 1
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+ERROR:  duplicate key value violates unique constraint "instance_admins_pkey"
+DETAIL:  Key (id)=(b24157ce-5b6a-4c91-8dae-43a131bc89d9) already exists.
+CONTEXT:  COPY instance_admins, line 1
+ERROR:  duplicate key value violates unique constraint "instance_configurations_pkey"
+DETAIL:  Key (id)=(5416693b-cc19-41b9-9c0e-7bd86811d448) already exists.
+CONTEXT:  COPY instance_configurations, line 1
+ERROR:  duplicate key value violates unique constraint "instances_pkey"
+DETAIL:  Key (id)=(7637d6e3-903b-4e41-be80-e7931eb7dce7) already exists.
+CONTEXT:  COPY instances, line 1
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+ERROR:  duplicate key value violates unique constraint "profiles_pkey"
+DETAIL:  Key (id)=(079fbc2e-ca25-424b-bde3-c02eaf25033f) already exists.
+CONTEXT:  COPY profiles, line 1
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+ERROR:  duplicate key value violates unique constraint "sessions_pkey"
+DETAIL:  Key (session_key)=(qj9kb2ww0x01ra41e7g06pewy70600rq9p4pykjh9jt4buvpn76hvttwb7v1vmalj899lm6tdl053uv4mhy75or3eaw96zl5n3gdfyuhdnq1ltocqgpz5wu456046wwy) already exists.
+CONTEXT:  COPY sessions, line 1
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+ERROR:  duplicate key value violates unique constraint "user_notification_preferences_pkey"
+DETAIL:  Key (id)=(d062c1e2-060f-492b-b77b-5b6781e9ae79) already exists.
+CONTEXT:  COPY user_notification_preferences, line 1
+COPY 0
+ERROR:  duplicate key value violates unique constraint "user_pkey"
+DETAIL:  Key (id)=(e86a4eba-bfc2-4561-83f3-92a4b5c0ff32) already exists.
+CONTEXT:  COPY users, line 1
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+ERROR:  duplicate key value violates unique constraint "workspace_home_preferences_pkey"
+DETAIL:  Key (id)=(bc70838b-2798-4270-9efc-1f4d7a9398c0) already exists.
+CONTEXT:  COPY workspace_home_preferences, line 1
+COPY 0
+COPY 0
+ERROR:  duplicate key value violates unique constraint "workspace_member_pkey"
+DETAIL:  Key (id)=(96562399-891e-4353-b407-2df40f607592) already exists.
+CONTEXT:  COPY workspace_members, line 1
+COPY 0
+COPY 0
+ERROR:  duplicate key value violates unique constraint "workspace_user_preferences_pkey"
+DETAIL:  Key (id)=(bbbbd67b-5b50-451b-ab6e-e35658513e0b) already exists.
+CONTEXT:  COPY workspace_user_preferences, line 1
+ERROR:  duplicate key value violates unique constraint "workspace_user_properties_pkey"
+DETAIL:  Key (id)=(822940cb-972a-46bc-87ef-6bbffa7f50c9) already exists.
+CONTEXT:  COPY workspace_user_properties, line 1
+ERROR:  duplicate key value violates unique constraint "workspace_pkey"
+DETAIL:  Key (id)=(711b4727-ae72-40df-a9f8-66ffdfb85cd6) already exists.
+CONTEXT:  COPY workspaces, line 1
+ setval
+--------
+      1
+(1 row)
+
+ setval
+--------
+      1
+(1 row)
+
+ setval
+--------
+    424
+(1 row)
+
+ setval
+--------
+      1
+(1 row)
+
+ setval
+--------
+     13
+(1 row)
+
+ setval
+--------
+      1
+(1 row)
+
+ setval
+--------
+     13
+(1 row)
+
+ setval
+--------
+      1
+(1 row)
+
+ setval
+--------
+    106
+(1 row)
+
+ setval
+--------
+    162
+(1 row)
+
+ setval
+--------
+      1
+(1 row)
+
+ setval
+--------
+      1
+(1 row)
+
+ setval
+--------
+      1
+(1 row)
+
+ERROR:  multiple primary keys for table "accounts" are not allowed
+ERROR:  relation "accounts_provider_provider_account_id_daac1f10_uniq" already exists
+ERROR:  multiple primary keys for table "analytic_views" are not allowed
+ERROR:  multiple primary keys for table "api_activity_logs" are not allowed
+ERROR:  multiple primary keys for table "api_tokens" are not allowed
+ERROR:  relation "api_tokens_token_key" already exists
+ERROR:  relation "auth_group_name_key" already exists
+ERROR:  relation "auth_group_permissions_group_id_permission_id_0cd325b0_uniq" already exists
+ERROR:  multiple primary keys for table "auth_group_permissions" are not allowed
+ERROR:  multiple primary keys for table "auth_group" are not allowed
+ERROR:  relation "auth_permission_content_type_id_codename_01ab375a_uniq" already exists
+ERROR:  multiple primary keys for table "auth_permission" are not allowed
+ERROR:  multiple primary keys for table "changelogs" are not allowed
+ERROR:  relation "comment_reactions_comment_id_actor_id_reac_24dc2de6_uniq" already exists
+ERROR:  multiple primary keys for table "comment_reactions" are not allowed
+ERROR:  multiple primary keys for table "cycle_issues" are not allowed
+ERROR:  relation "cycle_issues_issue_id_cycle_id_deleted_at_93e8fecd_uniq" already exists
+ERROR:  multiple primary keys for table "cycles" are not allowed
+ERROR:  relation "cycle_user_properties_cycle_id_user_id_deleted_at_fbe00cf4_uniq" already exists
+ERROR:  multiple primary keys for table "cycle_user_properties" are not allowed
+ERROR:  relation "deploy_boards_anchor_key" already exists
+ERROR:  relation "deploy_boards_entity_name_entity_ident_800ce160_uniq" already exists
+ERROR:  multiple primary keys for table "deploy_boards" are not allowed
+ERROR:  multiple primary keys for table "description_versions" are not allowed
+ERROR:  multiple primary keys for table "descriptions" are not allowed
+ERROR:  multiple primary keys for table "device_sessions" are not allowed
+ERROR:  multiple primary keys for table "devices" are not allowed
+ERROR:  multiple primary keys for table "django_celery_beat_clockedschedule" are not allowed
+ERROR:  multiple primary keys for table "django_celery_beat_crontabschedule" are not allowed
+ERROR:  multiple primary keys for table "django_celery_beat_intervalschedule" are not allowed
+ERROR:  relation "django_celery_beat_periodictask_name_key" already exists
+ERROR:  multiple primary keys for table "django_celery_beat_periodictask" are not allowed
+ERROR:  multiple primary keys for table "django_celery_beat_periodictasks" are not allowed
+ERROR:  relation "django_celery_beat_solar_event_latitude_longitude_ba64999a_uniq" already exists
+ERROR:  multiple primary keys for table "django_celery_beat_solarschedule" are not allowed
+ERROR:  relation "django_content_type_app_label_model_76bd3d3b_uniq" already exists
+ERROR:  multiple primary keys for table "django_content_type" are not allowed
+ERROR:  multiple primary keys for table "django_migrations" are not allowed
+ERROR:  multiple primary keys for table "django_session" are not allowed
+ERROR:  relation "draft_issue_assignees_draft_issue_id_assignee__7cd49721_uniq" already exists
+ERROR:  multiple primary keys for table "draft_issue_assignees" are not allowed
+ERROR:  relation "draft_issue_cycles_draft_issue_id_cycle_id__e133e097_uniq" already exists
+ERROR:  multiple primary keys for table "draft_issue_cycles" are not allowed
+ERROR:  multiple primary keys for table "draft_issue_labels" are not allowed
+ERROR:  relation "draft_issue_modules_draft_issue_id_module_id_634e1f1a_uniq" already exists
+ERROR:  multiple primary keys for table "draft_issue_modules" are not allowed
+ERROR:  multiple primary keys for table "draft_issues" are not allowed
+ERROR:  multiple primary keys for table "email_notification_logs" are not allowed
+ERROR:  multiple primary keys for table "estimate_points" are not allowed
+ERROR:  relation "estimates_name_project_id_deleted_at_41d66639_uniq" already exists
+ERROR:  multiple primary keys for table "estimates" are not allowed
+ERROR:  multiple primary keys for table "exporters" are not allowed
+ERROR:  relation "exporters_token_key" already exists
+ERROR:  multiple primary keys for table "file_assets" are not allowed
+ERROR:  relation "github_comment_syncs_issue_sync_id_comment_id_38c82e7b_uniq" already exists
+ERROR:  multiple primary keys for table "github_comment_syncs" are not allowed
+ERROR:  multiple primary keys for table "github_issue_syncs" are not allowed
+ERROR:  relation "github_issue_syncs_repository_sync_id_issue_id_4b34427e_uniq" already exists
+ERROR:  multiple primary keys for table "github_repositories" are not allowed
+ERROR:  multiple primary keys for table "github_repository_syncs" are not allowed
+ERROR:  relation "github_repository_syncs_project_id_repository_id_0f3705e6_uniq" already exists
+ERROR:  relation "github_repository_syncs_repository_id_key" already exists
+ERROR:  multiple primary keys for table "importers" are not allowed
+ERROR:  multiple primary keys for table "intake_issues" are not allowed
+ERROR:  relation "inboxes_name_project_id_deleted_at_95043f72_uniq" already exists
+ERROR:  multiple primary keys for table "intakes" are not allowed
+ERROR:  relation "instance_admins_instance_id_user_id_2e80a466_uniq" already exists
+ERROR:  multiple primary keys for table "instance_admins" are not allowed
+ERROR:  relation "instance_configurations_key_key" already exists
+ERROR:  multiple primary keys for table "instance_configurations" are not allowed
+ERROR:  relation "instances_instance_id_key" already exists
+ERROR:  multiple primary keys for table "instances" are not allowed
+ERROR:  multiple primary keys for table "integrations" are not allowed
+ERROR:  relation "integrations_provider_key" already exists
+ERROR:  multiple primary keys for table "issue_activities" are not allowed
+ERROR:  multiple primary keys for table "issue_assignees" are not allowed
+ERROR:  relation "issue_assignees_issue_id_assignee_id_deleted_at_b2623a0e_uniq" already exists
+ERROR:  multiple primary keys for table "issue_attachments" are not allowed
+ERROR:  multiple primary keys for table "issue_blockers" are not allowed
+ERROR:  multiple primary keys for table "issue_comments" are not allowed
+ERROR:  relation "issue_comments_description_id_key" already exists
+ERROR:  multiple primary keys for table "issue_description_versions" are not allowed
+ERROR:  multiple primary keys for table "issue_labels" are not allowed
+ERROR:  multiple primary keys for table "issue_links" are not allowed
+ERROR:  relation "issue_mentions_issue_id_mention_id_deleted_at_f6ecd6ed_uniq" already exists
+ERROR:  multiple primary keys for table "issue_mentions" are not allowed
+ERROR:  multiple primary keys for table "issues" are not allowed
+ERROR:  multiple primary keys for table "project_user_properties" are not allowed
+ERROR:  relation "issue_reactions_issue_id_actor_id_reacti_7da73ced_uniq" already exists
+ERROR:  multiple primary keys for table "issue_reactions" are not allowed
+ERROR:  relation "issue_relations_issue_id_related_issue_i_cc724584_uniq" already exists
+ERROR:  multiple primary keys for table "issue_relations" are not allowed
+ERROR:  multiple primary keys for table "issue_sequences" are not allowed
+ERROR:  relation "issue_subscribers_issue_id_subscriber_id_d_587dec1a_uniq" already exists
+ERROR:  multiple primary keys for table "issue_subscribers" are not allowed
+ERROR:  multiple primary keys for table "issue_types" are not allowed
+ERROR:  relation "issue_user_properties_user_id_project_id_delet_2217dce5_uniq" already exists
+ERROR:  multiple primary keys for table "issue_versions" are not allowed
+ERROR:  multiple primary keys for table "issue_views" are not allowed
+ERROR:  relation "issue_votes_issue_id_actor_id_deleted_at_886f34e8_uniq" already exists
+ERROR:  multiple primary keys for table "issue_votes" are not allowed
+ERROR:  multiple primary keys for table "labels" are not allowed
+ERROR:  relation "module_issues_issue_id_module_id_deleted_at_f944f7c9_uniq" already exists
+ERROR:  multiple primary keys for table "module_issues" are not allowed
+ERROR:  multiple primary keys for table "module_links" are not allowed
+ERROR:  multiple primary keys for table "module_members" are not allowed
+ERROR:  relation "module_members_module_id_member_id_deleted_at_bb7a6f00_uniq" already exists
+ERROR:  multiple primary keys for table "modules" are not allowed
+ERROR:  relation "module_user_properties_module_id_user_id_delete_3269582d_uniq" already exists
+ERROR:  multiple primary keys for table "module_user_properties" are not allowed
+ERROR:  relation "modules_name_project_id_deleted_at_328e2346_uniq" already exists
+ERROR:  multiple primary keys for table "notifications" are not allowed
+ERROR:  multiple primary keys for table "page_labels" are not allowed
+ERROR:  relation "page_logs_page_id_transaction_9ab05334_uniq" already exists
+ERROR:  multiple primary keys for table "page_logs" are not allowed
+ERROR:  multiple primary keys for table "page_versions" are not allowed
+ERROR:  multiple primary keys for table "pages" are not allowed
+ERROR:  multiple primary keys for table "profiles" are not allowed
+ERROR:  relation "profiles_user_id_key" already exists
+ERROR:  relation "project_deploy_boards_anchor_key" already exists
+ERROR:  multiple primary keys for table "project_deploy_boards" are not allowed
+ERROR:  relation "project_deploy_boards_project_id_anchor_893d365a_uniq" already exists
+ERROR:  multiple primary keys for table "project_identifiers" are not allowed
+ERROR:  relation "project_identifier_project_id_key" already exists
+ERROR:  relation "project_identifiers_name_workspace_id_deleted_at_d332e701_uniq" already exists
+ERROR:  multiple primary keys for table "project_issue_types" are not allowed
+ERROR:  relation "project_issue_types_project_id_issue_type_id_2287e5dc_uniq" already exists
+ERROR:  multiple primary keys for table "project_member_invites" are not allowed
+ERROR:  multiple primary keys for table "project_members" are not allowed
+ERROR:  relation "project_members_project_id_member_id_deleted_at_0299122d_uniq" already exists
+ERROR:  multiple primary keys for table "project_pages" are not allowed
+ERROR:  relation "project_pages_project_id_page_id_deleted_at_7c80a40c_uniq" already exists
+ERROR:  multiple primary keys for table "projects" are not allowed
+ERROR:  multiple primary keys for table "project_public_members" are not allowed
+ERROR:  relation "project_public_members_project_id_member_id_del_9acd89b5_uniq" already exists
+ERROR:  multiple primary keys for table "project_webhooks" are not allowed
+ERROR:  relation "project_webhooks_project_id_webhook_id_deleted_at_dcfdb35d_uniq" already exists
+ERROR:  relation "projects_identifier_workspace_id_deleted_at_7d2fa8c1_uniq" already exists
+ERROR:  relation "projects_name_workspace_id_deleted_at_c7aa56f7_uniq" already exists
+ERROR:  multiple primary keys for table "sessions" are not allowed
+ERROR:  multiple primary keys for table "slack_project_syncs" are not allowed
+ERROR:  relation "slack_project_syncs_team_id_project_id_50a144a7_uniq" already exists
+ERROR:  multiple primary keys for table "social_login_connections" are not allowed
+ERROR:  multiple primary keys for table "states" are not allowed
+ERROR:  relation "states_name_project_id_deleted_at_02f90488_uniq" already exists
+ERROR:  multiple primary keys for table "stickies" are not allowed
+ERROR:  multiple primary keys for table "teams" are not allowed
+ERROR:  relation "teams_name_workspace_id_deleted_at_4b131aa2_uniq" already exists
+ERROR:  relation "user_email_key" already exists
+ERROR:  relation "user_favorites_entity_type_user_id_enti_22b103ff_uniq" already exists
+ERROR:  multiple primary keys for table "user_favorites" are not allowed
+ERROR:  multiple primary keys for table "users_groups" are not allowed
+ERROR:  relation "user_groups_user_id_group_id_40beef00_uniq" already exists
+ERROR:  multiple primary keys for table "user_notification_preferences" are not allowed
+ERROR:  multiple primary keys for table "users" are not allowed
+ERROR:  multiple primary keys for table "user_recent_visits" are not allowed
+ERROR:  multiple primary keys for table "users_user_permissions" are not allowed
+ERROR:  relation "user_user_permissions_user_id_permission_id_7dc6e2e0_uniq" already exists
+ERROR:  relation "user_username_key" already exists
+ERROR:  multiple primary keys for table "webhook_logs" are not allowed
+ERROR:  multiple primary keys for table "webhooks" are not allowed
+ERROR:  relation "webhooks_workspace_id_url_deleted_at_ea7a1429_uniq" already exists
+ERROR:  relation "workspace_home_preferenc_workspace_id_user_id_key_75ea36d3_uniq" already exists
+ERROR:  multiple primary keys for table "workspace_home_preferences" are not allowed
+ERROR:  multiple primary keys for table "workspace_integrations" are not allowed
+ERROR:  relation "workspace_integrations_workspace_id_integration_fa041c22_uniq" already exists
+ERROR:  multiple primary keys for table "workspace_member_invites" are not allowed
+ERROR:  relation "workspace_member_invites_email_workspace_id_delet_2f03573e_uniq" already exists
+ERROR:  multiple primary keys for table "workspace_members" are not allowed
+ERROR:  relation "workspace_members_workspace_id_member_id_d_d7bfa872_uniq" already exists
+ERROR:  multiple primary keys for table "workspaces" are not allowed
+ERROR:  relation "workspace_slug_key" already exists
+ERROR:  multiple primary keys for table "workspace_themes" are not allowed
+ERROR:  relation "workspace_themes_workspace_id_name_deleted_at_b536ffd3_uniq" already exists
+ERROR:  multiple primary keys for table "workspace_user_links" are not allowed
+ERROR:  relation "workspace_user_preferenc_workspace_id_user_id_key_79341493_uniq" already exists
+ERROR:  multiple primary keys for table "workspace_user_preferences" are not allowed
+ERROR:  relation "workspace_user_propertie_workspace_id_user_id_del_a7cf15bc_uniq" already exists
+ERROR:  multiple primary keys for table "workspace_user_properties" are not allowed
+ERROR:  relation "accounts_user_id_7f1e1f1e" already exists
+ERROR:  relation "analytic_views_created_by_id_1b3ca0a9" already exists
+ERROR:  relation "analytic_views_updated_by_id_b6d827e1" already exists
+ERROR:  relation "analytic_views_workspace_id_ca6e5c0b" already exists
+ERROR:  relation "api_activity_logs_created_by_id_7f5c4ca8" already exists
+ERROR:  relation "api_activity_logs_updated_by_id_9ba0d417" already exists
+ERROR:  relation "api_tokens_created_by_id_441e3d24" already exists
+ERROR:  relation "api_tokens_token_6211101f_like" already exists
+ERROR:  relation "api_tokens_updated_by_id_bcd544cf" already exists
+ERROR:  relation "api_tokens_user_id_2db24e1c" already exists
+ERROR:  relation "api_tokens_workspace_id_6791c7bd" already exists
+ERROR:  relation "asset_asset_idx" already exists
+ERROR:  relation "asset_entity_identifier_idx" already exists
+ERROR:  relation "asset_entity_idx" already exists
+ERROR:  relation "asset_entity_type_idx" already exists
+ERROR:  relation "auth_group_name_a6ea08ec_like" already exists
+ERROR:  relation "auth_group_permissions_group_id_b120cbf9" already exists
+ERROR:  relation "auth_group_permissions_permission_id_84c5c92e" already exists
+ERROR:  relation "auth_permission_content_type_id_2f476e4b" already exists
+ERROR:  relation "changelogs_created_by_id_16dd944a" already exists
+ERROR:  relation "changelogs_updated_by_id_e0989861" already exists
+ERROR:  relation "comment_reaction_unique_comment_actor_reaction_when_deleted_at_" already exists
+ERROR:  relation "comment_reactions_actor_id_21219e9c" already exists
+ERROR:  relation "comment_reactions_comment_id_87c59446" already exists
+ERROR:  relation "comment_reactions_created_by_id_9aeb43c4" already exists
+ERROR:  relation "comment_reactions_project_id_ab9114b4" already exists
+ERROR:  relation "comment_reactions_updated_by_id_c74c9bbd" already exists
+ERROR:  relation "comment_reactions_workspace_id_b614ca4f" already exists
+ERROR:  relation "cycle_created_by_id_78e43b79" already exists
+ERROR:  relation "cycle_issue_created_by_id_30b27539" already exists
+ERROR:  relation "cycle_issue_cycle_id_ec681215" already exists
+ERROR:  relation "cycle_issue_project_id_6ad3257a" already exists
+ERROR:  relation "cycle_issue_updated_by_id_cb4516f2" already exists
+ERROR:  relation "cycle_issue_when_deleted_at_null" already exists
+ERROR:  relation "cycle_issue_workspace_id_1d77330e" already exists
+ERROR:  relation "cycle_issues_issue_id_2d5ac97f" already exists
+ERROR:  relation "cycle_owned_by_id_5456a4d1" already exists
+ERROR:  relation "cycle_project_id_0b590349" already exists
+ERROR:  relation "cycle_updated_by_id_93baee43" already exists
+ERROR:  relation "cycle_user_properties_created_by_id_501f371c" already exists
+ERROR:  relation "cycle_user_properties_cycle_id_1f8bdf35" already exists
+ERROR:  relation "cycle_user_properties_project_id_4efc0f07" already exists
+ERROR:  relation "cycle_user_properties_unique_cycle_user_when_deleted_at_null" already exists
+ERROR:  relation "cycle_user_properties_updated_by_id_1b5ac27b" already exists
+ERROR:  relation "cycle_user_properties_user_id_9e9ef97d" already exists
+ERROR:  relation "cycle_user_properties_workspace_id_62d65d71" already exists
+ERROR:  relation "cycle_workspace_id_a199e8e1" already exists
+ERROR:  relation "deploy_board_unique_entity_name_entity_identifier_when_deleted_" already exists
+ERROR:  relation "deploy_boards_anchor_fe87f323_like" already exists
+ERROR:  relation "deploy_boards_created_by_id_149dff93" already exists
+ERROR:  relation "deploy_boards_inbox_id_ebc13d44" already exists
+ERROR:  relation "deploy_boards_project_id_cfc792a1" already exists
+ERROR:  relation "deploy_boards_updated_by_id_db7ae24f" already exists
+ERROR:  relation "deploy_boards_workspace_id_fcf03158" already exists
+ERROR:  relation "description_versions_created_by_id_6633a3de" already exists
+ERROR:  relation "description_versions_description_id_dc7f19b6" already exists
+ERROR:  relation "description_versions_project_id_1a6c9aa9" already exists
+ERROR:  relation "description_versions_updated_by_id_8b5179ae" already exists
+ERROR:  relation "description_versions_workspace_id_52857186" already exists
+ERROR:  relation "descriptions_created_by_id_b88ab399" already exists
+ERROR:  relation "descriptions_project_id_8f46180b" already exists
+ERROR:  relation "descriptions_updated_by_id_af519c4d" already exists
+ERROR:  relation "descriptions_workspace_id_767279bf" already exists
+ERROR:  relation "device_sessions_created_by_id_920a3bd5" already exists
+ERROR:  relation "device_sessions_device_id_a42b2ada" already exists
+ERROR:  relation "device_sessions_session_id_5382b02b" already exists
+ERROR:  relation "device_sessions_session_id_5382b02b_like" already exists
+ERROR:  relation "device_sessions_updated_by_id_d0bd0c76" already exists
+ERROR:  relation "devices_created_by_id_410a755b" already exists
+ERROR:  relation "devices_updated_by_id_ee20dc3c" already exists
+ERROR:  relation "devices_user_id_9a5cca49" already exists
+ERROR:  relation "django_celery_beat_periodictask_clocked_id_47a69f82" already exists
+ERROR:  relation "django_celery_beat_periodictask_crontab_id_d3cba168" already exists
+ERROR:  relation "django_celery_beat_periodictask_interval_id_a8ca27da" already exists
+ERROR:  relation "django_celery_beat_periodictask_name_265a36b7_like" already exists
+ERROR:  relation "django_celery_beat_periodictask_solar_id_a87ce72c" already exists
+ERROR:  relation "django_session_expire_date_a5c62663" already exists
+ERROR:  relation "django_session_session_key_c0390e0f_like" already exists
+ERROR:  relation "draft_issue_assignee_unique_issue_assignee_when_deleted_at_null" already exists
+ERROR:  relation "draft_issue_assignees_assignee_id_9cc52f9d" already exists
+ERROR:  relation "draft_issue_assignees_created_by_id_c25d4bde" already exists
+ERROR:  relation "draft_issue_assignees_draft_issue_id_70827be2" already exists
+ERROR:  relation "draft_issue_assignees_project_id_c87dd571" already exists
+ERROR:  relation "draft_issue_assignees_updated_by_id_16dbb5e0" already exists
+ERROR:  relation "draft_issue_assignees_workspace_id_e28a98e9" already exists
+ERROR:  relation "draft_issue_cycle_when_deleted_at_null" already exists
+ERROR:  relation "draft_issue_cycles_created_by_id_e56335c8" already exists
+ERROR:  relation "draft_issue_cycles_cycle_id_b214e11f" already exists
+ERROR:  relation "draft_issue_cycles_draft_issue_id_ed45e8a2" already exists
+ERROR:  relation "draft_issue_cycles_project_id_dc5d1ff6" already exists
+ERROR:  relation "draft_issue_cycles_updated_by_id_518a23ab" already exists
+ERROR:  relation "draft_issue_cycles_workspace_id_4fd0aa0c" already exists
+ERROR:  relation "draft_issue_labels_created_by_id_88217eef" already exists
+ERROR:  relation "draft_issue_labels_draft_issue_id_339d4c2b" already exists
+ERROR:  relation "draft_issue_labels_label_id_b9b001a5" already exists
+ERROR:  relation "draft_issue_labels_project_id_16f9ba0a" already exists
+ERROR:  relation "draft_issue_labels_updated_by_id_edac537c" already exists
+ERROR:  relation "draft_issue_labels_workspace_id_489a9873" already exists
+ERROR:  relation "draft_issue_modules_created_by_id_95ec4247" already exists
+ERROR:  relation "draft_issue_modules_draft_issue_id_eb470383" already exists
+ERROR:  relation "draft_issue_modules_module_id_4d3f477a" already exists
+ERROR:  relation "draft_issue_modules_project_id_c32eadab" already exists
+ERROR:  relation "draft_issue_modules_updated_by_id_18548965" already exists
+ERROR:  relation "draft_issue_modules_workspace_id_536c335a" already exists
+ERROR:  relation "draft_issues_created_by_id_aedba72a" already exists
+ERROR:  relation "draft_issues_estimate_point_id_9e333189" already exists
+ERROR:  relation "draft_issues_parent_id_eee6ec32" already exists
+ERROR:  relation "draft_issues_project_id_784a560c" already exists
+ERROR:  relation "draft_issues_state_id_94f28f5a" already exists
+ERROR:  relation "draft_issues_type_id_7a62fe34" already exists
+ERROR:  relation "draft_issues_updated_by_id_1ca3cd4e" already exists
+ERROR:  relation "draft_issues_workspace_id_9d8512c8" already exists
+ERROR:  relation "email_notification_logs_created_by_id_6faff587" already exists
+ERROR:  relation "email_notification_logs_receiver_id_7c7d2e13" already exists
+ERROR:  relation "email_notification_logs_triggered_by_id_b551e727" already exists
+ERROR:  relation "email_notification_logs_updated_by_id_5d99c798" already exists
+ERROR:  relation "estimate_points_created_by_id_d1b04bd9" already exists
+ERROR:  relation "estimate_points_estimate_id_4b4cb706" already exists
+ERROR:  relation "estimate_points_project_id_ba9bcb2c" already exists
+ERROR:  relation "estimate_points_updated_by_id_a1da94e1" already exists
+ERROR:  relation "estimate_points_workspace_id_96fc4f92" already exists
+ERROR:  relation "estimate_unique_name_project_when_deleted_at_null" already exists
+ERROR:  relation "estimates_created_by_id_7e401493" already exists
+ERROR:  relation "estimates_project_id_7f195a41" already exists
+ERROR:  relation "estimates_updated_by_id_b3fcfb1d" already exists
+ERROR:  relation "estimates_workspace_id_718811eb" already exists
+ERROR:  relation "exporters_created_by_id_44e1d9b3" already exists
+ERROR:  relation "exporters_initiated_by_id_d51f7552" already exists
+ERROR:  relation "exporters_token_c774aeeb_like" already exists
+ERROR:  relation "exporters_updated_by_id_d2572861" already exists
+ERROR:  relation "exporters_workspace_id_11a04317" already exists
+ERROR:  relation "fav_entity_identifier_idx" already exists
+ERROR:  relation "fav_entity_idx" already exists
+ERROR:  relation "fav_entity_type_idx" already exists
+ERROR:  relation "file_asset_created_by_id_966942a0" already exists
+ERROR:  relation "file_asset_updated_by_id_d6aaf4f0" already exists
+ERROR:  relation "file_assets_comment_id_35d4ecaf" already exists
+ERROR:  relation "file_assets_draft_issue_id_52633145" already exists
+ERROR:  relation "file_assets_issue_id_cfe87d6c" already exists
+ERROR:  relation "file_assets_page_id_64c753d1" already exists
+ERROR:  relation "file_assets_project_id_ebd5c0d8" already exists
+ERROR:  relation "file_assets_user_id_ce1818dc" already exists
+ERROR:  relation "file_assets_workspace_id_fa50b9c5" already exists
+ERROR:  relation "github_comment_syncs_comment_id_6feec6d1" already exists
+ERROR:  relation "github_comment_syncs_created_by_id_b1ef2517" already exists
+ERROR:  relation "github_comment_syncs_issue_sync_id_5e738eb5" already exists
+ERROR:  relation "github_comment_syncs_project_id_6d199ace" already exists
+ERROR:  relation "github_comment_syncs_updated_by_id_bb05c066" already exists
+ERROR:  relation "github_comment_syncs_workspace_id_b54528c8" already exists
+ERROR:  relation "github_issue_syncs_created_by_id_d02b7c56" already exists
+ERROR:  relation "github_issue_syncs_issue_id_450cb083" already exists
+ERROR:  relation "github_issue_syncs_project_id_4609ad0c" already exists
+ERROR:  relation "github_issue_syncs_repository_sync_id_ba0d4de4" already exists
+ERROR:  relation "github_issue_syncs_updated_by_id_e9cd6f86" already exists
+ERROR:  relation "github_issue_syncs_workspace_id_eae020ad" already exists
+ERROR:  relation "github_repositories_created_by_id_104fa685" already exists
+ERROR:  relation "github_repositories_project_id_65c546bb" already exists
+ERROR:  relation "github_repositories_updated_by_id_8aa4d772" already exists
+ERROR:  relation "github_repositories_workspace_id_c4de7326" already exists
+ERROR:  relation "github_repository_syncs_actor_id_1fa689fe" already exists
+ERROR:  relation "github_repository_syncs_created_by_id_0df94495" already exists
+ERROR:  relation "github_repository_syncs_label_id_eb1e9bd7" already exists
+ERROR:  relation "github_repository_syncs_project_id_e7e8291e" already exists
+ERROR:  relation "github_repository_syncs_updated_by_id_07e9d065" already exists
+ERROR:  relation "github_repository_syncs_workspace_id_4a22a8b8" already exists
+ERROR:  relation "github_repository_syncs_workspace_integration_id_62858398" already exists
+ERROR:  relation "importers_created_by_id_7dd06433" already exists
+ERROR:  relation "importers_initiated_by_id_3cddbd23" already exists
+ERROR:  relation "importers_project_id_1f8b43ef" already exists
+ERROR:  relation "importers_token_id_c951e89f" already exists
+ERROR:  relation "importers_updated_by_id_3915139e" already exists
+ERROR:  relation "importers_workspace_id_795b8985" already exists
+ERROR:  relation "inbox_issues_created_by_id_483bce13" already exists
+ERROR:  relation "inbox_issues_duplicate_to_id_6cb8d961" already exists
+ERROR:  relation "inbox_issues_inbox_id_444b05b9" already exists
+ERROR:  relation "inbox_issues_issue_id_7d74b224" already exists
+ERROR:  relation "inbox_issues_project_id_5117a70b" already exists
+ERROR:  relation "inbox_issues_updated_by_id_d1b2b70f" already exists
+ERROR:  relation "inbox_issues_workspace_id_4a61a7bd" already exists
+ERROR:  relation "inboxes_created_by_id_9f1cf5ec" already exists
+ERROR:  relation "inboxes_project_id_a0135c66" already exists
+ERROR:  relation "inboxes_updated_by_id_69b7b3ae" already exists
+ERROR:  relation "inboxes_workspace_id_d6178865" already exists
+ERROR:  relation "instance_admins_created_by_id_7f4e03b4" already exists
+ERROR:  relation "instance_admins_instance_id_66d1ba73" already exists
+ERROR:  relation "instance_admins_updated_by_id_b7800403" already exists
+ERROR:  relation "instance_admins_user_id_cc6e9b62" already exists
+ERROR:  relation "instance_configurations_created_by_id_e683f3e5" already exists
+ERROR:  relation "instance_configurations_key_3eb64d36_like" already exists
+ERROR:  relation "instance_configurations_updated_by_id_f0d7542e" already exists
+ERROR:  relation "instances_created_by_id_c76e92ef" already exists
+ERROR:  relation "instances_instance_id_cf688621_like" already exists
+ERROR:  relation "instances_updated_by_id_cce8fcdf" already exists
+ERROR:  relation "intake_unique_name_project_when_deleted_at_null" already exists
+ERROR:  relation "integrations_created_by_id_0b6edd52" already exists
+ERROR:  relation "integrations_provider_6537a106_like" already exists
+ERROR:  relation "integrations_updated_by_id_d6d00d15" already exists
+ERROR:  relation "issue_activity_actor_id_52fdd42d" already exists
+ERROR:  relation "issue_activity_created_by_id_49516e3d" already exists
+ERROR:  relation "issue_activity_issue_comment_id_701f3c3c" already exists
+ERROR:  relation "issue_activity_issue_id_807fbde4" already exists
+ERROR:  relation "issue_activity_project_id_d0ac2ccf" already exists
+ERROR:  relation "issue_activity_updated_by_id_0075f9bd" already exists
+ERROR:  relation "issue_activity_workspace_id_65acaf73" already exists
+ERROR:  relation "issue_assignee_assignee_id_50f5c04e" already exists
+ERROR:  relation "issue_assignee_created_by_id_f693d43b" already exists
+ERROR:  relation "issue_assignee_issue_id_72da08db" already exists
+ERROR:  relation "issue_assignee_project_id_61c18bf2" already exists
+ERROR:  relation "issue_assignee_unique_issue_assignee_when_deleted_at_null" already exists
+ERROR:  relation "issue_assignee_updated_by_id_c54088aa" already exists
+ERROR:  relation "issue_assignee_workspace_id_9aad55b7" already exists
+ERROR:  relation "issue_attachments_created_by_id_87be05bb" already exists
+ERROR:  relation "issue_attachments_issue_id_0faf88bf" already exists
+ERROR:  relation "issue_attachments_project_id_a95fe706" already exists
+ERROR:  relation "issue_attachments_updated_by_id_47dceec1" already exists
+ERROR:  relation "issue_attachments_workspace_id_c456a532" already exists
+ERROR:  relation "issue_blocker_block_id_5d15a701" already exists
+ERROR:  relation "issue_blocker_blocked_by_id_a138af71" already exists
+ERROR:  relation "issue_blocker_created_by_id_0d19f6ea" already exists
+ERROR:  relation "issue_blocker_project_id_380bd100" already exists
+ERROR:  relation "issue_blocker_updated_by_id_4af87d63" already exists
+ERROR:  relation "issue_blocker_workspace_id_419a1c71" already exists
+ERROR:  relation "issue_comment_actor_id_d312315b" already exists
+ERROR:  relation "issue_comment_created_by_id_0765f239" already exists
+ERROR:  relation "issue_comment_issue_id_d0195e35" already exists
+ERROR:  relation "issue_comment_project_id_db37c105" already exists
+ERROR:  relation "issue_comment_updated_by_id_96cfb86e" already exists
+ERROR:  relation "issue_comment_workspace_id_3f7969ec" already exists
+ERROR:  relation "issue_comments_parent_id_d8db10b1" already exists
+ERROR:  relation "issue_created_by_id_8f0ae62b" already exists
+ERROR:  relation "issue_description_versions_created_by_id_3f7e62a1" already exists
+ERROR:  relation "issue_description_versions_issue_id_c8baa13e" already exists
+ERROR:  relation "issue_description_versions_owned_by_id_0effe4d0" already exists
+ERROR:  relation "issue_description_versions_project_id_536b23ef" already exists
+ERROR:  relation "issue_description_versions_updated_by_id_6530365d" already exists
+ERROR:  relation "issue_description_versions_workspace_id_88e930f9" already exists
+ERROR:  relation "issue_label_created_by_id_94075315" already exists
+ERROR:  relation "issue_label_issue_id_0f252e52" already exists
+ERROR:  relation "issue_label_label_id_5f22777f" already exists
+ERROR:  relation "issue_label_project_id_eaa2ba39" already exists
+ERROR:  relation "issue_label_updated_by_id_a97a6733" already exists
+ERROR:  relation "issue_label_workspace_id_b5b1faac" already exists
+ERROR:  relation "issue_links_created_by_id_5e4aa092" already exists
+ERROR:  relation "issue_links_issue_id_7032881f" already exists
+ERROR:  relation "issue_links_project_id_63d6e9ce" already exists
+ERROR:  relation "issue_links_updated_by_id_a771cce4" already exists
+ERROR:  relation "issue_links_workspace_id_ff9038e7" already exists
+ERROR:  relation "issue_mention_unique_issue_mention_when_deleted_at_null" already exists
+ERROR:  relation "issue_mentions_created_by_id_eb44759e" already exists
+ERROR:  relation "issue_mentions_issue_id_d8821107" already exists
+ERROR:  relation "issue_mentions_mention_id_cf1b9346" already exists
+ERROR:  relation "issue_mentions_project_id_d0cccdf5" already exists
+ERROR:  relation "issue_mentions_updated_by_id_c62106d3" already exists
+ERROR:  relation "issue_mentions_workspace_id_4ca59d05" already exists
+ERROR:  relation "issue_parent_id_ce8d76ba" already exists
+ERROR:  relation "issue_project_id_fea0fc80" already exists
+ERROR:  relation "issue_property_created_by_id_8e92131c" already exists
+ERROR:  relation "issue_property_project_id_30e7de7b" already exists
+ERROR:  relation "issue_property_updated_by_id_ff158d4d" already exists
+ERROR:  relation "issue_property_user_id_0b1d1c8f" already exists
+ERROR:  relation "issue_property_workspace_id_17860d65" already exists
+ERROR:  relation "issue_reaction_unique_issue_actor_reaction_when_deleted_at_null" already exists
+ERROR:  relation "issue_reactions_actor_id_5f5b8303" already exists
+ERROR:  relation "issue_reactions_created_by_id_3953b7de" already exists
+ERROR:  relation "issue_reactions_issue_id_2c324bae" already exists
+ERROR:  relation "issue_reactions_project_id_8708ecaf" already exists
+ERROR:  relation "issue_reactions_updated_by_id_4069af90" already exists
+ERROR:  relation "issue_reactions_workspace_id_bd8d7550" already exists
+ERROR:  relation "issue_relation_unique_issue_related_issue_when_deleted_at_null" already exists
+ERROR:  relation "issue_relations_created_by_id_854d07e7" already exists
+ERROR:  relation "issue_relations_issue_id_e1db6f72" already exists
+ERROR:  relation "issue_relations_project_id_15350161" already exists
+ERROR:  relation "issue_relations_related_issue_id_e1ea44a7" already exists
+ERROR:  relation "issue_relations_updated_by_id_3dfa850f" already exists
+ERROR:  relation "issue_relations_workspace_id_00b50e90" already exists
+ERROR:  relation "issue_sequence_created_by_id_59270506" already exists
+ERROR:  relation "issue_sequence_issue_id_16e9f00f" already exists
+ERROR:  relation "issue_sequence_project_id_ce882e85" already exists
+ERROR:  relation "issue_sequence_updated_by_id_310c8dd3" already exists
+ERROR:  relation "issue_sequence_workspace_id_0d3f0fd4" already exists
+ERROR:  relation "issue_sequences_sequence_2c9458d4" already exists
+ERROR:  relation "issue_state_id_1a65560d" already exists
+ERROR:  relation "issue_subscriber_unique_issue_subscriber_when_deleted_at_null" already exists
+ERROR:  relation "issue_subscribers_created_by_id_b6ea0157" already exists
+ERROR:  relation "issue_subscribers_issue_id_85cf2093" already exists
+ERROR:  relation "issue_subscribers_project_id_cf48d75f" already exists
+ERROR:  relation "issue_subscribers_subscriber_id_2d89c988" already exists
+ERROR:  relation "issue_subscribers_updated_by_id_1bfc2f55" already exists
+ERROR:  relation "issue_subscribers_workspace_id_96afa91f" already exists
+ERROR:  relation "issue_types_created_by_id_48764f53" already exists
+ERROR:  relation "issue_types_updated_by_id_4919203b" already exists
+ERROR:  relation "issue_types_workspace_id_591c6f3b" already exists
+ERROR:  relation "issue_updated_by_id_f1261863" already exists
+ERROR:  relation "issue_versions_activity_id_b1872ffc" already exists
+ERROR:  relation "issue_versions_created_by_id_a782830a" already exists
+ERROR:  relation "issue_versions_issue_id_25cf001c" already exists
+ERROR:  relation "issue_versions_owned_by_id_7586378d" already exists
+ERROR:  relation "issue_versions_project_id_a069ad03" already exists
+ERROR:  relation "issue_versions_updated_by_id_dcae6dd2" already exists
+ERROR:  relation "issue_versions_workspace_id_b8c48b7c" already exists
+ERROR:  relation "issue_views_created_by_id_0d2e456b" already exists
+ERROR:  relation "issue_views_owned_by_id_5e261e5d" already exists
+ERROR:  relation "issue_views_project_id_55ee009f" already exists
+ERROR:  relation "issue_views_updated_by_id_28cd9870" already exists
+ERROR:  relation "issue_views_workspace_id_8785e03d" already exists
+ERROR:  relation "issue_vote_unique_issue_actor_when_deleted_at_null" already exists
+ERROR:  relation "issue_votes_actor_id_525cab61" already exists
+ERROR:  relation "issue_votes_created_by_id_86adcf5c" already exists
+ERROR:  relation "issue_votes_issue_id_07a61ecb" already exists
+ERROR:  relation "issue_votes_project_id_b649f55b" already exists
+ERROR:  relation "issue_votes_updated_by_id_9e2a6cdc" already exists
+ERROR:  relation "issue_votes_workspace_id_a3e91a6b" already exists
+ERROR:  relation "issue_workspace_id_c84878c1" already exists
+ERROR:  relation "issues_estimate_point_id_a6822abe" already exists
+ERROR:  relation "issues_type_id_a4710b19" already exists
+ERROR:  relation "label_created_by_id_aa6ffcfa" already exists
+ERROR:  relation "label_parent_id_7a853296" already exists
+ERROR:  relation "label_project_id_90e0f1a2" already exists
+ERROR:  relation "label_updated_by_id_894a5464" already exists
+ERROR:  relation "label_workspace_id_c4c9ae5a" already exists
+ERROR:  relation "module_created_by_id_ff7a5866" already exists
+ERROR:  relation "module_draft_issue_unique_issue_module_when_deleted_at_null" already exists
+ERROR:  relation "module_issue_unique_issue_module_when_deleted_at_null" already exists
+ERROR:  relation "module_issues_created_by_id_de0b995a" already exists
+ERROR:  relation "module_issues_issue_id_7caa908b" already exists
+ERROR:  relation "module_issues_module_id_74e0ed5a" already exists
+ERROR:  relation "module_issues_project_id_59836d1e" already exists
+ERROR:  relation "module_issues_updated_by_id_46dbf724" already exists
+ERROR:  relation "module_issues_workspace_id_6bf85201" already exists
+ERROR:  relation "module_lead_id_04966630" already exists
+ERROR:  relation "module_links_created_by_id_eaf6492f" already exists
+ERROR:  relation "module_links_module_id_0fda3f8a" already exists
+ERROR:  relation "module_links_project_id_f720bb79" already exists
+ERROR:  relation "module_links_updated_by_id_4da419e7" already exists
+ERROR:  relation "module_links_workspace_id_0521c11c" already exists
+ERROR:  relation "module_member_created_by_id_2ed84a65" already exists
+ERROR:  relation "module_member_member_id_928f473e" already exists
+ERROR:  relation "module_member_module_id_f00be7ef" already exists
+ERROR:  relation "module_member_project_id_ec8d2376" already exists
+ERROR:  relation "module_member_unique_module_member_when_deleted_at_null" already exists
+ERROR:  relation "module_member_updated_by_id_a9046438" already exists
+ERROR:  relation "module_member_workspace_id_f2f23c73" already exists
+ERROR:  relation "module_project_id_da84b04f" already exists
+ERROR:  relation "module_unique_name_project_when_deleted_at_null" already exists
+ERROR:  relation "module_updated_by_id_72ab6d5c" already exists
+ERROR:  relation "module_user_properties_created_by_id_bdd98440" already exists
+ERROR:  relation "module_user_properties_module_id_e95b158a" already exists
+ERROR:  relation "module_user_properties_project_id_3c5a4972" already exists
+ERROR:  relation "module_user_properties_unique_module_user_when_deleted_at_null" already exists
+ERROR:  relation "module_user_properties_updated_by_id_b7dafc77" already exists
+ERROR:  relation "module_user_properties_user_id_e83a1c2c" already exists
+ERROR:  relation "module_user_properties_workspace_id_ddaf807c" already exists
+ERROR:  relation "module_workspace_id_0a826fef" already exists
+ERROR:  relation "notif_entity_identifier_idx" already exists
+ERROR:  relation "notif_entity_idx" already exists
+ERROR:  relation "notif_entity_lookup_idx" already exists
+ERROR:  relation "notif_entity_name_idx" already exists
+ERROR:  relation "notif_read_at_idx" already exists
+ERROR:  relation "notif_receiver_entity_idx" already exists
+ERROR:  relation "notif_receiver_sender_idx" already exists
+ERROR:  relation "notif_receiver_state_idx" already exists
+ERROR:  relation "notif_receiver_status_idx" already exists
+ERROR:  relation "notifications_created_by_id_b9c3f81b" already exists
+ERROR:  relation "notifications_project_id_e4d4f192" already exists
+ERROR:  relation "notifications_receiver_id_b708b2b0" already exists
+ERROR:  relation "notifications_triggered_by_id_31cdec21" already exists
+ERROR:  relation "notifications_updated_by_id_8a651e96" already exists
+ERROR:  relation "notifications_workspace_id_b2f09ef7" already exists
+ERROR:  relation "page_labels_created_by_id_fbd942c0" already exists
+ERROR:  relation "page_labels_label_id_05958e53" already exists
+ERROR:  relation "page_labels_page_id_0e6cdb3d" already exists
+ERROR:  relation "page_labels_updated_by_id_d9fddbff" already exists
+ERROR:  relation "page_labels_workspace_id_078bb01c" already exists
+ERROR:  relation "page_logs_created_by_id_4a295aec" already exists
+ERROR:  relation "page_logs_page_id_0e0d747d" already exists
+ERROR:  relation "page_logs_updated_by_id_1995190b" already exists
+ERROR:  relation "page_logs_workspace_id_be7bde64" already exists
+ERROR:  relation "page_versions_created_by_id_d660b13b" already exists
+ERROR:  relation "page_versions_owned_by_id_6d9143db" already exists
+ERROR:  relation "page_versions_page_id_c46471da" already exists
+ERROR:  relation "page_versions_updated_by_id_72d5e579" already exists
+ERROR:  relation "page_versions_workspace_id_8330a200" already exists
+ERROR:  relation "pagelog_entity_id_idx" already exists
+ERROR:  relation "pagelog_entity_name_idx" already exists
+ERROR:  relation "pagelog_entity_type_idx" already exists
+ERROR:  relation "pagelog_name_id_idx" already exists
+ERROR:  relation "pagelog_type_id_idx" already exists
+ERROR:  relation "pages_created_by_id_d109a675" already exists
+ERROR:  relation "pages_owned_by_id_bf50485f" already exists
+ERROR:  relation "pages_parent_id_8b823409" already exists
+ERROR:  relation "pages_updated_by_id_6c42de3e" already exists
+ERROR:  relation "pages_workspace_id_c6c51010" already exists
+ERROR:  relation "project_created_by_id_6cc13408" already exists
+ERROR:  relation "project_default_assignee_id_6ba45f90" already exists
+ERROR:  relation "project_deploy_boards_anchor_b61b8817_like" already exists
+ERROR:  relation "project_deploy_boards_created_by_id_2ea72f98" already exists
+ERROR:  relation "project_deploy_boards_inbox_id_a6a75525" already exists
+ERROR:  relation "project_deploy_boards_project_id_49d887b2" already exists
+ERROR:  relation "project_deploy_boards_updated_by_id_290eb99e" already exists
+ERROR:  relation "project_deploy_boards_workspace_id_cd92f164" already exists
+ERROR:  relation "project_identifier_created_by_id_2b6f273a" already exists
+ERROR:  relation "project_identifier_updated_by_id_1a00e2a0" already exists
+ERROR:  relation "project_identifier_workspace_id_6024b517" already exists
+ERROR:  relation "project_identifiers_name_6ca8a4b0" already exists
+ERROR:  relation "project_identifiers_name_6ca8a4b0_like" already exists
+ERROR:  relation "project_issue_type_unique_project_issue_type_when_deleted_at_nu" already exists
+ERROR:  relation "project_issue_types_created_by_id_049cecfd" already exists
+ERROR:  relation "project_issue_types_issue_type_id_9494de9f" already exists
+ERROR:  relation "project_issue_types_project_id_ef6e52e4" already exists
+ERROR:  relation "project_issue_types_updated_by_id_b5998397" already exists
+ERROR:  relation "project_issue_types_workspace_id_ace3c5b5" already exists
+ERROR:  relation "project_member_created_by_id_8b363306" already exists
+ERROR:  relation "project_member_invite_created_by_id_a87df45c" already exists
+ERROR:  relation "project_member_invite_project_id_8fb7750e" already exists
+ERROR:  relation "project_member_invite_updated_by_id_5aa55c96" already exists
+ERROR:  relation "project_member_invite_workspace_id_64e2dc4c" already exists
+ERROR:  relation "project_member_member_id_9d6b126b" already exists
+ERROR:  relation "project_member_project_id_11ea1a9e" already exists
+ERROR:  relation "project_member_unique_project_member_when_deleted_at_null" already exists
+ERROR:  relation "project_member_updated_by_id_cf6aaac4" already exists
+ERROR:  relation "project_member_workspace_id_88bb9a97" already exists
+ERROR:  relation "project_page_unique_project_page_when_deleted_at_null" already exists
+ERROR:  relation "project_pages_created_by_id_b9d02062" already exists
+ERROR:  relation "project_pages_page_id_a0f54439" already exists
+ERROR:  relation "project_pages_project_id_376ba35a" already exists
+ERROR:  relation "project_pages_updated_by_id_b80bf0f4" already exists
+ERROR:  relation "project_pages_workspace_id_13ed9e73" already exists
+ERROR:  relation "project_project_lead_id_caf8e353" already exists
+ERROR:  relation "project_public_member_unique_project_member_when_deleted_at_nul" already exists
+ERROR:  relation "project_public_members_created_by_id_c4c7c776" already exists
+ERROR:  relation "project_public_members_member_id_52f257f9" already exists
+ERROR:  relation "project_public_members_project_id_2dfd893d" already exists
+ERROR:  relation "project_public_members_updated_by_id_c3e4d675" already exists
+ERROR:  relation "project_public_members_workspace_id_ebfce110" already exists
+ERROR:  relation "project_unique_identifier_workspace_when_deleted_at_null" already exists
+ERROR:  relation "project_unique_name_workspace_when_deleted_at_null" already exists
+ERROR:  relation "project_updated_by_id_fe290525" already exists
+ERROR:  relation "project_user_property_unique_user_project_when_deleted_at_null" already exists
+ERROR:  relation "project_webhook_unique_project_webhook_when_deleted_at_null" already exists
+ERROR:  relation "project_webhooks_created_by_id_c3e4bfa3" already exists
+ERROR:  relation "project_webhooks_project_id_bec3cf8c" already exists
+ERROR:  relation "project_webhooks_updated_by_id_a0183aeb" already exists
+ERROR:  relation "project_webhooks_webhook_id_da27c6a7" already exists
+ERROR:  relation "project_webhooks_workspace_id_429ebf05" already exists
+ERROR:  relation "project_workspace_id_01764ff9" already exists
+ERROR:  relation "projects_cover_image_asset_id_e6636b92" already exists
+ERROR:  relation "projects_default_state_id_f13e8b95" already exists
+ERROR:  relation "projects_estimate_id_85c7b2ac" already exists
+ERROR:  relation "projects_identifier_3267ade8" already exists
+ERROR:  relation "projects_identifier_3267ade8_like" already exists
+ERROR:  relation "sessions_expire_date_16e4c444" already exists
+ERROR:  relation "sessions_session_key_58f9471b_like" already exists
+ERROR:  relation "sessions_user_id_05e26f4a" already exists
+ERROR:  relation "sessions_user_id_05e26f4a_like" already exists
+ERROR:  relation "slack_project_syncs_created_by_id_ec405a17" already exists
+ERROR:  relation "slack_project_syncs_project_id_016dc792" already exists
+ERROR:  relation "slack_project_syncs_updated_by_id_152eb3b5" already exists
+ERROR:  relation "slack_project_syncs_workspace_id_d1822b06" already exists
+ERROR:  relation "slack_project_syncs_workspace_integration_id_d89c9b40" already exists
+ERROR:  relation "social_login_connection_created_by_id_7ca2ef50" already exists
+ERROR:  relation "social_login_connection_updated_by_id_c13deb42" already exists
+ERROR:  relation "social_login_connection_user_id_0e26c0c5" already exists
+ERROR:  relation "state_created_by_id_ff51a50d" already exists
+ERROR:  relation "state_project_id_23a65fd6" already exists
+ERROR:  relation "state_slug_bab0af35" already exists
+ERROR:  relation "state_slug_bab0af35_like" already exists
+ERROR:  relation "state_unique_name_project_when_deleted_at_null" already exists
+ERROR:  relation "state_updated_by_id_be298453" already exists
+ERROR:  relation "state_workspace_id_2293282d" already exists
+ERROR:  relation "stickies_created_by_id_f72e05c4" already exists
+ERROR:  relation "stickies_owner_id_6ee3be2b" already exists
+ERROR:  relation "stickies_updated_by_id_d660f1fb" already exists
+ERROR:  relation "stickies_workspace_id_0094496a" already exists
+ERROR:  relation "team_created_by_id_725a9101" already exists
+ERROR:  relation "team_unique_name_workspace_when_deleted_at_null" already exists
+ERROR:  relation "team_updated_by_id_79bb36f2" already exists
+ERROR:  relation "team_workspace_id_1d56407f" already exists
+ERROR:  relation "unique_name_when_project_null_and_not_deleted" already exists
+ERROR:  relation "unique_name_workspace_when_deleted_at_null" already exists
+ERROR:  relation "unique_project_name_when_not_deleted" already exists
+ERROR:  relation "user_email_54dc62b2_like" already exists
+ERROR:  relation "user_favorite_unique_entity_type_entity_identifier_user_when_de" already exists
+ERROR:  relation "user_favorites_created_by_id_dc025309" already exists
+ERROR:  relation "user_favorites_parent_id_550512e4" already exists
+ERROR:  relation "user_favorites_project_id_359b527f" already exists
+ERROR:  relation "user_favorites_updated_by_id_a1a5ac4a" already exists
+ERROR:  relation "user_favorites_user_id_cea7e2d2" already exists
+ERROR:  relation "user_favorites_workspace_id_aa90f680" already exists
+ERROR:  relation "user_groups_group_id_b76f8aba" already exists
+ERROR:  relation "user_groups_user_id_abaea130" already exists
+ERROR:  relation "user_notification_preferences_created_by_id_54dc743a" already exists
+ERROR:  relation "user_notification_preferences_project_id_e0ca17f8" already exists
+ERROR:  relation "user_notification_preferences_updated_by_id_eb70a86d" already exists
+ERROR:  relation "user_notification_preferences_user_id_9dccc056" already exists
+ERROR:  relation "user_notification_preferences_workspace_id_a2321c58" already exists
+ERROR:  relation "user_recent_visits_created_by_id_a655b75f" already exists
+ERROR:  relation "user_recent_visits_project_id_e5eecf27" already exists
+ERROR:  relation "user_recent_visits_updated_by_id_42b12ef2" already exists
+ERROR:  relation "user_recent_visits_user_id_f5153288" already exists
+ERROR:  relation "user_recent_visits_workspace_id_362a4e80" already exists
+ERROR:  relation "user_user_permissions_permission_id_9deb68a3" already exists
+ERROR:  relation "user_user_permissions_user_id_ed4a47ea" already exists
+ERROR:  relation "user_username_cf016618_like" already exists
+ERROR:  relation "users_avatar_asset_id_50fa2043" already exists
+ERROR:  relation "users_cover_image_asset_id_b9679cbc" already exists
+ERROR:  relation "webhook_logs_created_by_id_71e7bc38" already exists
+ERROR:  relation "webhook_logs_updated_by_id_3d9bad04" already exists
+ERROR:  relation "webhook_logs_workspace_id_ffcd0e31" already exists
+ERROR:  relation "webhook_url_unique_url_when_deleted_at_null" already exists
+ERROR:  relation "webhooks_created_by_id_25aca1b0" already exists
+ERROR:  relation "webhooks_updated_by_id_ea35154e" already exists
+ERROR:  relation "webhooks_workspace_id_da5865d7" already exists
+ERROR:  relation "workspace_created_by_id_10ad894e" already exists
+ERROR:  relation "workspace_home_preferences_created_by_id_f31fc163" already exists
+ERROR:  relation "workspace_home_preferences_updated_by_id_14ed118a" already exists
+ERROR:  relation "workspace_home_preferences_user_id_4087938d" already exists
+ERROR:  relation "workspace_home_preferences_workspace_id_b49f76e0" already exists
+ERROR:  relation "workspace_integrations_actor_id_21619aa1" already exists
+ERROR:  relation "workspace_integrations_api_token_id_bdb1759b" already exists
+ERROR:  relation "workspace_integrations_created_by_id_37639c73" already exists
+ERROR:  relation "workspace_integrations_integration_id_6cb0aace" already exists
+ERROR:  relation "workspace_integrations_updated_by_id_fce01dcb" already exists
+ERROR:  relation "workspace_integrations_workspace_id_27ebeb6b" already exists
+ERROR:  relation "workspace_member_created_by_id_8dc8b040" already exists
+ERROR:  relation "workspace_member_invite_created_by_id_082f21d3" already exists
+ERROR:  relation "workspace_member_invite_unique_email_workspace_when_deleted_at_" already exists
+ERROR:  relation "workspace_member_invite_updated_by_id_d31a9c7f" already exists
+ERROR:  relation "workspace_member_invite_workspace_id_d935b364" already exists
+ERROR:  relation "workspace_member_member_id_824f5497" already exists
+ERROR:  relation "workspace_member_unique_workspace_member_when_deleted_at_null" already exists
+ERROR:  relation "workspace_member_updated_by_id_1cec0062" already exists
+ERROR:  relation "workspace_member_workspace_id_33f66d4b" already exists
+ERROR:  relation "workspace_owner_id_60a8bafc" already exists
+ERROR:  relation "workspace_slug_4d89d459_like" already exists
+ERROR:  relation "workspace_theme_unique_workspace_name_when_deleted_at_null" already exists
+ERROR:  relation "workspace_themes_actor_id_0e94172e" already exists
+ERROR:  relation "workspace_themes_created_by_id_676e2655" already exists
+ERROR:  relation "workspace_themes_updated_by_id_bba863fe" already exists
+ERROR:  relation "workspace_themes_workspace_id_d1bffad8" already exists
+ERROR:  relation "workspace_updated_by_id_09d249ed" already exists
+ERROR:  relation "workspace_user_home_preferences_unique_workspace_user_key_when_" already exists
+ERROR:  relation "workspace_user_links_created_by_id_b9ce7a5d" already exists
+ERROR:  relation "workspace_user_links_owner_id_37d99444" already exists
+ERROR:  relation "workspace_user_links_project_id_045e0d53" already exists
+ERROR:  relation "workspace_user_links_updated_by_id_bd0b017f" already exists
+ERROR:  relation "workspace_user_links_workspace_id_1b0a8e22" already exists
+ERROR:  relation "workspace_user_preferences_created_by_id_2d566570" already exists
+ERROR:  relation "workspace_user_preferences_unique_workspace_user_key_when_delet" already exists
+ERROR:  relation "workspace_user_preferences_updated_by_id_65fed266" already exists
+ERROR:  relation "workspace_user_preferences_user_id_0ba5007a" already exists
+ERROR:  relation "workspace_user_preferences_workspace_id_a345adde" already exists
+ERROR:  relation "workspace_user_properties_created_by_id_6d8d1c4e" already exists
+ERROR:  relation "workspace_user_properties_unique_workspace_user_when_deleted_at" already exists
+ERROR:  relation "workspace_user_properties_updated_by_id_910a2cc5" already exists
+ERROR:  relation "workspace_user_properties_user_id_b1079e07" already exists
+ERROR:  relation "workspace_user_properties_workspace_id_1dc3e2a6" already exists
+ERROR:  relation "workspaces_logo_asset_id_a784bb00" already exists
+ERROR:  constraint "accounts_user_id_7f1e1f1e_fk_users_id" for relation "accounts" already exists
+ERROR:  constraint "analytic_views_created_by_id_1b3ca0a9_fk_users_id" for relation "analytic_views" already exists
+ERROR:  constraint "analytic_views_updated_by_id_b6d827e1_fk_users_id" for relation "analytic_views" already exists
+ERROR:  constraint "analytic_views_workspace_id_ca6e5c0b_fk_workspaces_id" for relation "analytic_views" already exists
+ERROR:  constraint "api_activity_logs_created_by_id_7f5c4ca8_fk_users_id" for relation "api_activity_logs" already exists
+ERROR:  constraint "api_activity_logs_updated_by_id_9ba0d417_fk_users_id" for relation "api_activity_logs" already exists
+ERROR:  constraint "api_tokens_created_by_id_441e3d24_fk_users_id" for relation "api_tokens" already exists
+ERROR:  constraint "api_tokens_updated_by_id_bcd544cf_fk_users_id" for relation "api_tokens" already exists
+ERROR:  constraint "api_tokens_user_id_2db24e1c_fk_users_id" for relation "api_tokens" already exists
+ERROR:  constraint "api_tokens_workspace_id_6791c7bd_fk_workspaces_id" for relation "api_tokens" already exists
+ERROR:  constraint "auth_group_permissio_permission_id_84c5c92e_fk_auth_perm" for relation "auth_group_permissions" already exists
+ERROR:  constraint "auth_group_permissions_group_id_b120cbf9_fk_auth_group_id" for relation "auth_group_permissions" already exists
+ERROR:  constraint "auth_permission_content_type_id_2f476e4b_fk_django_co" for relation "auth_permission" already exists
+ERROR:  constraint "changelogs_created_by_id_16dd944a_fk_users_id" for relation "changelogs" already exists
+ERROR:  constraint "changelogs_updated_by_id_e0989861_fk_users_id" for relation "changelogs" already exists
+ERROR:  constraint "comment_reactions_actor_id_21219e9c_fk_users_id" for relation "comment_reactions" already exists
+ERROR:  constraint "comment_reactions_comment_id_87c59446_fk_issue_comments_id" for relation "comment_reactions" already exists
+ERROR:  constraint "comment_reactions_created_by_id_9aeb43c4_fk_users_id" for relation "comment_reactions" already exists
+ERROR:  constraint "comment_reactions_project_id_ab9114b4_fk_projects_id" for relation "comment_reactions" already exists
+ERROR:  constraint "comment_reactions_updated_by_id_c74c9bbd_fk_users_id" for relation "comment_reactions" already exists
+ERROR:  constraint "comment_reactions_workspace_id_b614ca4f_fk_workspaces_id" for relation "comment_reactions" already exists
+ERROR:  constraint "cycle_created_by_id_78e43b79_fk_user_id" for relation "cycles" already exists
+ERROR:  constraint "cycle_issue_created_by_id_30b27539_fk_user_id" for relation "cycle_issues" already exists
+ERROR:  constraint "cycle_issue_cycle_id_ec681215_fk_cycle_id" for relation "cycle_issues" already exists
+ERROR:  constraint "cycle_issue_project_id_6ad3257a_fk_project_id" for relation "cycle_issues" already exists
+ERROR:  constraint "cycle_issue_updated_by_id_cb4516f2_fk_user_id" for relation "cycle_issues" already exists
+ERROR:  constraint "cycle_issue_workspace_id_1d77330e_fk_workspace_id" for relation "cycle_issues" already exists
+ERROR:  constraint "cycle_issues_issue_id_2d5ac97f_fk_issues_id" for relation "cycle_issues" already exists
+ERROR:  constraint "cycle_owned_by_id_5456a4d1_fk_user_id" for relation "cycles" already exists
+ERROR:  constraint "cycle_project_id_0b590349_fk_project_id" for relation "cycles" already exists
+ERROR:  constraint "cycle_updated_by_id_93baee43_fk_user_id" for relation "cycles" already exists
+ERROR:  constraint "cycle_user_properties_created_by_id_501f371c_fk_users_id" for relation "cycle_user_properties" already exists
+ERROR:  constraint "cycle_user_properties_cycle_id_1f8bdf35_fk_cycles_id" for relation "cycle_user_properties" already exists
+ERROR:  constraint "cycle_user_properties_project_id_4efc0f07_fk_projects_id" for relation "cycle_user_properties" already exists
+ERROR:  constraint "cycle_user_properties_updated_by_id_1b5ac27b_fk_users_id" for relation "cycle_user_properties" already exists
+ERROR:  constraint "cycle_user_properties_user_id_9e9ef97d_fk_users_id" for relation "cycle_user_properties" already exists
+ERROR:  constraint "cycle_user_properties_workspace_id_62d65d71_fk_workspaces_id" for relation "cycle_user_properties" already exists
+ERROR:  constraint "cycle_workspace_id_a199e8e1_fk_workspace_id" for relation "cycles" already exists
+ERROR:  constraint "deploy_boards_created_by_id_149dff93_fk_users_id" for relation "deploy_boards" already exists
+ERROR:  constraint "deploy_boards_intake_id_76a6470a_fk_intakes_id" for relation "deploy_boards" already exists
+ERROR:  constraint "deploy_boards_project_id_cfc792a1_fk_projects_id" for relation "deploy_boards" already exists
+ERROR:  constraint "deploy_boards_updated_by_id_db7ae24f_fk_users_id" for relation "deploy_boards" already exists
+ERROR:  constraint "deploy_boards_workspace_id_fcf03158_fk_workspaces_id" for relation "deploy_boards" already exists
+ERROR:  constraint "description_versions_created_by_id_6633a3de_fk_users_id" for relation "description_versions" already exists
+ERROR:  constraint "description_versions_description_id_dc7f19b6_fk_descriptions_id" for relation "description_versions" already exists
+ERROR:  constraint "description_versions_project_id_1a6c9aa9_fk_projects_id" for relation "description_versions" already exists
+ERROR:  constraint "description_versions_updated_by_id_8b5179ae_fk_users_id" for relation "description_versions" already exists
+ERROR:  constraint "description_versions_workspace_id_52857186_fk_workspaces_id" for relation "description_versions" already exists
+ERROR:  constraint "descriptions_created_by_id_b88ab399_fk_users_id" for relation "descriptions" already exists
+ERROR:  constraint "descriptions_project_id_8f46180b_fk_projects_id" for relation "descriptions" already exists
+ERROR:  constraint "descriptions_updated_by_id_af519c4d_fk_users_id" for relation "descriptions" already exists
+ERROR:  constraint "descriptions_workspace_id_767279bf_fk_workspaces_id" for relation "descriptions" already exists
+ERROR:  constraint "device_sessions_created_by_id_920a3bd5_fk_users_id" for relation "device_sessions" already exists
+ERROR:  constraint "device_sessions_device_id_a42b2ada_fk_devices_id" for relation "device_sessions" already exists
+ERROR:  constraint "device_sessions_session_id_5382b02b_fk_sessions_session_key" for relation "device_sessions" already exists
+ERROR:  constraint "device_sessions_updated_by_id_d0bd0c76_fk_users_id" for relation "device_sessions" already exists
+ERROR:  constraint "devices_created_by_id_410a755b_fk_users_id" for relation "devices" already exists
+ERROR:  constraint "devices_updated_by_id_ee20dc3c_fk_users_id" for relation "devices" already exists
+ERROR:  constraint "devices_user_id_9a5cca49_fk_users_id" for relation "devices" already exists
+ERROR:  constraint "django_celery_beat_p_clocked_id_47a69f82_fk_django_ce" for relation "django_celery_beat_periodictask" already exists
+ERROR:  constraint "django_celery_beat_p_crontab_id_d3cba168_fk_django_ce" for relation "django_celery_beat_periodictask" already exists
+ERROR:  constraint "django_celery_beat_p_interval_id_a8ca27da_fk_django_ce" for relation "django_celery_beat_periodictask" already exists
+ERROR:  constraint "django_celery_beat_p_solar_id_a87ce72c_fk_django_ce" for relation "django_celery_beat_periodictask" already exists
+ERROR:  constraint "draft_issue_assignee_draft_issue_id_70827be2_fk_draft_iss" for relation "draft_issue_assignees" already exists
+ERROR:  constraint "draft_issue_assignees_assignee_id_9cc52f9d_fk_users_id" for relation "draft_issue_assignees" already exists
+ERROR:  constraint "draft_issue_assignees_created_by_id_c25d4bde_fk_users_id" for relation "draft_issue_assignees" already exists
+ERROR:  constraint "draft_issue_assignees_project_id_c87dd571_fk_projects_id" for relation "draft_issue_assignees" already exists
+ERROR:  constraint "draft_issue_assignees_updated_by_id_16dbb5e0_fk_users_id" for relation "draft_issue_assignees" already exists
+ERROR:  constraint "draft_issue_assignees_workspace_id_e28a98e9_fk_workspaces_id" for relation "draft_issue_assignees" already exists
+ERROR:  constraint "draft_issue_cycles_created_by_id_e56335c8_fk_users_id" for relation "draft_issue_cycles" already exists
+ERROR:  constraint "draft_issue_cycles_cycle_id_b214e11f_fk_cycles_id" for relation "draft_issue_cycles" already exists
+ERROR:  constraint "draft_issue_cycles_draft_issue_id_ed45e8a2_fk_draft_issues_id" for relation "draft_issue_cycles" already exists
+ERROR:  constraint "draft_issue_cycles_project_id_dc5d1ff6_fk_projects_id" for relation "draft_issue_cycles" already exists
+ERROR:  constraint "draft_issue_cycles_updated_by_id_518a23ab_fk_users_id" for relation "draft_issue_cycles" already exists
+ERROR:  constraint "draft_issue_cycles_workspace_id_4fd0aa0c_fk_workspaces_id" for relation "draft_issue_cycles" already exists
+ERROR:  constraint "draft_issue_labels_created_by_id_88217eef_fk_users_id" for relation "draft_issue_labels" already exists
+ERROR:  constraint "draft_issue_labels_draft_issue_id_339d4c2b_fk_draft_issues_id" for relation "draft_issue_labels" already exists
+ERROR:  constraint "draft_issue_labels_label_id_b9b001a5_fk_labels_id" for relation "draft_issue_labels" already exists
+ERROR:  constraint "draft_issue_labels_project_id_16f9ba0a_fk_projects_id" for relation "draft_issue_labels" already exists
+ERROR:  constraint "draft_issue_labels_updated_by_id_edac537c_fk_users_id" for relation "draft_issue_labels" already exists
+ERROR:  constraint "draft_issue_labels_workspace_id_489a9873_fk_workspaces_id" for relation "draft_issue_labels" already exists
+ERROR:  constraint "draft_issue_modules_created_by_id_95ec4247_fk_users_id" for relation "draft_issue_modules" already exists
+ERROR:  constraint "draft_issue_modules_draft_issue_id_eb470383_fk_draft_issues_id" for relation "draft_issue_modules" already exists
+ERROR:  constraint "draft_issue_modules_module_id_4d3f477a_fk_modules_id" for relation "draft_issue_modules" already exists
+ERROR:  constraint "draft_issue_modules_project_id_c32eadab_fk_projects_id" for relation "draft_issue_modules" already exists
+ERROR:  constraint "draft_issue_modules_updated_by_id_18548965_fk_users_id" for relation "draft_issue_modules" already exists
+ERROR:  constraint "draft_issue_modules_workspace_id_536c335a_fk_workspaces_id" for relation "draft_issue_modules" already exists
+ERROR:  constraint "draft_issues_created_by_id_aedba72a_fk_users_id" for relation "draft_issues" already exists
+ERROR:  constraint "draft_issues_estimate_point_id_9e333189_fk_estimate_points_id" for relation "draft_issues" already exists
+ERROR:  constraint "draft_issues_parent_id_eee6ec32_fk_issues_id" for relation "draft_issues" already exists
+ERROR:  constraint "draft_issues_project_id_784a560c_fk_projects_id" for relation "draft_issues" already exists
+ERROR:  constraint "draft_issues_state_id_94f28f5a_fk_states_id" for relation "draft_issues" already exists
+ERROR:  constraint "draft_issues_type_id_7a62fe34_fk_issue_types_id" for relation "draft_issues" already exists
+ERROR:  constraint "draft_issues_updated_by_id_1ca3cd4e_fk_users_id" for relation "draft_issues" already exists
+ERROR:  constraint "draft_issues_workspace_id_9d8512c8_fk_workspaces_id" for relation "draft_issues" already exists
+ERROR:  constraint "email_notification_logs_created_by_id_6faff587_fk_users_id" for relation "email_notification_logs" already exists
+ERROR:  constraint "email_notification_logs_receiver_id_7c7d2e13_fk_users_id" for relation "email_notification_logs" already exists
+ERROR:  constraint "email_notification_logs_triggered_by_id_b551e727_fk_users_id" for relation "email_notification_logs" already exists
+ERROR:  constraint "email_notification_logs_updated_by_id_5d99c798_fk_users_id" for relation "email_notification_logs" already exists
+ERROR:  constraint "estimate_points_created_by_id_d1b04bd9_fk_users_id" for relation "estimate_points" already exists
+ERROR:  constraint "estimate_points_estimate_id_4b4cb706_fk_estimates_id" for relation "estimate_points" already exists
+ERROR:  constraint "estimate_points_project_id_ba9bcb2c_fk_projects_id" for relation "estimate_points" already exists
+ERROR:  constraint "estimate_points_updated_by_id_a1da94e1_fk_users_id" for relation "estimate_points" already exists
+ERROR:  constraint "estimate_points_workspace_id_96fc4f92_fk_workspaces_id" for relation "estimate_points" already exists
+ERROR:  constraint "estimates_created_by_id_7e401493_fk_users_id" for relation "estimates" already exists
+ERROR:  constraint "estimates_project_id_7f195a41_fk_projects_id" for relation "estimates" already exists
+ERROR:  constraint "estimates_updated_by_id_b3fcfb1d_fk_users_id" for relation "estimates" already exists
+ERROR:  constraint "estimates_workspace_id_718811eb_fk_workspaces_id" for relation "estimates" already exists
+ERROR:  constraint "exporters_created_by_id_44e1d9b3_fk_users_id" for relation "exporters" already exists
+ERROR:  constraint "exporters_initiated_by_id_d51f7552_fk_users_id" for relation "exporters" already exists
+ERROR:  constraint "exporters_updated_by_id_d2572861_fk_users_id" for relation "exporters" already exists
+ERROR:  constraint "exporters_workspace_id_11a04317_fk_workspaces_id" for relation "exporters" already exists
+ERROR:  constraint "file_asset_created_by_id_966942a0_fk_user_id" for relation "file_assets" already exists
+ERROR:  constraint "file_asset_updated_by_id_d6aaf4f0_fk_user_id" for relation "file_assets" already exists
+ERROR:  constraint "file_assets_comment_id_35d4ecaf_fk_issue_comments_id" for relation "file_assets" already exists
+ERROR:  constraint "file_assets_draft_issue_id_52633145_fk_draft_issues_id" for relation "file_assets" already exists
+ERROR:  constraint "file_assets_issue_id_cfe87d6c_fk_issues_id" for relation "file_assets" already exists
+ERROR:  constraint "file_assets_page_id_64c753d1_fk_pages_id" for relation "file_assets" already exists
+ERROR:  constraint "file_assets_project_id_ebd5c0d8_fk_projects_id" for relation "file_assets" already exists
+ERROR:  constraint "file_assets_user_id_ce1818dc_fk_users_id" for relation "file_assets" already exists
+ERROR:  constraint "file_assets_workspace_id_fa50b9c5_fk_workspaces_id" for relation "file_assets" already exists
+ERROR:  constraint "github_comment_syncs_comment_id_6feec6d1_fk_issue_comments_id" for relation "github_comment_syncs" already exists
+ERROR:  constraint "github_comment_syncs_created_by_id_b1ef2517_fk_users_id" for relation "github_comment_syncs" already exists
+ERROR:  constraint "github_comment_syncs_issue_sync_id_5e738eb5_fk_github_is" for relation "github_comment_syncs" already exists
+ERROR:  constraint "github_comment_syncs_project_id_6d199ace_fk_projects_id" for relation "github_comment_syncs" already exists
+ERROR:  constraint "github_comment_syncs_updated_by_id_bb05c066_fk_users_id" for relation "github_comment_syncs" already exists
+ERROR:  constraint "github_comment_syncs_workspace_id_b54528c8_fk_workspaces_id" for relation "github_comment_syncs" already exists
+ERROR:  constraint "github_issue_syncs_created_by_id_d02b7c56_fk_users_id" for relation "github_issue_syncs" already exists
+ERROR:  constraint "github_issue_syncs_issue_id_450cb083_fk_issues_id" for relation "github_issue_syncs" already exists
+ERROR:  constraint "github_issue_syncs_project_id_4609ad0c_fk_projects_id" for relation "github_issue_syncs" already exists
+ERROR:  constraint "github_issue_syncs_repository_sync_id_ba0d4de4_fk_github_re" for relation "github_issue_syncs" already exists
+ERROR:  constraint "github_issue_syncs_updated_by_id_e9cd6f86_fk_users_id" for relation "github_issue_syncs" already exists
+ERROR:  constraint "github_issue_syncs_workspace_id_eae020ad_fk_workspaces_id" for relation "github_issue_syncs" already exists
+ERROR:  constraint "github_repositories_created_by_id_104fa685_fk_users_id" for relation "github_repositories" already exists
+ERROR:  constraint "github_repositories_project_id_65c546bb_fk_projects_id" for relation "github_repositories" already exists
+ERROR:  constraint "github_repositories_updated_by_id_8aa4d772_fk_users_id" for relation "github_repositories" already exists
+ERROR:  constraint "github_repositories_workspace_id_c4de7326_fk_workspaces_id" for relation "github_repositories" already exists
+ERROR:  constraint "github_repository_sy_repository_id_ead52404_fk_github_re" for relation "github_repository_syncs" already exists
+ERROR:  constraint "github_repository_sy_workspace_integratio_62858398_fk_workspace" for relation "github_repository_syncs" already exists
+ERROR:  constraint "github_repository_syncs_actor_id_1fa689fe_fk_users_id" for relation "github_repository_syncs" already exists
+ERROR:  constraint "github_repository_syncs_created_by_id_0df94495_fk_users_id" for relation "github_repository_syncs" already exists
+ERROR:  constraint "github_repository_syncs_label_id_eb1e9bd7_fk_labels_id" for relation "github_repository_syncs" already exists
+ERROR:  constraint "github_repository_syncs_project_id_e7e8291e_fk_projects_id" for relation "github_repository_syncs" already exists
+ERROR:  constraint "github_repository_syncs_updated_by_id_07e9d065_fk_users_id" for relation "github_repository_syncs" already exists
+ERROR:  constraint "github_repository_syncs_workspace_id_4a22a8b8_fk_workspaces_id" for relation "github_repository_syncs" already exists
+ERROR:  constraint "importers_created_by_id_7dd06433_fk_users_id" for relation "importers" already exists
+ERROR:  constraint "importers_initiated_by_id_3cddbd23_fk_users_id" for relation "importers" already exists
+ERROR:  constraint "importers_project_id_1f8b43ef_fk_projects_id" for relation "importers" already exists
+ERROR:  constraint "importers_token_id_c951e89f_fk_api_tokens_id" for relation "importers" already exists
+ERROR:  constraint "importers_updated_by_id_3915139e_fk_users_id" for relation "importers" already exists
+ERROR:  constraint "importers_workspace_id_795b8985_fk_workspaces_id" for relation "importers" already exists
+ERROR:  constraint "inbox_issues_created_by_id_483bce13_fk_users_id" for relation "intake_issues" already exists
+ERROR:  constraint "inbox_issues_duplicate_to_id_6cb8d961_fk_issues_id" for relation "intake_issues" already exists
+ERROR:  constraint "inbox_issues_intake_id_a04a7455_fk_intakes_id" for relation "intake_issues" already exists
+ERROR:  constraint "inbox_issues_issue_id_7d74b224_fk_issues_id" for relation "intake_issues" already exists
+ERROR:  constraint "inbox_issues_project_id_5117a70b_fk_projects_id" for relation "intake_issues" already exists
+ERROR:  constraint "inbox_issues_updated_by_id_d1b2b70f_fk_users_id" for relation "intake_issues" already exists
+ERROR:  constraint "inbox_issues_workspace_id_4a61a7bd_fk_workspaces_id" for relation "intake_issues" already exists
+ERROR:  constraint "inboxes_created_by_id_9f1cf5ec_fk_users_id" for relation "intakes" already exists
+ERROR:  constraint "inboxes_project_id_a0135c66_fk_projects_id" for relation "intakes" already exists
+ERROR:  constraint "inboxes_updated_by_id_69b7b3ae_fk_users_id" for relation "intakes" already exists
+ERROR:  constraint "inboxes_workspace_id_d6178865_fk_workspaces_id" for relation "intakes" already exists
+ERROR:  constraint "instance_admins_created_by_id_7f4e03b4_fk_users_id" for relation "instance_admins" already exists
+ERROR:  constraint "instance_admins_instance_id_66d1ba73_fk_instances_id" for relation "instance_admins" already exists
+ERROR:  constraint "instance_admins_updated_by_id_b7800403_fk_users_id" for relation "instance_admins" already exists
+ERROR:  constraint "instance_admins_user_id_cc6e9b62_fk_users_id" for relation "instance_admins" already exists
+ERROR:  constraint "instance_configurations_created_by_id_e683f3e5_fk_users_id" for relation "instance_configurations" already exists
+ERROR:  constraint "instance_configurations_updated_by_id_f0d7542e_fk_users_id" for relation "instance_configurations" already exists
+ERROR:  constraint "instances_created_by_id_c76e92ef_fk_users_id" for relation "instances" already exists
+ERROR:  constraint "instances_updated_by_id_cce8fcdf_fk_users_id" for relation "instances" already exists
+ERROR:  constraint "integrations_created_by_id_0b6edd52_fk_users_id" for relation "integrations" already exists
+ERROR:  constraint "integrations_updated_by_id_d6d00d15_fk_users_id" for relation "integrations" already exists
+ERROR:  constraint "issue_activities_issue_id_180e5662_fk_issues_id" for relation "issue_activities" already exists
+ERROR:  constraint "issue_activity_actor_id_52fdd42d_fk_user_id" for relation "issue_activities" already exists
+ERROR:  constraint "issue_activity_created_by_id_49516e3d_fk_user_id" for relation "issue_activities" already exists
+ERROR:  constraint "issue_activity_issue_comment_id_701f3c3c_fk_issue_comment_id" for relation "issue_activities" already exists
+ERROR:  constraint "issue_activity_project_id_d0ac2ccf_fk_project_id" for relation "issue_activities" already exists
+ERROR:  constraint "issue_activity_updated_by_id_0075f9bd_fk_user_id" for relation "issue_activities" already exists
+ERROR:  constraint "issue_activity_workspace_id_65acaf73_fk_workspace_id" for relation "issue_activities" already exists
+ERROR:  constraint "issue_assignee_assignee_id_50f5c04e_fk_user_id" for relation "issue_assignees" already exists
+ERROR:  constraint "issue_assignee_created_by_id_f693d43b_fk_user_id" for relation "issue_assignees" already exists
+ERROR:  constraint "issue_assignee_issue_id_72da08db_fk_issue_id" for relation "issue_assignees" already exists
+ERROR:  constraint "issue_assignee_project_id_61c18bf2_fk_project_id" for relation "issue_assignees" already exists
+ERROR:  constraint "issue_assignee_updated_by_id_c54088aa_fk_user_id" for relation "issue_assignees" already exists
+ERROR:  constraint "issue_assignee_workspace_id_9aad55b7_fk_workspace_id" for relation "issue_assignees" already exists
+ERROR:  constraint "issue_attachments_created_by_id_87be05bb_fk_users_id" for relation "issue_attachments" already exists
+ERROR:  constraint "issue_attachments_issue_id_0faf88bf_fk_issues_id" for relation "issue_attachments" already exists
+ERROR:  constraint "issue_attachments_project_id_a95fe706_fk_projects_id" for relation "issue_attachments" already exists
+ERROR:  constraint "issue_attachments_updated_by_id_47dceec1_fk_users_id" for relation "issue_attachments" already exists
+ERROR:  constraint "issue_attachments_workspace_id_c456a532_fk_workspaces_id" for relation "issue_attachments" already exists
+ERROR:  constraint "issue_blocker_block_id_5d15a701_fk_issue_id" for relation "issue_blockers" already exists
+ERROR:  constraint "issue_blocker_blocked_by_id_a138af71_fk_issue_id" for relation "issue_blockers" already exists
+ERROR:  constraint "issue_blocker_created_by_id_0d19f6ea_fk_user_id" for relation "issue_blockers" already exists
+ERROR:  constraint "issue_blocker_project_id_380bd100_fk_project_id" for relation "issue_blockers" already exists
+ERROR:  constraint "issue_blocker_updated_by_id_4af87d63_fk_user_id" for relation "issue_blockers" already exists
+ERROR:  constraint "issue_blocker_workspace_id_419a1c71_fk_workspace_id" for relation "issue_blockers" already exists
+ERROR:  constraint "issue_comment_actor_id_d312315b_fk_user_id" for relation "issue_comments" already exists
+ERROR:  constraint "issue_comment_created_by_id_0765f239_fk_user_id" for relation "issue_comments" already exists
+ERROR:  constraint "issue_comment_issue_id_d0195e35_fk_issue_id" for relation "issue_comments" already exists
+ERROR:  constraint "issue_comment_project_id_db37c105_fk_project_id" for relation "issue_comments" already exists
+ERROR:  constraint "issue_comment_updated_by_id_96cfb86e_fk_user_id" for relation "issue_comments" already exists
+ERROR:  constraint "issue_comment_workspace_id_3f7969ec_fk_workspace_id" for relation "issue_comments" already exists
+ERROR:  constraint "issue_comments_description_id_0cb72512_fk_descriptions_id" for relation "issue_comments" already exists
+ERROR:  constraint "issue_comments_parent_id_d8db10b1_fk_issue_comments_id" for relation "issue_comments" already exists
+ERROR:  constraint "issue_created_by_id_8f0ae62b_fk_user_id" for relation "issues" already exists
+ERROR:  constraint "issue_description_ve_workspace_id_88e930f9_fk_workspace" for relation "issue_description_versions" already exists
+ERROR:  constraint "issue_description_versions_created_by_id_3f7e62a1_fk_users_id" for relation "issue_description_versions" already exists
+ERROR:  constraint "issue_description_versions_issue_id_c8baa13e_fk_issues_id" for relation "issue_description_versions" already exists
+ERROR:  constraint "issue_description_versions_owned_by_id_0effe4d0_fk_users_id" for relation "issue_description_versions" already exists
+ERROR:  constraint "issue_description_versions_project_id_536b23ef_fk_projects_id" for relation "issue_description_versions" already exists
+ERROR:  constraint "issue_description_versions_updated_by_id_6530365d_fk_users_id" for relation "issue_description_versions" already exists
+ERROR:  constraint "issue_label_created_by_id_94075315_fk_user_id" for relation "issue_labels" already exists
+ERROR:  constraint "issue_label_issue_id_0f252e52_fk_issue_id" for relation "issue_labels" already exists
+ERROR:  constraint "issue_label_label_id_5f22777f_fk_label_id" for relation "issue_labels" already exists
+ERROR:  constraint "issue_label_project_id_eaa2ba39_fk_project_id" for relation "issue_labels" already exists
+ERROR:  constraint "issue_label_updated_by_id_a97a6733_fk_user_id" for relation "issue_labels" already exists
+ERROR:  constraint "issue_label_workspace_id_b5b1faac_fk_workspace_id" for relation "issue_labels" already exists
+ERROR:  constraint "issue_links_created_by_id_5e4aa092_fk_users_id" for relation "issue_links" already exists
+ERROR:  constraint "issue_links_issue_id_7032881f_fk_issues_id" for relation "issue_links" already exists
+ERROR:  constraint "issue_links_project_id_63d6e9ce_fk_projects_id" for relation "issue_links" already exists
+ERROR:  constraint "issue_links_updated_by_id_a771cce4_fk_users_id" for relation "issue_links" already exists
+ERROR:  constraint "issue_links_workspace_id_ff9038e7_fk_workspaces_id" for relation "issue_links" already exists
+ERROR:  constraint "issue_mentions_created_by_id_eb44759e_fk_users_id" for relation "issue_mentions" already exists
+ERROR:  constraint "issue_mentions_issue_id_d8821107_fk_issues_id" for relation "issue_mentions" already exists
+ERROR:  constraint "issue_mentions_mention_id_cf1b9346_fk_users_id" for relation "issue_mentions" already exists
+ERROR:  constraint "issue_mentions_project_id_d0cccdf5_fk_projects_id" for relation "issue_mentions" already exists
+ERROR:  constraint "issue_mentions_updated_by_id_c62106d3_fk_users_id" for relation "issue_mentions" already exists
+ERROR:  constraint "issue_mentions_workspace_id_4ca59d05_fk_workspaces_id" for relation "issue_mentions" already exists
+ERROR:  constraint "issue_parent_id_ce8d76ba_fk_issue_id" for relation "issues" already exists
+ERROR:  constraint "issue_project_id_fea0fc80_fk_project_id" for relation "issues" already exists
+ERROR:  constraint "issue_property_created_by_id_8e92131c_fk_user_id" for relation "project_user_properties" already exists
+ERROR:  constraint "issue_property_project_id_30e7de7b_fk_project_id" for relation "project_user_properties" already exists
+ERROR:  constraint "issue_property_updated_by_id_ff158d4d_fk_user_id" for relation "project_user_properties" already exists
+ERROR:  constraint "issue_property_user_id_0b1d1c8f_fk_user_id" for relation "project_user_properties" already exists
+ERROR:  constraint "issue_property_workspace_id_17860d65_fk_workspace_id" for relation "project_user_properties" already exists
+ERROR:  constraint "issue_reactions_actor_id_5f5b8303_fk_users_id" for relation "issue_reactions" already exists
+ERROR:  constraint "issue_reactions_created_by_id_3953b7de_fk_users_id" for relation "issue_reactions" already exists
+ERROR:  constraint "issue_reactions_issue_id_2c324bae_fk_issues_id" for relation "issue_reactions" already exists
+ERROR:  constraint "issue_reactions_project_id_8708ecaf_fk_projects_id" for relation "issue_reactions" already exists
+ERROR:  constraint "issue_reactions_updated_by_id_4069af90_fk_users_id" for relation "issue_reactions" already exists
+ERROR:  constraint "issue_reactions_workspace_id_bd8d7550_fk_workspaces_id" for relation "issue_reactions" already exists
+ERROR:  constraint "issue_relations_created_by_id_854d07e7_fk_users_id" for relation "issue_relations" already exists
+ERROR:  constraint "issue_relations_issue_id_e1db6f72_fk_issues_id" for relation "issue_relations" already exists
+ERROR:  constraint "issue_relations_project_id_15350161_fk_projects_id" for relation "issue_relations" already exists
+ERROR:  constraint "issue_relations_related_issue_id_e1ea44a7_fk_issues_id" for relation "issue_relations" already exists
+ERROR:  constraint "issue_relations_updated_by_id_3dfa850f_fk_users_id" for relation "issue_relations" already exists
+ERROR:  constraint "issue_relations_workspace_id_00b50e90_fk_workspaces_id" for relation "issue_relations" already exists
+ERROR:  constraint "issue_sequence_created_by_id_59270506_fk_user_id" for relation "issue_sequences" already exists
+ERROR:  constraint "issue_sequence_issue_id_16e9f00f_fk_issue_id" for relation "issue_sequences" already exists
+ERROR:  constraint "issue_sequence_project_id_ce882e85_fk_project_id" for relation "issue_sequences" already exists
+ERROR:  constraint "issue_sequence_updated_by_id_310c8dd3_fk_user_id" for relation "issue_sequences" already exists
+ERROR:  constraint "issue_sequence_workspace_id_0d3f0fd4_fk_workspace_id" for relation "issue_sequences" already exists
+ERROR:  constraint "issue_state_id_1a65560d_fk_state_id" for relation "issues" already exists
+ERROR:  constraint "issue_subscribers_created_by_id_b6ea0157_fk_users_id" for relation "issue_subscribers" already exists
+ERROR:  constraint "issue_subscribers_issue_id_85cf2093_fk_issues_id" for relation "issue_subscribers" already exists
+ERROR:  constraint "issue_subscribers_project_id_cf48d75f_fk_projects_id" for relation "issue_subscribers" already exists
+ERROR:  constraint "issue_subscribers_subscriber_id_2d89c988_fk_users_id" for relation "issue_subscribers" already exists
+ERROR:  constraint "issue_subscribers_updated_by_id_1bfc2f55_fk_users_id" for relation "issue_subscribers" already exists
+ERROR:  constraint "issue_subscribers_workspace_id_96afa91f_fk_workspaces_id" for relation "issue_subscribers" already exists
+ERROR:  constraint "issue_types_created_by_id_48764f53_fk_users_id" for relation "issue_types" already exists
+ERROR:  constraint "issue_types_updated_by_id_4919203b_fk_users_id" for relation "issue_types" already exists
+ERROR:  constraint "issue_types_workspace_id_591c6f3b_fk_workspaces_id" for relation "issue_types" already exists
+ERROR:  constraint "issue_updated_by_id_f1261863_fk_user_id" for relation "issues" already exists
+ERROR:  constraint "issue_versions_activity_id_b1872ffc_fk_issue_activities_id" for relation "issue_versions" already exists
+ERROR:  constraint "issue_versions_created_by_id_a782830a_fk_users_id" for relation "issue_versions" already exists
+ERROR:  constraint "issue_versions_issue_id_25cf001c_fk_issues_id" for relation "issue_versions" already exists
+ERROR:  constraint "issue_versions_owned_by_id_7586378d_fk_users_id" for relation "issue_versions" already exists
+ERROR:  constraint "issue_versions_project_id_a069ad03_fk_projects_id" for relation "issue_versions" already exists
+ERROR:  constraint "issue_versions_updated_by_id_dcae6dd2_fk_users_id" for relation "issue_versions" already exists
+ERROR:  constraint "issue_versions_workspace_id_b8c48b7c_fk_workspaces_id" for relation "issue_versions" already exists
+ERROR:  constraint "issue_views_created_by_id_0d2e456b_fk_users_id" for relation "issue_views" already exists
+ERROR:  constraint "issue_views_owned_by_id_5e261e5d_fk_users_id" for relation "issue_views" already exists
+ERROR:  constraint "issue_views_project_id_55ee009f_fk_projects_id" for relation "issue_views" already exists
+ERROR:  constraint "issue_views_updated_by_id_28cd9870_fk_users_id" for relation "issue_views" already exists
+ERROR:  constraint "issue_views_workspace_id_8785e03d_fk_workspaces_id" for relation "issue_views" already exists
+ERROR:  constraint "issue_votes_actor_id_525cab61_fk_users_id" for relation "issue_votes" already exists
+ERROR:  constraint "issue_votes_created_by_id_86adcf5c_fk_users_id" for relation "issue_votes" already exists
+ERROR:  constraint "issue_votes_issue_id_07a61ecb_fk_issues_id" for relation "issue_votes" already exists
+ERROR:  constraint "issue_votes_project_id_b649f55b_fk_projects_id" for relation "issue_votes" already exists
+ERROR:  constraint "issue_votes_updated_by_id_9e2a6cdc_fk_users_id" for relation "issue_votes" already exists
+ERROR:  constraint "issue_votes_workspace_id_a3e91a6b_fk_workspaces_id" for relation "issue_votes" already exists
+ERROR:  constraint "issue_workspace_id_c84878c1_fk_workspace_id" for relation "issues" already exists
+ERROR:  constraint "issues_estimate_point_id_a6822abe_fk_estimate_points_id" for relation "issues" already exists
+ERROR:  constraint "issues_type_id_a4710b19_fk_issue_types_id" for relation "issues" already exists
+ERROR:  constraint "label_created_by_id_aa6ffcfa_fk_user_id" for relation "labels" already exists
+ERROR:  constraint "label_parent_id_7a853296_fk_label_id" for relation "labels" already exists
+ERROR:  constraint "label_updated_by_id_894a5464_fk_user_id" for relation "labels" already exists
+ERROR:  constraint "label_workspace_id_c4c9ae5a_fk_workspace_id" for relation "labels" already exists
+ERROR:  constraint "labels_project_id_cf57a802_fk_projects_id" for relation "labels" already exists
+ERROR:  constraint "module_created_by_id_ff7a5866_fk_user_id" for relation "modules" already exists
+ERROR:  constraint "module_issues_created_by_id_de0b995a_fk_user_id" for relation "module_issues" already exists
+ERROR:  constraint "module_issues_issue_id_7caa908b_fk_issues_id" for relation "module_issues" already exists
+ERROR:  constraint "module_issues_module_id_74e0ed5a_fk_module_id" for relation "module_issues" already exists
+ERROR:  constraint "module_issues_project_id_59836d1e_fk_project_id" for relation "module_issues" already exists
+ERROR:  constraint "module_issues_updated_by_id_46dbf724_fk_user_id" for relation "module_issues" already exists
+ERROR:  constraint "module_issues_workspace_id_6bf85201_fk_workspace_id" for relation "module_issues" already exists
+ERROR:  constraint "module_lead_id_04966630_fk_user_id" for relation "modules" already exists
+ERROR:  constraint "module_links_created_by_id_eaf6492f_fk_users_id" for relation "module_links" already exists
+ERROR:  constraint "module_links_module_id_0fda3f8a_fk_modules_id" for relation "module_links" already exists
+ERROR:  constraint "module_links_project_id_f720bb79_fk_projects_id" for relation "module_links" already exists
+ERROR:  constraint "module_links_updated_by_id_4da419e7_fk_users_id" for relation "module_links" already exists
+ERROR:  constraint "module_links_workspace_id_0521c11c_fk_workspaces_id" for relation "module_links" already exists
+ERROR:  constraint "module_member_created_by_id_2ed84a65_fk_user_id" for relation "module_members" already exists
+ERROR:  constraint "module_member_member_id_928f473e_fk_user_id" for relation "module_members" already exists
+ERROR:  constraint "module_member_module_id_f00be7ef_fk_module_id" for relation "module_members" already exists
+ERROR:  constraint "module_member_project_id_ec8d2376_fk_project_id" for relation "module_members" already exists
+ERROR:  constraint "module_member_updated_by_id_a9046438_fk_user_id" for relation "module_members" already exists
+ERROR:  constraint "module_member_workspace_id_f2f23c73_fk_workspace_id" for relation "module_members" already exists
+ERROR:  constraint "module_project_id_da84b04f_fk_project_id" for relation "modules" already exists
+ERROR:  constraint "module_updated_by_id_72ab6d5c_fk_user_id" for relation "modules" already exists
+ERROR:  constraint "module_user_properties_created_by_id_bdd98440_fk_users_id" for relation "module_user_properties" already exists
+ERROR:  constraint "module_user_properties_module_id_e95b158a_fk_modules_id" for relation "module_user_properties" already exists
+ERROR:  constraint "module_user_properties_project_id_3c5a4972_fk_projects_id" for relation "module_user_properties" already exists
+ERROR:  constraint "module_user_properties_updated_by_id_b7dafc77_fk_users_id" for relation "module_user_properties" already exists
+ERROR:  constraint "module_user_properties_user_id_e83a1c2c_fk_users_id" for relation "module_user_properties" already exists
+ERROR:  constraint "module_user_properties_workspace_id_ddaf807c_fk_workspaces_id" for relation "module_user_properties" already exists
+ERROR:  constraint "module_workspace_id_0a826fef_fk_workspace_id" for relation "modules" already exists
+ERROR:  constraint "notifications_created_by_id_b9c3f81b_fk_users_id" for relation "notifications" already exists
+ERROR:  constraint "notifications_project_id_e4d4f192_fk_projects_id" for relation "notifications" already exists
+ERROR:  constraint "notifications_receiver_id_b708b2b0_fk_users_id" for relation "notifications" already exists
+ERROR:  constraint "notifications_triggered_by_id_31cdec21_fk_users_id" for relation "notifications" already exists
+ERROR:  constraint "notifications_updated_by_id_8a651e96_fk_users_id" for relation "notifications" already exists
+ERROR:  constraint "notifications_workspace_id_b2f09ef7_fk_workspaces_id" for relation "notifications" already exists
+ERROR:  constraint "page_labels_created_by_id_fbd942c0_fk_users_id" for relation "page_labels" already exists
+ERROR:  constraint "page_labels_label_id_05958e53_fk_labels_id" for relation "page_labels" already exists
+ERROR:  constraint "page_labels_page_id_0e6cdb3d_fk_pages_id" for relation "page_labels" already exists
+ERROR:  constraint "page_labels_updated_by_id_d9fddbff_fk_users_id" for relation "page_labels" already exists
+ERROR:  constraint "page_labels_workspace_id_078bb01c_fk_workspaces_id" for relation "page_labels" already exists
+ERROR:  constraint "page_logs_created_by_id_4a295aec_fk_users_id" for relation "page_logs" already exists
+ERROR:  constraint "page_logs_page_id_0e0d747d_fk_pages_id" for relation "page_logs" already exists
+ERROR:  constraint "page_logs_updated_by_id_1995190b_fk_users_id" for relation "page_logs" already exists
+ERROR:  constraint "page_logs_workspace_id_be7bde64_fk_workspaces_id" for relation "page_logs" already exists
+ERROR:  constraint "page_versions_created_by_id_d660b13b_fk_users_id" for relation "page_versions" already exists
+ERROR:  constraint "page_versions_owned_by_id_6d9143db_fk_users_id" for relation "page_versions" already exists
+ERROR:  constraint "page_versions_page_id_c46471da_fk_pages_id" for relation "page_versions" already exists
+ERROR:  constraint "page_versions_updated_by_id_72d5e579_fk_users_id" for relation "page_versions" already exists
+ERROR:  constraint "page_versions_workspace_id_8330a200_fk_workspaces_id" for relation "page_versions" already exists
+ERROR:  constraint "pages_created_by_id_d109a675_fk_users_id" for relation "pages" already exists
+ERROR:  constraint "pages_owned_by_id_bf50485f_fk_users_id" for relation "pages" already exists
+ERROR:  constraint "pages_parent_id_8b823409_fk_pages_id" for relation "pages" already exists
+ERROR:  constraint "pages_updated_by_id_6c42de3e_fk_users_id" for relation "pages" already exists
+ERROR:  constraint "pages_workspace_id_c6c51010_fk_workspaces_id" for relation "pages" already exists
+ERROR:  constraint "profiles_user_id_36580373_fk_users_id" for relation "profiles" already exists
+ERROR:  constraint "project_created_by_id_6cc13408_fk_user_id" for relation "projects" already exists
+ERROR:  constraint "project_default_assignee_id_6ba45f90_fk_user_id" for relation "projects" already exists
+ERROR:  constraint "project_deploy_boards_created_by_id_2ea72f98_fk_users_id" for relation "project_deploy_boards" already exists
+ERROR:  constraint "project_deploy_boards_intake_id_36aa612d_fk_intakes_id" for relation "project_deploy_boards" already exists
+ERROR:  constraint "project_deploy_boards_project_id_49d887b2_fk_projects_id" for relation "project_deploy_boards" already exists
+ERROR:  constraint "project_deploy_boards_updated_by_id_290eb99e_fk_users_id" for relation "project_deploy_boards" already exists
+ERROR:  constraint "project_deploy_boards_workspace_id_cd92f164_fk_workspaces_id" for relation "project_deploy_boards" already exists
+ERROR:  constraint "project_identifier_created_by_id_2b6f273a_fk_user_id" for relation "project_identifiers" already exists
+ERROR:  constraint "project_identifier_project_id_13de58a9_fk_project_id" for relation "project_identifiers" already exists
+ERROR:  constraint "project_identifier_updated_by_id_1a00e2a0_fk_user_id" for relation "project_identifiers" already exists
+ERROR:  constraint "project_identifier_workspace_id_6024b517_fk_workspace_id" for relation "project_identifiers" already exists
+ERROR:  constraint "project_issue_types_created_by_id_049cecfd_fk_users_id" for relation "project_issue_types" already exists
+ERROR:  constraint "project_issue_types_issue_type_id_9494de9f_fk_issue_types_id" for relation "project_issue_types" already exists
+ERROR:  constraint "project_issue_types_project_id_ef6e52e4_fk_projects_id" for relation "project_issue_types" already exists
+ERROR:  constraint "project_issue_types_updated_by_id_b5998397_fk_users_id" for relation "project_issue_types" already exists
+ERROR:  constraint "project_issue_types_workspace_id_ace3c5b5_fk_workspaces_id" for relation "project_issue_types" already exists
+ERROR:  constraint "project_member_created_by_id_8b363306_fk_user_id" for relation "project_members" already exists
+ERROR:  constraint "project_member_invite_created_by_id_a87df45c_fk_user_id" for relation "project_member_invites" already exists
+ERROR:  constraint "project_member_invite_project_id_8fb7750e_fk_project_id" for relation "project_member_invites" already exists
+ERROR:  constraint "project_member_invite_updated_by_id_5aa55c96_fk_user_id" for relation "project_member_invites" already exists
+ERROR:  constraint "project_member_invite_workspace_id_64e2dc4c_fk_workspace_id" for relation "project_member_invites" already exists
+ERROR:  constraint "project_member_member_id_9d6b126b_fk_user_id" for relation "project_members" already exists
+ERROR:  constraint "project_member_project_id_11ea1a9e_fk_project_id" for relation "project_members" already exists
+ERROR:  constraint "project_member_updated_by_id_cf6aaac4_fk_user_id" for relation "project_members" already exists
+ERROR:  constraint "project_member_workspace_id_88bb9a97_fk_workspace_id" for relation "project_members" already exists
+ERROR:  constraint "project_pages_created_by_id_b9d02062_fk_users_id" for relation "project_pages" already exists
+ERROR:  constraint "project_pages_page_id_a0f54439_fk_pages_id" for relation "project_pages" already exists
+ERROR:  constraint "project_pages_project_id_376ba35a_fk_projects_id" for relation "project_pages" already exists
+ERROR:  constraint "project_pages_updated_by_id_b80bf0f4_fk_users_id" for relation "project_pages" already exists
+ERROR:  constraint "project_pages_workspace_id_13ed9e73_fk_workspaces_id" for relation "project_pages" already exists
+ERROR:  constraint "project_project_lead_id_caf8e353_fk_user_id" for relation "projects" already exists
+ERROR:  constraint "project_public_members_created_by_id_c4c7c776_fk_users_id" for relation "project_public_members" already exists
+ERROR:  constraint "project_public_members_member_id_52f257f9_fk_users_id" for relation "project_public_members" already exists
+ERROR:  constraint "project_public_members_project_id_2dfd893d_fk_projects_id" for relation "project_public_members" already exists
+ERROR:  constraint "project_public_members_updated_by_id_c3e4d675_fk_users_id" for relation "project_public_members" already exists
+ERROR:  constraint "project_public_members_workspace_id_ebfce110_fk_workspaces_id" for relation "project_public_members" already exists
+ERROR:  constraint "project_updated_by_id_fe290525_fk_user_id" for relation "projects" already exists
+ERROR:  constraint "project_webhooks_created_by_id_c3e4bfa3_fk_users_id" for relation "project_webhooks" already exists
+ERROR:  constraint "project_webhooks_project_id_bec3cf8c_fk_projects_id" for relation "project_webhooks" already exists
+ERROR:  constraint "project_webhooks_updated_by_id_a0183aeb_fk_users_id" for relation "project_webhooks" already exists
+ERROR:  constraint "project_webhooks_webhook_id_da27c6a7_fk_webhooks_id" for relation "project_webhooks" already exists
+ERROR:  constraint "project_webhooks_workspace_id_429ebf05_fk_workspaces_id" for relation "project_webhooks" already exists
+ERROR:  constraint "project_workspace_id_01764ff9_fk_workspace_id" for relation "projects" already exists
+ERROR:  constraint "projects_cover_image_asset_id_e6636b92_fk_file_assets_id" for relation "projects" already exists
+ERROR:  constraint "projects_default_state_id_f13e8b95_fk_states_id" for relation "projects" already exists
+ERROR:  constraint "projects_estimate_id_85c7b2ac_fk_estimates_id" for relation "projects" already exists
+ERROR:  constraint "slack_project_syncs_created_by_id_ec405a17_fk_users_id" for relation "slack_project_syncs" already exists
+ERROR:  constraint "slack_project_syncs_project_id_016dc792_fk_projects_id" for relation "slack_project_syncs" already exists
+ERROR:  constraint "slack_project_syncs_updated_by_id_152eb3b5_fk_users_id" for relation "slack_project_syncs" already exists
+ERROR:  constraint "slack_project_syncs_workspace_id_d1822b06_fk_workspaces_id" for relation "slack_project_syncs" already exists
+ERROR:  constraint "slack_project_syncs_workspace_integratio_d89c9b40_fk_workspace" for relation "slack_project_syncs" already exists
+ERROR:  constraint "social_login_connection_created_by_id_7ca2ef50_fk_user_id" for relation "social_login_connections" already exists
+ERROR:  constraint "social_login_connection_updated_by_id_c13deb42_fk_user_id" for relation "social_login_connections" already exists
+ERROR:  constraint "social_login_connection_user_id_0e26c0c5_fk_user_id" for relation "social_login_connections" already exists
+ERROR:  constraint "state_created_by_id_ff51a50d_fk_user_id" for relation "states" already exists
+ERROR:  constraint "state_project_id_23a65fd6_fk_project_id" for relation "states" already exists
+ERROR:  constraint "state_updated_by_id_be298453_fk_user_id" for relation "states" already exists
+ERROR:  constraint "state_workspace_id_2293282d_fk_workspace_id" for relation "states" already exists
+ERROR:  constraint "stickies_created_by_id_f72e05c4_fk_users_id" for relation "stickies" already exists
+ERROR:  constraint "stickies_owner_id_6ee3be2b_fk_users_id" for relation "stickies" already exists
+ERROR:  constraint "stickies_updated_by_id_d660f1fb_fk_users_id" for relation "stickies" already exists
+ERROR:  constraint "stickies_workspace_id_0094496a_fk_workspaces_id" for relation "stickies" already exists
+ERROR:  constraint "team_created_by_id_725a9101_fk_user_id" for relation "teams" already exists
+ERROR:  constraint "team_updated_by_id_79bb36f2_fk_user_id" for relation "teams" already exists
+ERROR:  constraint "team_workspace_id_1d56407f_fk_workspace_id" for relation "teams" already exists
+ERROR:  constraint "user_favorites_created_by_id_dc025309_fk_users_id" for relation "user_favorites" already exists
+ERROR:  constraint "user_favorites_parent_id_550512e4_fk_user_favorites_id" for relation "user_favorites" already exists
+ERROR:  constraint "user_favorites_project_id_359b527f_fk_projects_id" for relation "user_favorites" already exists
+ERROR:  constraint "user_favorites_updated_by_id_a1a5ac4a_fk_users_id" for relation "user_favorites" already exists
+ERROR:  constraint "user_favorites_user_id_cea7e2d2_fk_users_id" for relation "user_favorites" already exists
+ERROR:  constraint "user_favorites_workspace_id_aa90f680_fk_workspaces_id" for relation "user_favorites" already exists
+ERROR:  constraint "user_groups_group_id_b76f8aba_fk_auth_group_id" for relation "users_groups" already exists
+ERROR:  constraint "user_groups_user_id_abaea130_fk_user_id" for relation "users_groups" already exists
+ERROR:  constraint "user_notification_pr_created_by_id_54dc743a_fk_users_id" for relation "user_notification_preferences" already exists
+ERROR:  constraint "user_notification_pr_project_id_e0ca17f8_fk_projects_" for relation "user_notification_preferences" already exists
+ERROR:  constraint "user_notification_pr_updated_by_id_eb70a86d_fk_users_id" for relation "user_notification_preferences" already exists
+ERROR:  constraint "user_notification_pr_workspace_id_a2321c58_fk_workspace" for relation "user_notification_preferences" already exists
+ERROR:  constraint "user_notification_preferences_user_id_9dccc056_fk_users_id" for relation "user_notification_preferences" already exists
+ERROR:  constraint "user_recent_visits_created_by_id_a655b75f_fk_users_id" for relation "user_recent_visits" already exists
+ERROR:  constraint "user_recent_visits_project_id_e5eecf27_fk_projects_id" for relation "user_recent_visits" already exists
+ERROR:  constraint "user_recent_visits_updated_by_id_42b12ef2_fk_users_id" for relation "user_recent_visits" already exists
+ERROR:  constraint "user_recent_visits_user_id_f5153288_fk_users_id" for relation "user_recent_visits" already exists
+ERROR:  constraint "user_recent_visits_workspace_id_362a4e80_fk_workspaces_id" for relation "user_recent_visits" already exists
+ERROR:  constraint "user_user_permission_permission_id_9deb68a3_fk_auth_perm" for relation "users_user_permissions" already exists
+ERROR:  constraint "user_user_permissions_user_id_ed4a47ea_fk_user_id" for relation "users_user_permissions" already exists
+ERROR:  constraint "users_avatar_asset_id_50fa2043_fk_file_assets_id" for relation "users" already exists
+ERROR:  constraint "users_cover_image_asset_id_b9679cbc_fk_file_assets_id" for relation "users" already exists
+ERROR:  constraint "webhook_logs_created_by_id_71e7bc38_fk_users_id" for relation "webhook_logs" already exists
+ERROR:  constraint "webhook_logs_updated_by_id_3d9bad04_fk_users_id" for relation "webhook_logs" already exists
+ERROR:  constraint "webhook_logs_workspace_id_ffcd0e31_fk_workspaces_id" for relation "webhook_logs" already exists
+ERROR:  constraint "webhooks_created_by_id_25aca1b0_fk_users_id" for relation "webhooks" already exists
+ERROR:  constraint "webhooks_updated_by_id_ea35154e_fk_users_id" for relation "webhooks" already exists
+ERROR:  constraint "webhooks_workspace_id_da5865d7_fk_workspaces_id" for relation "webhooks" already exists
+ERROR:  constraint "workspace_created_by_id_10ad894e_fk_user_id" for relation "workspaces" already exists
+ERROR:  constraint "workspace_home_prefe_workspace_id_b49f76e0_fk_workspace" for relation "workspace_home_preferences" already exists
+ERROR:  constraint "workspace_home_preferences_created_by_id_f31fc163_fk_users_id" for relation "workspace_home_preferences" already exists
+ERROR:  constraint "workspace_home_preferences_updated_by_id_14ed118a_fk_users_id" for relation "workspace_home_preferences" already exists
+ERROR:  constraint "workspace_home_preferences_user_id_4087938d_fk_users_id" for relation "workspace_home_preferences" already exists
+ERROR:  constraint "workspace_integratio_integration_id_6cb0aace_fk_integrati" for relation "workspace_integrations" already exists
+ERROR:  constraint "workspace_integrations_actor_id_21619aa1_fk_users_id" for relation "workspace_integrations" already exists
+ERROR:  constraint "workspace_integrations_api_token_id_bdb1759b_fk_api_tokens_id" for relation "workspace_integrations" already exists
+ERROR:  constraint "workspace_integrations_created_by_id_37639c73_fk_users_id" for relation "workspace_integrations" already exists
+ERROR:  constraint "workspace_integrations_updated_by_id_fce01dcb_fk_users_id" for relation "workspace_integrations" already exists
+ERROR:  constraint "workspace_integrations_workspace_id_27ebeb6b_fk_workspaces_id" for relation "workspace_integrations" already exists
+ERROR:  constraint "workspace_member_created_by_id_8dc8b040_fk_user_id" for relation "workspace_members" already exists
+ERROR:  constraint "workspace_member_invite_created_by_id_082f21d3_fk_user_id" for relation "workspace_member_invites" already exists
+ERROR:  constraint "workspace_member_invite_updated_by_id_d31a9c7f_fk_user_id" for relation "workspace_member_invites" already exists
+ERROR:  constraint "workspace_member_invite_workspace_id_d935b364_fk_workspace_id" for relation "workspace_member_invites" already exists
+ERROR:  constraint "workspace_member_member_id_824f5497_fk_user_id" for relation "workspace_members" already exists
+ERROR:  constraint "workspace_member_updated_by_id_1cec0062_fk_user_id" for relation "workspace_members" already exists
+ERROR:  constraint "workspace_member_workspace_id_33f66d4b_fk_workspace_id" for relation "workspace_members" already exists
+ERROR:  constraint "workspace_owner_id_60a8bafc_fk_user_id" for relation "workspaces" already exists
+ERROR:  constraint "workspace_themes_actor_id_0e94172e_fk_users_id" for relation "workspace_themes" already exists
+ERROR:  constraint "workspace_themes_created_by_id_676e2655_fk_users_id" for relation "workspace_themes" already exists
+ERROR:  constraint "workspace_themes_updated_by_id_bba863fe_fk_users_id" for relation "workspace_themes" already exists
+ERROR:  constraint "workspace_themes_workspace_id_d1bffad8_fk_workspaces_id" for relation "workspace_themes" already exists
+ERROR:  constraint "workspace_updated_by_id_09d249ed_fk_user_id" for relation "workspaces" already exists
+ERROR:  constraint "workspace_user_links_created_by_id_b9ce7a5d_fk_users_id" for relation "workspace_user_links" already exists
+ERROR:  constraint "workspace_user_links_owner_id_37d99444_fk_users_id" for relation "workspace_user_links" already exists
+ERROR:  constraint "workspace_user_links_project_id_045e0d53_fk_projects_id" for relation "workspace_user_links" already exists
+ERROR:  constraint "workspace_user_links_updated_by_id_bd0b017f_fk_users_id" for relation "workspace_user_links" already exists
+ERROR:  constraint "workspace_user_links_workspace_id_1b0a8e22_fk_workspaces_id" for relation "workspace_user_links" already exists
+ERROR:  constraint "workspace_user_prefe_workspace_id_a345adde_fk_workspace" for relation "workspace_user_preferences" already exists
+ERROR:  constraint "workspace_user_preferences_created_by_id_2d566570_fk_users_id" for relation "workspace_user_preferences" already exists
+ERROR:  constraint "workspace_user_preferences_updated_by_id_65fed266_fk_users_id" for relation "workspace_user_preferences" already exists
+ERROR:  constraint "workspace_user_preferences_user_id_0ba5007a_fk_users_id" for relation "workspace_user_preferences" already exists
+ERROR:  constraint "workspace_user_prope_workspace_id_1dc3e2a6_fk_workspace" for relation "workspace_user_properties" already exists
+ERROR:  constraint "workspace_user_properties_created_by_id_6d8d1c4e_fk_users_id" for relation "workspace_user_properties" already exists
+ERROR:  constraint "workspace_user_properties_updated_by_id_910a2cc5_fk_users_id" for relation "workspace_user_properties" already exists
+ERROR:  constraint "workspace_user_properties_user_id_b1079e07_fk_users_id" for relation "workspace_user_properties" already exists
+ERROR:  constraint "workspaces_logo_asset_id_a784bb00_fk_file_assets_id" for relation "workspaces" already exists
+✓ Restoration completed successfully!
+
