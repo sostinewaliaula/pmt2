@@ -7,7 +7,7 @@ def add_ldap_configuration(apps, schema_editor):
     """Add LDAP configuration keys to InstanceConfiguration"""
     
     # Get the model from the apps registry (historical state)
-    InstanceConfiguration = apps.get_model('license', 'InstanceConfiguration')
+    InstanceConfiguration = apps.get_model('plane.license', 'InstanceConfiguration')
     
     # LDAP configuration keys with default values
     ldap_configs = [
@@ -41,7 +41,7 @@ def remove_ldap_configuration(apps, schema_editor):
     """Remove LDAP configuration keys from InstanceConfiguration"""
     
     # Get the model from the apps registry (historical state)
-    InstanceConfiguration = apps.get_model('license', 'InstanceConfiguration')
+    InstanceConfiguration = apps.get_model('plane.license', 'InstanceConfiguration')
     
     ldap_keys = [
         "IS_LDAP_ENABLED",
@@ -66,6 +66,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('db', '0121_alter_estimate_type'),
+        ('license', '0006_instance_is_current_version_deprecated'),
     ]
 
     operations = [
