@@ -10,7 +10,6 @@ from django.views import View
 
 # Module imports
 from plane.authentication.provider.credentials.email import EmailProvider
-from plane.authentication.adapter.ldap import LDAPAdapter
 from plane.authentication.utils.login import user_login
 from plane.license.models import Instance
 from plane.authentication.utils.host import base_host
@@ -93,6 +92,9 @@ class SignInAuthEndpoint(View):
         
         if IS_LDAP_ENABLED == "1":
             try:
+                # Import LDAP adapter only when needed to avoid import errors during migrations
+                from plane.authentication.adapter.ldap import LDAPAdapter
+                
                 ldap_adapter = LDAPAdapter(
                     request=request,
                     username=email,
@@ -117,6 +119,9 @@ class SignInAuthEndpoint(View):
                 return HttpResponseRedirect(url)
             except AuthenticationException:
                 # LDAP authentication failed, continue with email authentication
+                pass
+            except ImportError:
+                # LDAP dependencies not available, continue with email authentication
                 pass
 
         if not existing_user:

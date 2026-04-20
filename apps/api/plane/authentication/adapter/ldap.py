@@ -11,7 +11,7 @@ from typing import Dict, Any, Optional
 # Third party imports
 import ldap3
 from ldap3 import Server, Connection, ALL, NTLM, SIMPLE, Tls
-from ldap3.core.exceptions import LDAPException, LDAPBindError, LDAPInvalidCredentialsError
+from ldap3.core.exceptions import LDAPException, LDAPBindError, LDAPInvalidCredentialsResult
 
 # Module imports
 from plane.authentication.adapter.base import Adapter
@@ -201,7 +201,7 @@ class LDAPAdapter(Adapter):
             user_conn.unbind()
             return True
             
-        except LDAPInvalidCredentialsError:
+        except LDAPInvalidCredentialsResult:
             self.logger.warning(f"LDAP authentication failed for user: {user_dn}")
             return False
         except LDAPBindError as e:
