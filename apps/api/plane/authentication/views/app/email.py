@@ -10,6 +10,7 @@ from django.views import View
 
 # Module imports
 from plane.authentication.provider.credentials.email import EmailProvider
+from plane.authentication.adapter.ldap import LDAPAdapter
 from plane.authentication.utils.login import user_login
 from plane.license.models import Instance
 from plane.authentication.utils.host import base_host
@@ -21,6 +22,7 @@ from plane.authentication.adapter.error import (
     AUTHENTICATION_ERROR_CODES,
 )
 from plane.utils.path_validator import get_safe_redirect_url
+from plane.license.utils.instance_value import get_configuration_value
 
 
 class SignInAuthEndpoint(View):
@@ -83,6 +85,39 @@ class SignInAuthEndpoint(View):
             return HttpResponseRedirect(url)
 
         existing_user = User.objects.filter(email=email).first()
+
+        # Try LDAP authentication first if enabled
+        (IS_LDAP_ENABLED,) = get_configuration_value([
+            {"key": "IS_LDAP_ENABLED", "default": "0"}
+        ])
+        
+        if IS_LDAP_ENABLED == "1":
+            try:
+                ldap_adapter = LDAPAdapter(
+                    request=request,
+                    username=email,
+                    password=password,
+                    callback=post_user_auth_workflow
+                )
+                user = ldap_adapter.authenticate()
+                # Login the user and record his device info
+                user_login(request=request, user=user, is_app=True)
+                # Get the redirection path
+                if next_path:
+                    path = next_path
+                else:
+                    path = get_redirection_path(user=user)
+
+                # Get the safe redirect URL
+                url = get_safe_redirect_url(
+                    base_url=base_host(request=request, is_app=True),
+                    next_path=path,
+                    params={},
+                )
+                return HttpResponseRedirect(url)
+            except AuthenticationException:
+                # LDAP authentication failed, continue with email authentication
+                pass
 
         if not existing_user:
             exc = AuthenticationException(

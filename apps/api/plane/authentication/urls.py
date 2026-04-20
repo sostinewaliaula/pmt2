@@ -18,6 +18,8 @@ from .views import (
     GitHubOauthInitiateEndpoint,
     GoogleCallbackEndpoint,
     GoogleOauthInitiateEndpoint,
+    LDAPAuthenticationEndpoint,
+    LDAPTestConnectionEndpoint,
     MagicGenerateEndpoint,
     MagicSignInEndpoint,
     MagicSignUpEndpoint,
@@ -150,4 +152,7 @@ urlpatterns = [
         GiteaCallbackSpaceEndpoint.as_view(),
         name="space-gitea-callback",
     ),
+    ## LDAP Authentication
+    path("ldap/", LDAPAuthenticationEndpoint.as_view(), name="ldap-auth"),
+    path("ldap/test-connection/", LDAPTestConnectionEndpoint.as_view(), name="ldap-test"),
 ]
