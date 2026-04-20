@@ -1,6 +1,6 @@
 services:
   web:
-    image: ghcr.io/sostinewaliaula/caava-web:latest
+    image: ghcr.io/sostinewaliaula/pmt2-web:latest
     restart: always
     env_file:
       - .env
@@ -8,7 +8,7 @@ services:
       - api
 
   admin:
-    image: ghcr.io/sostinewaliaula/caava-admin:latest
+    image: ghcr.io/sostinewaliaula/pmt2-admin:latest
     restart: always
     env_file:
       - .env
@@ -17,7 +17,7 @@ services:
       - web
 
   space:
-    image: ghcr.io/sostinewaliaula/caava-space:latest
+    image: ghcr.io/sostinewaliaula/pmt2-space:latest
     restart: always
     env_file:
       - .env
@@ -26,7 +26,7 @@ services:
       - web
 
   api:
-    image: ghcr.io/sostinewaliaula/caava-api:latest
+    image: ghcr.io/sostinewaliaula/pmt2-api:latest
     restart: always
     command: ./bin/docker-entrypoint-api.sh
     env_file:
@@ -36,7 +36,7 @@ services:
       - plane-redis
 
   worker:
-    image: ghcr.io/sostinewaliaula/caava-api:latest
+    image: ghcr.io/sostinewaliaula/pmt2-api:latest
     restart: always
     command: ./bin/docker-entrypoint-worker.sh
     env_file:
@@ -47,7 +47,7 @@ services:
       - plane-redis
 
   beat-worker:
-    image: ghcr.io/sostinewaliaula/caava-api:latest
+    image: ghcr.io/sostinewaliaula/pmt2-api:latest
     restart: always
     command: ./bin/docker-entrypoint-beat.sh
     env_file:
@@ -58,7 +58,7 @@ services:
       - plane-redis
 
   migrator:
-    image: ghcr.io/sostinewaliaula/caava-api:latest
+    image: ghcr.io/sostinewaliaula/pmt2-api:latest
     restart: no
     command: ./bin/docker-entrypoint-migrator.sh
     env_file:
@@ -68,7 +68,7 @@ services:
       - plane-redis
 
   live:
-    image: ghcr.io/sostinewaliaula/caava-live:latest
+    image: ghcr.io/sostinewaliaula/pmt2-live:latest
     restart: always
     env_file:
       - .env
@@ -116,7 +116,7 @@ services:
       MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY}
 
   proxy:
-    image: ghcr.io/sostinewaliaula/caava-proxy:latest
+    image: ghcr.io/sostinewaliaula/pmt2-proxy:latest
     restart: always
     ports:
       - ${LISTEN_HTTP_PORT}:80

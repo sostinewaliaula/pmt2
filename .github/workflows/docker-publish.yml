@@ -1,4 +1,4 @@
-name: Build and Publish Caava Group Images
+name: Build and Publish PMT2 Images
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME_PREFIX: ${{ github.repository_owner }}/caava
+  IMAGE_NAME_PREFIX: ${{ github.repository_owner }}/pmt2
 
 jobs:
   build-and-push:
