@@ -18,7 +18,7 @@ import googleLogo from "@/app/assets/logos/google-logo.svg?url";
 // hooks
 import { useInstance } from "@/hooks/store/use-instance";
 
-export const useCoreOAuthConfig = (oauthActionText: string): TOAuthConfigs => {
+export const useCoreOAuthConfig = (oauthActionText: string, onLDAPClick?: () => void): TOAuthConfigs => {
   //router
   const searchParams = useSearchParams();
   // query params
@@ -109,8 +109,9 @@ export const useCoreOAuthConfig = (oauthActionText: string): TOAuthConfigs => {
         </svg>
       ),
       onClick: () => {
-        // For now, redirect to LDAP endpoint directly
-        window.location.assign(`${API_BASE_URL}/auth/ldap/`);
+        if (onLDAPClick) {
+          onLDAPClick();
+        }
       },
       enabled: config?.is_ldap_enabled,
     },
