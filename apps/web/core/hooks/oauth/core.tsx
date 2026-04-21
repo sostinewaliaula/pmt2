@@ -18,7 +18,7 @@ import googleLogo from "@/app/assets/logos/google-logo.svg?url";
 // hooks
 import { useInstance } from "@/hooks/store/use-instance";
 
-export const useCoreOAuthConfig = (oauthActionText: string, onLDAPClick?: () => void): TOAuthConfigs => {
+export const useCoreOAuthConfig = (oauthActionText: string): TOAuthConfigs => {
   //router
   const searchParams = useSearchParams();
   // query params
@@ -33,8 +33,7 @@ export const useCoreOAuthConfig = (oauthActionText: string, onLDAPClick?: () => 
       (config?.is_google_enabled ||
         config?.is_github_enabled ||
         config?.is_gitlab_enabled ||
-        config?.is_gitea_enabled ||
-        config?.is_ldap_enabled)) ||
+        config?.is_gitea_enabled)) ||
     false;
   const oAuthOptions: TOAuthOption[] = [
     {
@@ -79,41 +78,6 @@ export const useCoreOAuthConfig = (oauthActionText: string, onLDAPClick?: () => 
         window.location.assign(`${API_BASE_URL}/auth/gitea/${next_path ? `?next_path=${next_path}` : ``}`);
       },
       enabled: config?.is_gitea_enabled,
-    },
-    {
-      id: "ldap",
-      text: `${oauthActionText} with LDAP`,
-      icon: (
-        <svg height={18} width={18} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M12 2L2 7L12 12L22 7L12 2Z"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M2 17L12 22L22 17"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M2 12L12 17L22 12"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      ),
-      onClick: () => {
-        if (onLDAPClick) {
-          onLDAPClick();
-        }
-      },
-      enabled: config?.is_ldap_enabled,
     },
   ];
 
