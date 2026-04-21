@@ -10,8 +10,8 @@ import type { TOAuthConfigs } from "@plane/types";
 import { useCoreOAuthConfig } from "./core";
 import { useExtendedOAuthConfig } from "./extended";
 
-export const useOAuthConfig = (oauthActionText: string = "Continue", onLDAPClick?: () => void): TOAuthConfigs => {
-  const coreOAuthConfig = useCoreOAuthConfig(oauthActionText, onLDAPClick);
+export const useOAuthConfig = (oauthActionText: string = "Continue"): TOAuthConfigs => {
+  const coreOAuthConfig = useCoreOAuthConfig(oauthActionText);
   const extendedOAuthConfig = useExtendedOAuthConfig(oauthActionText);
   return {
     isOAuthEnabled: coreOAuthConfig.isOAuthEnabled || extendedOAuthConfig.isOAuthEnabled,
