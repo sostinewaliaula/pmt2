@@ -19,8 +19,7 @@ import {
   authErrorHandler,
 } from "@/helpers/authentication.helper";
 // hooks
-import { useOAuthConfig } from "@/hooks/oauth";
-import { useCoreOAuthConfig } from "@/core/hooks/oauth/core";
+import { useOAuthConfig } from "@/core/hooks/oauth";
 import { useInstance } from "@/hooks/store/use-instance";
 // local imports
 import { TermsAndConditions } from "../terms-and-conditions";
@@ -52,7 +51,7 @@ export const AuthRoot = observer(function AuthRoot(props: TAuthRoot) {
   const { config } = useInstance();
   // derived values
   const oAuthActionText = authMode === EAuthModes.SIGN_UP ? "Sign up" : "Sign in";
-  const { isOAuthEnabled, oAuthOptions } = useCoreOAuthConfig(oAuthActionText, () => setAuthStep(EAuthSteps.LDAP));
+  const { isOAuthEnabled, oAuthOptions } = useOAuthConfig(oAuthActionText, () => setAuthStep(EAuthSteps.LDAP));
   const isEmailBasedAuthEnabled = config?.is_email_password_enabled || config?.is_magic_login_enabled;
   const isLDAPEnabled = config?.is_ldap_enabled;
   const noAuthMethodsAvailable = !isOAuthEnabled && !isEmailBasedAuthEnabled && !isLDAPEnabled;
