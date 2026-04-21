@@ -129,11 +129,18 @@ class LDAPAdapter(Adapter):
                 receive_timeout=30
             )
             
-            # Prepare search filter
+            # Prepare search filter - support both email and username formats
             search_filter = config["user_filter"].format(
                 username=username,
                 email=username  # Support both username and email
             )
+            
+            # If the input doesn't contain @ and the filter expects email, 
+            # try to construct an email from username
+            if "@" not in username and "{email}" in config["user_filter"]:
+                # Try with constructed email format (username@domain)
+                # This is a fallback - the primary search should work with username
+                pass
             
             # Search for user
             success = admin_conn.search(
@@ -165,10 +172,21 @@ class LDAPAdapter(Adapter):
             user_dn = user_entry.entry_dn
             
             # Store user attributes for later use
+            username_attr = str(user_entry[config["attr_username"]]) if config["attr_username"] in user_entry else username
+            email_attr = str(user_entry[config["attr_email"]]) if config["attr_email"] in user_entry else ""
+            
+            # If no email found in LDAP, construct one from username
+            if not email_attr:
+                if "@" in username:
+                    email_attr = username
+                else:
+                    # Construct email from username (you may want to configure the domain)
+                    email_attr = f"{username}@ldap.local"
+            
             self.ldap_user_attributes = {
                 "dn": user_dn,
-                "username": str(user_entry[config["attr_username"]]) if config["attr_username"] in user_entry else username,
-                "email": str(user_entry[config["attr_email"]]) if config["attr_email"] in user_entry else "",
+                "username": username_attr,
+                "email": email_attr,
                 "first_name": str(user_entry[config["attr_first_name"]]) if config["attr_first_name"] in user_entry else "",
                 "last_name": str(user_entry[config["attr_last_name"]]) if config["attr_last_name"] in user_entry else "",
             }

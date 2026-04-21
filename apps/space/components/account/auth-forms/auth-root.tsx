@@ -24,6 +24,7 @@ import { TermsAndConditions } from "../terms-and-conditions";
 import { AuthBanner } from "./auth-banner";
 import { AuthHeader } from "./auth-header";
 import { AuthEmailForm } from "./email";
+import { AuthLDAPForm } from "./ldap";
 import { AuthPasswordForm } from "./password";
 import { AuthUniqueCodeForm } from "./unique-code";
 
@@ -84,6 +85,7 @@ export const AuthRoot = observer(function AuthRoot() {
   const isSMTPConfigured = config?.is_smtp_configured || false;
   const isMagicLoginEnabled = config?.is_magic_login_enabled || false;
   const isEmailPasswordEnabled = config?.is_email_password_enabled || false;
+  const isLDAPEnabled = config?.is_ldap_enabled || false;
   const oAuthActionText = authMode === EAuthModes.SIGN_UP ? "Sign up" : "Sign in";
   const { isOAuthEnabled, oAuthOptions } = useOAuthConfig(oAuthActionText);
 
@@ -184,6 +186,35 @@ export const AuthRoot = observer(function AuthRoot() {
               setAuthStep(step);
             }}
           />
+        )}
+        {authStep === EAuthSteps.LDAP && (
+          <AuthLDAPForm
+            handleAuthStep={(step: string) => {
+              setAuthStep(step as EAuthSteps);
+            }}
+            handleErrorInfo={setErrorInfo}
+          />
+        )}
+        
+        {/* LDAP Login Option */}
+        {isLDAPEnabled && authStep === EAuthSteps.EMAIL && (
+          <div className="flex flex-col space-y-2">
+            <div className="flex items-center">
+              <div className="flex-grow border-t border-onboarding-border-100"></div>
+              <span className="mx-3 text-xs text-onboarding-text-400">or</span>
+              <div className="flex-grow border-t border-onboarding-border-100"></div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setAuthStep(EAuthSteps.LDAP)}
+              className="flex w-full items-center justify-center gap-2 rounded border border-onboarding-border-100 bg-onboarding-background-200 px-4 py-3 text-sm font-medium text-onboarding-text-300 hover:bg-onboarding-background-300"
+            >
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M5 12l4-4m-4 4l4 4" />
+              </svg>
+              Sign in with LDAP / Active Directory
+            </button>
+          </div>
         )}
         <TermsAndConditions isSignUp={authMode === EAuthModes.SIGN_UP ? true : false} />
       </div>

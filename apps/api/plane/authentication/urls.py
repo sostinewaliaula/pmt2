@@ -36,6 +36,7 @@ from .views import (
     GitHubOauthInitiateSpaceEndpoint,
     GoogleCallbackSpaceEndpoint,
     GoogleOauthInitiateSpaceEndpoint,
+    LDAPAuthenticationSpaceEndpoint,
     MagicGenerateSpaceEndpoint,
     MagicSignInSpaceEndpoint,
     MagicSignUpSpaceEndpoint,
@@ -155,4 +156,5 @@ urlpatterns = [
     ## LDAP Authentication
     path("ldap/", LDAPAuthenticationEndpoint.as_view(), name="ldap-auth"),
     path("ldap/test-connection/", LDAPTestConnectionEndpoint.as_view(), name="ldap-test"),
+    path("spaces/ldap/", LDAPAuthenticationSpaceEndpoint.as_view(), name="space-ldap-auth"),
 ]

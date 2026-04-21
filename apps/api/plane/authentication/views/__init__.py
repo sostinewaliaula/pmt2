@@ -18,6 +18,7 @@ from .app.signout import SignOutAuthEndpoint
 
 
 from .space.email import SignInAuthSpaceEndpoint, SignUpAuthSpaceEndpoint
+from .space.ldap import LDAPAuthenticationSpaceEndpoint
 
 from .space.github import GitHubCallbackSpaceEndpoint, GitHubOauthInitiateSpaceEndpoint
 
