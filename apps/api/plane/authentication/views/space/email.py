@@ -20,6 +20,7 @@ from plane.authentication.adapter.error import (
     AuthenticationException,
 )
 from plane.utils.path_validator import get_safe_redirect_url, validate_next_path, get_allowed_hosts
+from plane.license.utils.instance_value import get_configuration_value
 
 
 class SignInAuthSpaceEndpoint(View):
@@ -74,6 +75,39 @@ class SignInAuthSpaceEndpoint(View):
 
         # Existing User
         existing_user = User.objects.filter(email=email).first()
+
+        # Try LDAP authentication first if enabled
+        (IS_LDAP_ENABLED,) = get_configuration_value([
+            {"key": "IS_LDAP_ENABLED", "default": "0"}
+        ])
+        
+        if IS_LDAP_ENABLED == "1":
+            try:
+                # Import LDAP adapter only when needed to avoid import errors during migrations
+                from plane.authentication.adapter.ldap import LDAPAdapter
+                
+                ldap_adapter = LDAPAdapter(
+                    request=request,
+                    username=email,
+                    password=password,
+                    callback=None  # No callback needed for space authentication
+                )
+                user = ldap_adapter.authenticate()
+                # Login the user and record his device info
+                user_login(request=request, user=user, is_space=True)
+                # redirect to referer path
+                next_path = validate_next_path(next_path=next_path)
+                url = f"{base_host(request=request, is_space=True).rstrip('/')}{next_path}"
+                if url_has_allowed_host_and_scheme(url, allowed_hosts=get_allowed_hosts()):
+                    return HttpResponseRedirect(url)
+                else:
+                    return HttpResponseRedirect(base_host(request=request, is_space=True))
+            except AuthenticationException:
+                # LDAP authentication failed, continue with email authentication
+                pass
+            except ImportError:
+                # LDAP dependencies not available, continue with email authentication
+                pass
 
         if not existing_user:
             exc = AuthenticationException(
