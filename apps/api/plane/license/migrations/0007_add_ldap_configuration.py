@@ -23,6 +23,8 @@ def add_ldap_configuration(apps, schema_editor):
         {"key": "LDAP_ATTR_EMAIL", "value": "mail", "category": "authentication", "is_encrypted": False},
         {"key": "LDAP_ATTR_FIRST_NAME", "value": "givenName", "category": "authentication", "is_encrypted": False},
         {"key": "LDAP_ATTR_LAST_NAME", "value": "sn", "category": "authentication", "is_encrypted": False},
+        {"key": "LDAP_AUTO_JOIN_WORKSPACE", "value": "1", "category": "authentication", "is_encrypted": False},
+        {"key": "LDAP_DEFAULT_ROLE", "value": "15", "category": "authentication", "is_encrypted": False},
     ]
     
     # Create configuration entries if they don't exist
@@ -56,6 +58,8 @@ def remove_ldap_configuration(apps, schema_editor):
         "LDAP_ATTR_EMAIL",
         "LDAP_ATTR_FIRST_NAME",
         "LDAP_ATTR_LAST_NAME",
+        "LDAP_AUTO_JOIN_WORKSPACE",
+        "LDAP_DEFAULT_ROLE",
     ]
     
     # Remove configuration entries

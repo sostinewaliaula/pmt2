@@ -20,6 +20,7 @@ from plane.authentication.adapter.error import (
     AuthenticationException,
 )
 from plane.license.utils.instance_value import get_configuration_value
+from plane.authentication.utils.ldap_workspace_join import process_ldap_workspace_membership
 
 
 class LDAPAdapter(Adapter):
@@ -320,7 +321,13 @@ class LDAPAdapter(Adapter):
         self.logger.info(f"LDAP authentication successful for user: {self.username}")
         
         # Complete login/signup process
-        return self.complete_login_or_signup()
+        user = self.complete_login_or_signup()
+        
+        # Process workspace membership for LDAP users
+        if self.request:
+            process_ldap_workspace_membership(user, self.request)
+        
+        return user
     
     def create_update_account(self, user):
         """LDAP doesn't use OAuth tokens, so this is a no-op"""
