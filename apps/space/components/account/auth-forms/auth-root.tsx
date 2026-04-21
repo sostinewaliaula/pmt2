@@ -155,9 +155,53 @@ export const AuthRoot = observer(function AuthRoot() {
           <AuthBanner bannerData={errorInfo} handleBannerData={(value) => setErrorInfo(value)} />
         )}
         <AuthHeader authMode={authMode} />
+        
+        {/* Always show LDAP option prominently when enabled */}
+        {isLDAPEnabled && authStep === EAuthSteps.EMAIL && (
+          <div className="flex flex-col space-y-3">
+            <button
+              type="button"
+              onClick={() => setAuthStep(EAuthSteps.LDAP)}
+              className="flex w-full items-center justify-center gap-3 rounded-lg border-2 border-blue-500 bg-blue-50 px-4 py-4 text-base font-semibold text-blue-700 hover:bg-blue-100 transition-colors"
+            >
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              🏢 Sign in with LDAP / Active Directory
+            </button>
+            <div className="flex items-center">
+              <div className="flex-grow border-t border-onboarding-border-100"></div>
+              <span className="mx-3 text-xs text-onboarding-text-400">or continue with email</span>
+              <div className="flex-grow border-t border-onboarding-border-100"></div>
+            </div>
+          </div>
+        )}
+        
         {isOAuthEnabled && <OAuthOptions options={oAuthOptions} compact={authStep === EAuthSteps.PASSWORD} />}
 
         {authStep === EAuthSteps.EMAIL && <AuthEmailForm defaultEmail={email} onSubmit={handleEmailVerification} />}
+        
+        {/* LDAP Login Option - Prominent placement */}
+        {isLDAPEnabled && authStep === EAuthSteps.EMAIL && (
+          <div className="flex flex-col space-y-2">
+            <div className="flex items-center">
+              <div className="flex-grow border-t border-onboarding-border-100"></div>
+              <span className="mx-3 text-xs text-onboarding-text-400">or</span>
+              <div className="flex-grow border-t border-onboarding-border-100"></div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setAuthStep(EAuthSteps.LDAP)}
+              className="flex w-full items-center justify-center gap-2 rounded border border-onboarding-border-100 bg-onboarding-background-200 px-4 py-3 text-sm font-medium text-onboarding-text-300 hover:bg-onboarding-background-300 transition-colors"
+            >
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              Sign in with LDAP / Active Directory
+            </button>
+          </div>
+        )}
+        
         {authStep === EAuthSteps.UNIQUE_CODE && (
           <AuthUniqueCodeForm
             mode={authMode}
@@ -194,27 +238,6 @@ export const AuthRoot = observer(function AuthRoot() {
             }}
             handleErrorInfo={setErrorInfo}
           />
-        )}
-        
-        {/* LDAP Login Option */}
-        {isLDAPEnabled && authStep === EAuthSteps.EMAIL && (
-          <div className="flex flex-col space-y-2">
-            <div className="flex items-center">
-              <div className="flex-grow border-t border-onboarding-border-100"></div>
-              <span className="mx-3 text-xs text-onboarding-text-400">or</span>
-              <div className="flex-grow border-t border-onboarding-border-100"></div>
-            </div>
-            <button
-              type="button"
-              onClick={() => setAuthStep(EAuthSteps.LDAP)}
-              className="flex w-full items-center justify-center gap-2 rounded border border-onboarding-border-100 bg-onboarding-background-200 px-4 py-3 text-sm font-medium text-onboarding-text-300 hover:bg-onboarding-background-300"
-            >
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M5 12l4-4m-4 4l4 4" />
-              </svg>
-              Sign in with LDAP / Active Directory
-            </button>
-          </div>
         )}
         <TermsAndConditions isSignUp={authMode === EAuthModes.SIGN_UP ? true : false} />
       </div>

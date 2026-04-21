@@ -1,0 +1,135 @@
+/**
+ * Copyright (c) 2023-present Plane Software, Inc. and contributors
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * See the LICENSE file for details.
+ */
+
+import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+// plane imports
+import { Button, Input } from "@plane/ui";
+import { API_BASE_URL } from "@plane/constants";
+// helpers
+import type { TAuthErrorInfo } from "@/helpers/authentication.helper";
+import { EErrorAlertType, authErrorHandler, EAuthenticationErrorCodes, EAuthSteps } from "@/helpers/authentication.helper";
+
+type TLDAPAuthForm = {
+  handleAuthStep: (step: EAuthSteps) => void;
+  handleErrorInfo: (errorInfo: TAuthErrorInfo | undefined) => void;
+};
+
+export const AuthLDAPForm = ({ handleAuthStep, handleErrorInfo }: TLDAPAuthForm) => {
+  // router params
+  const searchParams = useSearchParams();
+  const nextPath = searchParams.get("next_path") || undefined;
+  const workspaceSlug = searchParams.get("slug") || undefined;
+  
+  // states
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!username.trim() || !password) {
+      const errorhandler = authErrorHandler(EAuthenticationErrorCodes.REQUIRED_EMAIL_PASSWORD_SIGN_IN);
+      if (errorhandler?.type) handleErrorInfo(errorhandler);
+      return;
+    }
+
+    setIsSubmitting(true);
+    handleErrorInfo(undefined);
+
+    try {
+      // Submit to LDAP endpoint
+      const response = await fetch(`${API_BASE_URL}/auth/ldap/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username.trim(),
+          password: password,
+        }),
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        // Successful authentication - get user data and redirect
+        const userData = await response.json();
+        
+        // Redirect to workspace or next path
+        const redirectUrl = workspaceSlug 
+          ? `/${workspaceSlug}` 
+          : nextPath || "/";
+        window.location.href = redirectUrl;
+      } else {
+        // Handle error response
+        const errorData = await response.json();
+        const errorCode = errorData.error_code?.toString() || EAuthenticationErrorCodes.AUTHENTICATION_FAILED_SIGN_IN;
+        const errorhandler = authErrorHandler(errorCode as EAuthenticationErrorCodes);
+        if (errorhandler?.type) handleErrorInfo(errorhandler);
+      }
+    } catch (error) {
+      const errorhandler = authErrorHandler(EAuthenticationErrorCodes.AUTHENTICATION_FAILED_SIGN_IN);
+      if (errorhandler?.type) handleErrorInfo(errorhandler);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+      <div className="space-y-1">
+        <Input
+          id="username"
+          name="username"
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Enter your username (e.g., firstname.lastname)"
+          className="h-[46px] w-full border border-onboarding-border-100 !bg-onboarding-background-200 pr-12 text-onboarding-text-400 placeholder:text-onboarding-text-400"
+          disabled={isSubmitting}
+          autoComplete="username"
+          autoFocus
+        />
+      </div>
+      <div className="space-y-1">
+        <Input
+          id="password"
+          name="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Enter your password"
+          className="h-[46px] w-full border border-onboarding-border-100 !bg-onboarding-background-200 pr-12 text-onboarding-text-400 placeholder:text-onboarding-text-400"
+          disabled={isSubmitting}
+          autoComplete="current-password"
+        />
+      </div>
+      <div className="space-y-2.5">
+        <Button
+          type="submit"
+          variant="primary"
+          className="w-full"
+          size="lg"
+          disabled={isSubmitting}
+          loading={isSubmitting}
+        >
+          {isSubmitting ? "Signing in..." : "Sign in with LDAP"}
+        </Button>
+        <Button
+          type="button"
+          variant="outline-primary"
+          className="w-full"
+          size="lg"
+          onClick={() => handleAuthStep(EAuthSteps.EMAIL)}
+          disabled={isSubmitting}
+        >
+          Back to email login
+        </Button>
+      </div>
+    </form>
+  );
+};
