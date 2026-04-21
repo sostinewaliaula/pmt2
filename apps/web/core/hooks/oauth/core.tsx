@@ -33,7 +33,8 @@ export const useCoreOAuthConfig = (oauthActionText: string): TOAuthConfigs => {
       (config?.is_google_enabled ||
         config?.is_github_enabled ||
         config?.is_gitlab_enabled ||
-        config?.is_gitea_enabled)) ||
+        config?.is_gitea_enabled ||
+        config?.is_ldap_enabled)) ||
     false;
   const oAuthOptions: TOAuthOption[] = [
     {
@@ -78,6 +79,40 @@ export const useCoreOAuthConfig = (oauthActionText: string): TOAuthConfigs => {
         window.location.assign(`${API_BASE_URL}/auth/gitea/${next_path ? `?next_path=${next_path}` : ``}`);
       },
       enabled: config?.is_gitea_enabled,
+    },
+    {
+      id: "ldap",
+      text: `${oauthActionText} with LDAP`,
+      icon: (
+        <svg height={18} width={18} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M12 2L2 7L12 12L22 7L12 2Z"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M2 17L12 22L22 17"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M2 12L12 17L22 12"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      ),
+      onClick: () => {
+        // For now, redirect to LDAP endpoint directly
+        window.location.assign(`${API_BASE_URL}/auth/ldap/`);
+      },
+      enabled: config?.is_ldap_enabled,
     },
   ];
 
