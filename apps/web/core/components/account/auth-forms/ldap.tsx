@@ -36,27 +36,29 @@ export const AuthLDAPForm = ({ handleAuthStep, handleErrorInfo }: TLDAPAuthForm)
     handleErrorInfo(undefined);
 
     try {
+      // Create form data
+      const formData = new FormData();
+      formData.append("username", username.trim());
+      formData.append("password", password);
+      formData.append("next_path", "/");
+
       // Submit to LDAP endpoint
       const response = await fetch(`${API_BASE_URL}/auth/ldap/`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: username.trim(),
-          password: password,
-        }),
+        body: formData,
         credentials: "include",
       });
 
-      if (response.ok) {
+      // Check if response is a redirect
+      if (response.redirected) {
+        // Follow the redirect
+        window.location.href = response.url;
+      } else if (response.ok) {
         // Successful authentication - redirect to home
         window.location.href = "/";
       } else {
         // Handle error response
-        const errorData = await response.json();
-        const errorCode = errorData.error_code?.toString() || EAuthenticationErrorCodes.AUTHENTICATION_FAILED_SIGN_IN;
-        const errorhandler = authErrorHandler(errorCode as EAuthenticationErrorCodes);
+        const errorhandler = authErrorHandler(EAuthenticationErrorCodes.AUTHENTICATION_FAILED_SIGN_IN);
         if (errorhandler?.type) handleErrorInfo(errorhandler);
       }
     } catch (error) {
