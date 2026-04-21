@@ -38,10 +38,6 @@ const Titles = {
       header: "Work in all dimensions.",
       subHeader: "Welcome back to Plane.",
     },
-    [EAuthSteps.LDAP]: {
-      header: "Work in all dimensions.",
-      subHeader: "Welcome back to Plane.",
-    },
   },
   [EAuthModes.SIGN_UP]: {
     [EAuthSteps.EMAIL]: {
@@ -53,10 +49,6 @@ const Titles = {
       subHeader: "Create your Plane account.",
     },
     [EAuthSteps.UNIQUE_CODE]: {
-      header: "Work in all dimensions.",
-      subHeader: "Create your Plane account.",
-    },
-    [EAuthSteps.LDAP]: {
       header: "Work in all dimensions.",
       subHeader: "Create your Plane account.",
     },
