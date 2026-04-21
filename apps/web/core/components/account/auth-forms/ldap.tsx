@@ -5,6 +5,7 @@
  */
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 // plane imports
 import { Button, Input } from "@plane/ui";
 import { API_BASE_URL } from "@plane/constants";
@@ -18,6 +19,11 @@ type TLDAPAuthForm = {
 };
 
 export const AuthLDAPForm = ({ handleAuthStep, handleErrorInfo }: TLDAPAuthForm) => {
+  // router params
+  const searchParams = useSearchParams();
+  const nextPath = searchParams.get("next_path") || undefined;
+  const workspaceSlug = searchParams.get("slug") || undefined;
+  
   // states
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -50,8 +56,14 @@ export const AuthLDAPForm = ({ handleAuthStep, handleErrorInfo }: TLDAPAuthForm)
       });
 
       if (response.ok) {
-        // Successful authentication - redirect to home
-        window.location.href = "/";
+        // Successful authentication - get user data and redirect
+        const userData = await response.json();
+        
+        // Redirect to workspace or next path
+        const redirectUrl = workspaceSlug 
+          ? `/${workspaceSlug}` 
+          : nextPath || "/";
+        window.location.href = redirectUrl;
       } else {
         // Handle error response
         const errorData = await response.json();
