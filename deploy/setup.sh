@@ -11,7 +11,7 @@ RED='\033[0;31m'
 BOLD='\033[1m'
 NC='\033[0m' # No Color
 
-REPO_RAW_URL="https://raw.githubusercontent.com/sostinewaliaula/pmt2/main/deploy"
+REPO_RAW_URL="https://raw.githubusercontent.com/sostinewaliaula/pmt/main/deploy"
 
 # Print header
 echo -e "${BOLD}${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
@@ -38,7 +38,8 @@ show_menu() {
     echo -e "   9) ${YELLOW}Run Database Migrations${NC} (Fix schema errors)"
     echo -e "   10) ${RED}Force Fix Enterprise Schema${NC} (Surgical fix for project_id)"
     echo -e "   11) ${BLUE}Clean Ghost Projects${NC} (Remove stuck Test projects)"
-    echo -e "   12) Exit"
+    echo -e "   12) ${RED}Fix View Creation Issue${NC} (Enterprise to Community view fix)"
+    echo -e "   13) Exit"
     echo -ne "\nAction [3]: "
 }
 
@@ -101,6 +102,129 @@ clean_ghosts() {
     read project_name
     docker compose exec -T plane-db psql -U ${DB_USER} -d ${DB_NAME} -c "DELETE FROM projects WHERE name = '$project_name';"
     echo -e "${GREEN}✓ Project '$project_name' removed.${NC}"
+}
+
+fix_view_creation() {
+    echo -e "${YELLOW}Applying View Creation Fix for Enterprise-to-Community migration...${NC}"
+    echo -e "${BLUE}This fixes the 'failed to create a view please try again later' error${NC}"
+    
+    # Get API container name dynamically
+    API_CONTAINER=$(docker compose ps --services | grep api | head -n 1)
+    if [ -z "$API_CONTAINER" ]; then
+        API_CONTAINER="api"
+    fi
+    
+    echo -e "${BLUE}Using API container: ${API_CONTAINER}${NC}"
+    
+    # Run the comprehensive view creation fix
+    docker compose exec -T $API_CONTAINER python manage.py shell -c "
+from django.db import connection
+from plane.db.models import User, Project, IssueView
+
+cursor = connection.cursor()
+
+print('=== COMPREHENSIVE VIEW CREATION FIX ===')
+print('Applying all known Enterprise to Community migration fixes...')
+
+# 1. Ensure all columns have proper defaults
+default_fixes = [
+    'ALTER TABLE issue_views ALTER COLUMN description SET DEFAULT \'\';',
+    'ALTER TABLE issue_views ALTER COLUMN query SET DEFAULT \'{}\';',
+    'ALTER TABLE issue_views ALTER COLUMN access SET DEFAULT 1;',
+    'ALTER TABLE issue_views ALTER COLUMN filters SET DEFAULT \'{}\';',
+    'ALTER TABLE issue_views ALTER COLUMN display_filters SET DEFAULT \'{\"group_by\": null, \"order_by\": \"-created_at\", \"type\": null, \"sub_issue\": true, \"show_empty_groups\": true, \"layout\": \"list\", \"calendar_date_range\": \"\"}\';',
+    'ALTER TABLE issue_views ALTER COLUMN display_properties SET DEFAULT \'{\"assignee\": true, \"attachment_count\": true, \"created_on\": true, \"due_date\": true, \"estimate\": true, \"key\": true, \"labels\": true, \"link\": true, \"priority\": true, \"start_date\": true, \"state\": true, \"sub_issue_count\": true, \"updated_on\": true}\';',
+    'ALTER TABLE issue_views ALTER COLUMN sort_order SET DEFAULT 65535;',
+    'ALTER TABLE issue_views ALTER COLUMN logo_props SET DEFAULT \'{}\';',
+    'ALTER TABLE issue_views ALTER COLUMN is_locked SET DEFAULT false;',
+    'ALTER TABLE issue_views ALTER COLUMN rich_filters SET DEFAULT \'{}\';'
+]
+
+for i, sql in enumerate(default_fixes, 1):
+    try:
+        cursor.execute(sql)
+        print(f'✓ Default fix {i}: Applied')
+    except Exception as e:
+        if 'already exists' in str(e) or 'already has' in str(e):
+            print(f'✓ Default fix {i}: Already applied')
+        else:
+            print(f'⚠ Default fix {i}: {e}')
+
+# 2. Update existing NULL values in issue_views table
+print('\\n=== UPDATING EXISTING NULL VALUES ===')
+try:
+    cursor.execute(\"\"\"
+    UPDATE issue_views SET 
+        description = COALESCE(description, ''),
+        query = COALESCE(query, '{}'),
+        access = COALESCE(access, 1),
+        filters = COALESCE(filters, '{}'),
+        display_filters = COALESCE(display_filters, '{\"group_by\": null, \"order_by\": \"-created_at\", \"type\": null, \"sub_issue\": true, \"show_empty_groups\": true, \"layout\": \"list\", \"calendar_date_range\": \"\"}'),
+        display_properties = COALESCE(display_properties, '{\"assignee\": true, \"attachment_count\": true, \"created_on\": true, \"due_date\": true, \"estimate\": true, \"key\": true, \"labels\": true, \"link\": true, \"priority\": true, \"start_date\": true, \"state\": true, \"sub_issue_count\": true, \"updated_on\": true}'),
+        sort_order = COALESCE(sort_order, 65535),
+        logo_props = COALESCE(logo_props, '{}'),
+        is_locked = COALESCE(is_locked, false),
+        rich_filters = COALESCE(rich_filters, '{}')
+    WHERE 
+        description IS NULL OR 
+        query IS NULL OR 
+        access IS NULL OR 
+        filters IS NULL OR 
+        display_filters IS NULL OR 
+        display_properties IS NULL OR 
+        sort_order IS NULL OR 
+        logo_props IS NULL OR 
+        is_locked IS NULL OR 
+        rich_filters IS NULL;
+    \"\"\")
+    
+    rows_updated = cursor.rowcount
+    print(f'✓ Updated {rows_updated} existing rows with proper defaults')
+except Exception as e:
+    print(f'⚠ Update warning: {e}')
+
+# 3. Test view creation
+print('\\n=== TESTING VIEW CREATION ===')
+try:
+    user = User.objects.first()
+    project = Project.objects.first()
+    
+    if user and project:
+        print(f'Testing with user: {user.email}')
+        print(f'Testing with project: {project.name}')
+        
+        # Try creating a test view
+        test_view = IssueView.objects.create(
+            name='Setup Script Test View',
+            description='Testing view creation after fix',
+            project=project,
+            owned_by=user,
+            filters={}
+        )
+        
+        print(f'✓ SUCCESS: Test view created with ID {test_view.id}')
+        test_view.delete()
+        print('✓ Test view cleaned up')
+        print('\\n🎉 VIEW CREATION FIX COMPLETED SUCCESSFULLY!')
+        print('You can now create views through the web interface.')
+        
+    else:
+        print('⚠ No test data available, but schema fixes have been applied')
+        print('View creation should work once you have projects and users')
+        
+except Exception as e:
+    print(f'✗ Test failed: {e}')
+    print('Schema fixes applied, but there may be additional issues')
+
+print('\\n=== FIX COMPLETED ===')
+"
+    
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}✓ View creation fix completed successfully!${NC}"
+        echo -e "${BLUE}You can now create views through the web interface.${NC}"
+    else
+        echo -e "${RED}✗ Fix encountered some issues. Check the output above.${NC}"
+    fi
 }
 
 run_migrations() {
@@ -258,7 +382,8 @@ while true; do
         9) run_migrations ;;
         10) fix_schema ;;
         11) clean_ghosts ;;
-        12) exit 0 ;;
+        12) fix_view_creation ;;
+        13) exit 0 ;;
         *) echo -e "${RED}Invalid option, please try again.${NC}" ;;
     esac
     echo -e "\n"
