@@ -73,6 +73,7 @@ fix_schema() {
         "module_user_properties:last_used_filter"
         "module_user_properties:pql_filters"
         "issue_views:pql_filters"
+        "issue_views:last_used_filter"
     )
 
     for entry in "${REL_COLS[@]}"; do
