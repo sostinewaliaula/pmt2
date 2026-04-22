@@ -11,7 +11,7 @@ RED='\033[0;31m'
 BOLD='\033[1m'
 NC='\033[0m' # No Color
 
-REPO_RAW_URL="https://raw.githubusercontent.com/sostinewaliaula/pmt/main/deploy"
+REPO_RAW_URL="https://raw.githubusercontent.com/sostinewaliaula/pmt2/main/deploy"
 
 # Print header
 echo -e "${BOLD}${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
