@@ -4,25 +4,20 @@
  * See the LICENSE file for details.
  */
 
-import { TIssueLite, TUserLite } from "./issue";
+import { TIssue } from "./issues";
+import { IUserLite } from "./users";
 
 export type TWorklog = {
   id: string;
   created_at: string;
   updated_at: string;
-  duration: number;
-  date: string;
-  description: string;
-  issue: string;
   user: string;
-  workspace: string;
+  user_detail: IUserLite;
+  issue: string;
   project: string;
-  user_detail: TUserLite;
-  issue_detail: TIssueLite;
-};
-
-export type TWorklogCreate = {
+  workspace: string;
   duration: number;
   date: string;
-  description: string;
+  comment: string;
+  issue_detail: TIssue;
 };

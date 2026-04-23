@@ -4,7 +4,7 @@
  * See the LICENSE file for details.
  */
 
-import { TIssueLite } from "./issue";
+import { TIssue } from "./issues";
 
 export type TMilestone = {
   id: string;
@@ -25,5 +25,5 @@ export type TMilestoneIssue = {
   id: string;
   milestone: string;
   issue: string;
-  issue_detail: TIssueLite;
+  issue_detail: TIssue;
 };
