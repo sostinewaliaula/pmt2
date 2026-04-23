@@ -21,3 +21,9 @@ export type TWorklog = {
   comment: string;
   issue_detail: TIssue;
 };
+
+export type TWorklogCreate = {
+  duration: number;
+  date: string;
+  comment: string;
+};
