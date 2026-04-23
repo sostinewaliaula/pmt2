@@ -40,6 +40,7 @@ from plane.app.views import (
     WidgetViewSet,
     DashboardWidgetViewSet,
     DashboardWidgetStatsEndpoint,
+    WorkspaceWorklogViewSet,
 )
 
 
