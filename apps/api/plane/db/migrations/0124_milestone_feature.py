@@ -13,49 +13,57 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='Milestone',
-            fields=[
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Created At')),
-                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='Last Modified At')),
-                ('deleted_at', models.DateTimeField(blank=True, null=True, verbose_name='Deleted At')),
-                ('id', models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
-                ('name', models.CharField(max_length=255)),
-                ('description', models.TextField(blank=True, default='')),
-                ('start_date', models.DateField(blank=True, null=True)),
-                ('target_date', models.DateField(blank=True, null=True)),
-                ('status', models.CharField(choices=[('planned', 'Planned'), ('in-progress', 'In Progress'), ('completed', 'Completed'), ('on-hold', 'On Hold')], default='planned', max_length=20)),
-                ('created_by', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='%(class)s_created_by', to=settings.AUTH_USER_MODEL, verbose_name='Created By')),
-                ('project', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='project_milestone', to='db.project')),
-                ('updated_by', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='%(class)s_updated_by', to=settings.AUTH_USER_MODEL, verbose_name='Last Modified By')),
-                ('workspace', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='workspace_milestone', to='db.workspace')),
+        migrations.SeparateDatabaseAndState(
+            state_operations=[
+                migrations.CreateModel(
+                    name='Milestone',
+                    fields=[
+                        ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Created At')),
+                        ('updated_at', models.DateTimeField(auto_now=True, verbose_name='Last Modified At')),
+                        ('deleted_at', models.DateTimeField(blank=True, null=True, verbose_name='Deleted At')),
+                        ('id', models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
+                        ('name', models.CharField(max_length=255)),
+                        ('description', models.TextField(blank=True, default='')),
+                        ('start_date', models.DateField(blank=True, null=True)),
+                        ('target_date', models.DateField(blank=True, null=True)),
+                        ('status', models.CharField(choices=[('planned', 'Planned'), ('in-progress', 'In Progress'), ('completed', 'Completed'), ('on-hold', 'On Hold')], default='planned', max_length=20)),
+                        ('created_by', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='%(class)s_created_by', to=settings.AUTH_USER_MODEL, verbose_name='Created By')),
+                        ('project', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='project_milestone', to='db.project')),
+                        ('updated_by', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='%(class)s_updated_by', to=settings.AUTH_USER_MODEL, verbose_name='Last Modified By')),
+                        ('workspace', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='workspace_milestone', to='db.workspace')),
+                    ],
+                    options={
+                        'verbose_name': 'Milestone',
+                        'verbose_name_plural': 'Milestones',
+                        'db_table': 'milestones',
+                        'ordering': ('target_date', 'created_at'),
+                    },
+                ),
+                migrations.CreateModel(
+                    name='MilestoneIssue',
+                    fields=[
+                        ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Created At')),
+                        ('updated_at', models.DateTimeField(auto_now=True, verbose_name='Last Modified At')),
+                        ('deleted_at', models.DateTimeField(blank=True, null=True, verbose_name='Deleted At')),
+                        ('id', models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
+                        ('created_by', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='%(class)s_created_by', to=settings.AUTH_USER_MODEL, verbose_name='Created By')),
+                        ('issue', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='milestone_issues', to='db.issue')),
+                        ('milestone', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='milestone_issues', to='db.milestone')),
+                        ('project', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='project_milestoneissue', to='db.project')),
+                        ('updated_by', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='%(class)s_updated_by', to=settings.AUTH_USER_MODEL, verbose_name='Last Modified By')),
+                        ('workspace', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='workspace_milestoneissue', to='db.workspace')),
+                    ],
+                    options={
+                        'verbose_name': 'Milestone Issue',
+                        'verbose_name_plural': 'Milestone Issues',
+                        'db_table': 'milestone_issues',
+                        'unique_together': {('milestone', 'issue')},
+                    },
+                ),
             ],
-            options={
-                'verbose_name': 'Milestone',
-                'verbose_name_plural': 'Milestones',
-                'db_table': 'milestones',
-                'ordering': ('target_date', 'created_at'),
-            },
-        ),
-        migrations.CreateModel(
-            name='MilestoneIssue',
-            fields=[
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Created At')),
-                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='Last Modified At')),
-                ('deleted_at', models.DateTimeField(blank=True, null=True, verbose_name='Deleted At')),
-                ('id', models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
-                ('created_by', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='%(class)s_created_by', to=settings.AUTH_USER_MODEL, verbose_name='Created By')),
-                ('issue', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='milestone_issues', to='db.issue')),
-                ('milestone', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='milestone_issues', to='db.milestone')),
-                ('project', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='project_milestoneissue', to='db.project')),
-                ('updated_by', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='%(class)s_updated_by', to=settings.AUTH_USER_MODEL, verbose_name='Last Modified By')),
-                ('workspace', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='workspace_milestoneissue', to='db.workspace')),
+            database_operations=[
+                # Tables already exist in the database from a previous run.
+                # This migration only updates Django's internal migration state tracker.
             ],
-            options={
-                'verbose_name': 'Milestone Issue',
-                'verbose_name_plural': 'Milestone Issues',
-                'db_table': 'milestone_issues',
-                'unique_together': {('milestone', 'issue')},
-            },
         ),
     ]

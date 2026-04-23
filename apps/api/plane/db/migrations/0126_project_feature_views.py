@@ -10,14 +10,29 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='project',
-            name='milestone_view',
-            field=models.BooleanField(default=True),
-        ),
-        migrations.AddField(
-            model_name='project',
-            name='project_update_view',
-            field=models.BooleanField(default=True),
+        migrations.SeparateDatabaseAndState(
+            state_operations=[
+                migrations.AddField(
+                    model_name='project',
+                    name='milestone_view',
+                    field=models.BooleanField(default=True),
+                ),
+                migrations.AddField(
+                    model_name='project',
+                    name='project_update_view',
+                    field=models.BooleanField(default=True),
+                ),
+            ],
+            database_operations=[
+                # Use IF NOT EXISTS to safely add columns even if they already exist.
+                migrations.RunSQL(
+                    sql="ALTER TABLE projects ADD COLUMN IF NOT EXISTS milestone_view boolean NOT NULL DEFAULT true;",
+                    reverse_sql="ALTER TABLE projects DROP COLUMN IF EXISTS milestone_view;",
+                ),
+                migrations.RunSQL(
+                    sql="ALTER TABLE projects ADD COLUMN IF NOT EXISTS project_update_view boolean NOT NULL DEFAULT true;",
+                    reverse_sql="ALTER TABLE projects DROP COLUMN IF EXISTS project_update_view;",
+                ),
+            ],
         ),
     ]
