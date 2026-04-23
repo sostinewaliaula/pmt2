@@ -133,3 +133,22 @@ from .draft import (
     DraftIssueSerializer,
     DraftIssueDetailSerializer,
 )
+
+from .dashboard import (
+    DashboardSerializer,
+    WidgetSerializer,
+    DashboardWidgetSerializer,
+    DashboardLiteSerializer,
+)
+
+from .worklog import (
+    WorklogSerializer,
+    WorklogCreateSerializer,
+)
+
+from .milestone import (
+    MilestoneSerializer,
+    MilestoneIssueSerializer,
+)
+
+from .project_update import ProjectUpdateSerializer
