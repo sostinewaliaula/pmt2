@@ -45,6 +45,8 @@ import type { ILabelStore } from "./label.store";
 import { LabelStore } from "./label.store";
 import type { IMemberRootStore } from "./member";
 import { MemberRootStore } from "./member";
+import type { IMilestoneStore } from "./milestone.store";
+import { MilestoneStore } from "./milestone.store";
 import type { IModuleStore } from "./module.store";
 import { ModulesStore } from "./module.store";
 import type { IModuleFilterStore } from "./module_filter.store";
@@ -57,6 +59,8 @@ import type { IProjectPageStore } from "./pages/project-page.store";
 import { ProjectPageStore } from "./pages/project-page.store";
 import type { IProjectRootStore } from "./project";
 import { ProjectRootStore } from "./project";
+import type { IProjectUpdateStore } from "./project_update.store";
+import { ProjectUpdateStore } from "./project_update.store";
 import type { IProjectViewStore } from "./project-view.store";
 import { ProjectViewStore } from "./project-view.store";
 import type { IRouterStore } from "./router.store";
@@ -67,6 +71,8 @@ import type { IThemeStore } from "./theme.store";
 import { ThemeStore } from "./theme.store";
 import type { IUserStore } from "./user";
 import { UserStore } from "./user";
+import type { IWorklogStore } from "./worklog.store";
+import { WorklogStore } from "./worklog.store";
 import type { IWorkspaceRootStore } from "./workspace";
 
 enableStaticRendering(typeof window === "undefined");
@@ -101,6 +107,9 @@ export class CoreRootStore {
   editorAssetStore: IEditorAssetStore;
   workItemFilters: IWorkItemFilterStore;
   powerK: IPowerKStore;
+  worklog: IWorklogStore;
+  milestone: IMilestoneStore;
+  projectUpdate: IProjectUpdateStore;
 
   constructor() {
     this.router = new RouterStore();
@@ -132,6 +141,9 @@ export class CoreRootStore {
     this.analytics = new AnalyticsStore();
     this.workItemFilters = new WorkItemFilterStore();
     this.powerK = new PowerKStore();
+    this.worklog = new WorklogStore(this);
+    this.milestone = new MilestoneStore(this);
+    this.projectUpdate = new ProjectUpdateStore(this);
   }
 
   resetOnSignOut() {
@@ -165,5 +177,8 @@ export class CoreRootStore {
     this.editorAssetStore = new EditorAssetStore();
     this.workItemFilters = new WorkItemFilterStore();
     this.powerK = new PowerKStore();
+    this.worklog = new WorklogStore(this);
+    this.milestone = new MilestoneStore(this);
+    this.projectUpdate = new ProjectUpdateStore(this);
   }
 }

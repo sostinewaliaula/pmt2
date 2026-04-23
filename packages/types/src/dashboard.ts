@@ -65,18 +65,19 @@ export type TWidgetFiltersFormData =
 
 export type TWidget = {
   id: string;
-  is_visible: boolean;
   key: TWidgetKeys;
-  readonly widget_filters: // only for read
-  TAssignedIssuesWidgetFilters &
-    TCreatedIssuesWidgetFilters &
-    TIssuesByStateGroupsWidgetFilters &
-    TIssuesByPriorityWidgetFilters;
-  filters: // only for write
-  TAssignedIssuesWidgetFilters &
-    TCreatedIssuesWidgetFilters &
-    TIssuesByStateGroupsWidgetFilters &
-    TIssuesByPriorityWidgetFilters;
+  pos_x: number;
+  pos_y: number;
+  width: number;
+  height: number;
+  filters: any;
+  config: any;
+  widget_detail?: {
+    key: string;
+    name: string;
+    description: string;
+    category: string;
+  };
 };
 
 export type TWidgetStatsRequestParams =
@@ -167,21 +168,18 @@ export type TWidgetStatsResponse =
   | TRecentCollaboratorsWidgetResponse[];
 
 // dashboard
-export type TDeprecatedDashboard = {
-  created_at: string;
-  created_by: string | null;
-  description_html: string;
+export type TDashboard = {
   id: string;
-  identifier: string | null;
-  is_default: boolean;
   name: string;
+  description: string;
+  is_public: boolean;
   owned_by: string;
-  type: string;
+  created_at: string;
   updated_at: string;
-  updated_by: string | null;
+  widgets: TWidget[];
 };
 
 export type THomeDashboardResponse = {
-  dashboard: TDeprecatedDashboard;
+  dashboard: TDashboard;
   widgets: TWidget[];
 };

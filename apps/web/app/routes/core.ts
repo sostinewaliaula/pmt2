@@ -87,6 +87,30 @@ export const coreRoutes: RouteConfigEntry[] = [
           route(":workspaceSlug/notifications", "./(all)/[workspaceSlug]/(projects)/notifications/page.tsx"),
         ]),
 
+        // Dashboards
+        layout("./(all)/[workspaceSlug]/(projects)/dashboards/layout.tsx", [
+          route(":workspaceSlug/dashboards", "./(all)/[workspaceSlug]/(projects)/dashboards/page.tsx"),
+          route(
+            ":workspaceSlug/dashboards/:dashboardId",
+            "./(all)/[workspaceSlug]/(projects)/dashboards/[dashboardId]/page.tsx"
+          ),
+        ]),
+
+        // Worklogs
+        layout("./(all)/[workspaceSlug]/(projects)/worklogs/layout.tsx", [
+          route(":workspaceSlug/worklogs", "./(all)/[workspaceSlug]/(projects)/worklogs/page.tsx"),
+        ]),
+
+        // Milestones
+        layout("./(all)/[workspaceSlug]/(projects)/[projectId]/milestones/layout.tsx", [
+          route(":workspaceSlug/projects/:projectId/milestones", "./(all)/[workspaceSlug]/(projects)/[projectId]/milestones/page.tsx"),
+        ]),
+
+        // Project Updates
+        layout("./(all)/[workspaceSlug]/(projects)/[projectId]/updates/layout.tsx", [
+          route(":workspaceSlug/projects/:projectId/updates", "./(all)/[workspaceSlug]/(projects)/[projectId]/updates/page.tsx"),
+        ]),
+
         // Profile
         layout("./(all)/[workspaceSlug]/(projects)/profile/[userId]/layout.tsx", [
           route(":workspaceSlug/profile/:userId", "./(all)/[workspaceSlug]/(projects)/profile/[userId]/page.tsx"),

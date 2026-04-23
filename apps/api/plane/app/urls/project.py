@@ -18,6 +18,11 @@ from plane.app.views import (
     UserProjectRolesEndpoint,
     ProjectArchiveUnarchiveEndpoint,
     ProjectMemberPreferenceEndpoint,
+    WorklogViewSet,
+    WorkspaceWorklogViewSet,
+    MilestoneViewSet,
+    MilestoneIssueViewSet,
+    ProjectUpdateViewSet,
 )
 
 
@@ -128,5 +133,48 @@ urlpatterns = [
         "workspaces/<str:slug>/projects/<uuid:project_id>/preferences/member/<uuid:member_id>/",
         ProjectMemberPreferenceEndpoint.as_view(),
         name="project-member-preference",
+    ),
+    # Worklogs
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/worklogs/",
+        WorklogViewSet.as_view({"get": "list"}),
+        name="project-worklogs",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/worklogs/export/",
+        WorklogViewSet.as_view({"get": "export"}),
+        name="project-worklogs-export",
+    ),
+    # Milestones
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/milestones/",
+        MilestoneViewSet.as_view({"get": "list", "post": "create"}),
+        name="project-milestone",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/milestones/<uuid:pk>/",
+        MilestoneViewSet.as_view({"get": "retrieve", "patch": "partial_update", "delete": "destroy"}),
+        name="project-milestone",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/milestones/<uuid:milestone_id>/issues/",
+        MilestoneIssueViewSet.as_view({"get": "list", "post": "create"}),
+        name="project-milestone-issue",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/milestones/<uuid:milestone_id>/issues/<uuid:pk>/",
+        MilestoneIssueViewSet.as_view({"delete": "destroy"}),
+        name="project-milestone-issue",
+    ),
+    # Project Updates
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/project-updates/",
+        ProjectUpdateViewSet.as_view({"get": "list", "post": "create"}),
+        name="project-update",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/project-updates/<uuid:pk>/",
+        ProjectUpdateViewSet.as_view({"get": "retrieve", "patch": "partial_update", "delete": "destroy"}),
+        name="project-update",
     ),
 ]

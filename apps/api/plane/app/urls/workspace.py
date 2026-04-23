@@ -36,6 +36,10 @@ from plane.app.views import (
     WorkspaceHomePreferenceViewSet,
     WorkspaceStickyViewSet,
     WorkspaceUserPreferenceViewSet,
+    DashboardViewSet,
+    WidgetViewSet,
+    DashboardWidgetViewSet,
+    DashboardWidgetStatsEndpoint,
 )
 
 
@@ -256,5 +260,42 @@ urlpatterns = [
         "workspaces/<str:slug>/sidebar-preferences/",
         WorkspaceUserPreferenceViewSet.as_view(),
         name="workspace-user-preference",
+    ),
+    # Dashboards
+    path(
+        "workspaces/<str:slug>/dashboards/",
+        DashboardViewSet.as_view({"get": "list", "post": "create"}),
+        name="workspace-dashboard",
+    ),
+    path(
+        "workspaces/<str:slug>/dashboards/<uuid:pk>/",
+        DashboardViewSet.as_view({"get": "retrieve", "patch": "partial_update", "delete": "destroy"}),
+        name="workspace-dashboard",
+    ),
+    path(
+        "workspaces/<str:slug>/dashboards/<uuid:dashboard_id>/widgets/",
+        DashboardWidgetViewSet.as_view({"get": "list", "post": "create"}),
+        name="workspace-dashboard-widgets",
+    ),
+    path(
+        "workspaces/<str:slug>/dashboards/<uuid:dashboard_id>/widgets/<uuid:pk>/",
+        DashboardWidgetViewSet.as_view({"get": "retrieve", "patch": "partial_update", "delete": "destroy"}),
+        name="workspace-dashboard-widgets",
+    ),
+    path(
+        "workspaces/<str:slug>/dashboards/<uuid:dashboard_id>/widgets/<uuid:widget_id>/stats/",
+        DashboardWidgetStatsEndpoint.as_view(),
+        name="workspace-dashboard-widgets-stats",
+    ),
+    path(
+        "widgets/",
+        WidgetViewSet.as_view({"get": "list"}),
+        name="widgets",
+    ),
+    # Worklogs
+    path(
+        "workspaces/<str:slug>/worklogs/",
+        WorkspaceWorklogViewSet.as_view({"get": "list"}),
+        name="workspace-worklogs",
     ),
 ]

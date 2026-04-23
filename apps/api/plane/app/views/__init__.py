@@ -82,6 +82,15 @@ from .workspace.module import WorkspaceModulesEndpoint
 from .workspace.cycle import WorkspaceCyclesEndpoint
 from .workspace.quick_link import QuickLinkViewSet
 from .workspace.sticky import WorkspaceStickyViewSet
+from .workspace.dashboard import (
+    DashboardViewSet,
+    WidgetViewSet,
+    DashboardWidgetViewSet,
+    DashboardWidgetStatsEndpoint,
+)
+from .project.worklog import WorklogViewSet, WorkspaceWorklogViewSet
+from .project.milestone import MilestoneViewSet, MilestoneIssueViewSet
+from .project.project_update import ProjectUpdateViewSet
 
 from .state.base import StateViewSet, IntakeStateEndpoint
 from .view.base import (

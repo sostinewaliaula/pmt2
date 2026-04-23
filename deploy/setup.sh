@@ -39,7 +39,8 @@ show_menu() {
     echo -e "   10) ${RED}Force Fix Enterprise Schema${NC} (Surgical fix for project_id)"
     echo -e "   11) ${BLUE}Clean Ghost Projects${NC} (Remove stuck Test projects)"
     echo -e "   12) ${RED}Fix View Creation Issue${NC} (Enterprise to Community view fix)"
-    echo -e "   13) Exit"
+    echo -e "   13) ${YELLOW}Seed Dashboard Widgets${NC} (Required for new Dashboards)"
+    echo -e "   14) Exit"
     echo -ne "\nAction [3]: "
 }
 
@@ -233,6 +234,16 @@ run_migrations() {
     echo -e "${GREEN}✓ Done. Database schema is now up to date.${NC}"
 }
 
+seed_widgets() {
+    echo -e "${YELLOW}Seeding Dashboard Widgets...${NC}"
+    API_CONTAINER=$(docker compose ps --services | grep api | head -n 1)
+    if [ -z "$API_CONTAINER" ]; then
+        API_CONTAINER="api"
+    fi
+    docker compose exec -T $API_CONTAINER python manage.py seed_widgets
+    echo -e "${GREEN}✓ Done. Dashboard widgets are now available.${NC}"
+}
+
 wipe_data() {
     echo -e "${RED}${BOLD}🚨 WARNING: This will permanently delete your database and all uploaded files!${NC}"
     echo -ne "Are you sure you want to completely reset this instance? (y/N): "
@@ -383,7 +394,8 @@ while true; do
         10) fix_schema ;;
         11) clean_ghosts ;;
         12) fix_view_creation ;;
-        13) exit 0 ;;
+        13) seed_widgets ;;
+        14) exit 0 ;;
         *) echo -e "${RED}Invalid option, please try again.${NC}" ;;
     esac
     echo -e "\n"

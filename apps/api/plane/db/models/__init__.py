@@ -7,6 +7,10 @@ from .api import APIActivityLog, APIToken
 from .asset import FileAsset
 from .base import BaseModel
 from .cycle import Cycle, CycleIssue, CycleUserProperties
+from .dashboard import Dashboard, Widget, DashboardWidget
+from .worklog import IssueWorklog
+from .milestone import Milestone, MilestoneIssue
+from .project_update import ProjectUpdate
 from .deploy_board import DeployBoard
 from .draft import (
     DraftIssue,
