@@ -28,29 +28,29 @@ const Titles = {
   [EAuthModes.SIGN_IN]: {
     [EAuthSteps.EMAIL]: {
       header: "Work in all dimensions.",
-      subHeader: "Welcome back to Caava Group Project Management.",
+      subHeader: "Welcome back to Caava Group Projects.",
     },
     [EAuthSteps.PASSWORD]: {
       header: "Work in all dimensions.",
-      subHeader: "Welcome back to Caava Group Project Management.",
+      subHeader: "Welcome back to Caava Group Projects.",
     },
     [EAuthSteps.UNIQUE_CODE]: {
       header: "Work in all dimensions.",
-      subHeader: "Welcome back to Caava Group Project Management.",
+      subHeader: "Welcome back to Caava Group Projects.",
     },
   },
   [EAuthModes.SIGN_UP]: {
     [EAuthSteps.EMAIL]: {
       header: "Work in all dimensions.",
-      subHeader: "Create your Caava Group Project Management account.",
+      subHeader: "Create your Caava Group Projects account.",
     },
     [EAuthSteps.PASSWORD]: {
       header: "Work in all dimensions.",
-      subHeader: "Create your Caava Group Project Management account.",
+      subHeader: "Create your Caava Group Projects account.",
     },
     [EAuthSteps.UNIQUE_CODE]: {
       header: "Work in all dimensions.",
-      subHeader: "Create your Caava Group Project Management account.",
+      subHeader: "Create your Caava Group Projects account.",
     },
   },
 };
