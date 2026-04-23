@@ -7,8 +7,8 @@
 "use client";
 
 import React from "react";
-// components
-import { WorkspaceAuthWrapper } from "@/components/auth-screens";
+// layouts
+import { WorkspaceAuthWrapper } from "@/layouts/auth-layout/workspace-wrapper";
 
 type Props = {
   children: React.ReactNode;
