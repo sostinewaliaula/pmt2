@@ -11,6 +11,8 @@ import { Disclosure } from "@headlessui/react";
 import type { TIssueServiceType, TWorkItemWidgets } from "@plane/types";
 // components
 import { IssueWorklogList } from "@/components/worklog";
+// hooks
+import { useProject } from "@/hooks/store/use-project";
 
 export type TWorkItemAdditionalWidgetCollapsiblesProps = {
   disabled: boolean;
@@ -23,8 +25,11 @@ export type TWorkItemAdditionalWidgetCollapsiblesProps = {
 
 export const WorkItemAdditionalWidgetCollapsibles = observer(function WorkItemAdditionalWidgetCollapsibles(props: TWorkItemAdditionalWidgetCollapsiblesProps) {
   const { workspaceSlug, projectId, workItemId, hideWidgets } = props;
+  const { getProjectById } = useProject();
+
+  const project = getProjectById(projectId);
   
-  if (hideWidgets?.includes("worklogs" as any)) return null;
+  if (hideWidgets?.includes("worklogs" as any) || !project?.is_time_tracking_enabled) return null;
 
   return (
     <div className="border-t border-subtle">

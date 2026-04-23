@@ -10,7 +10,7 @@ import { useTranslation } from "@plane/i18n";
 import { setPromiseToast } from "@plane/propel/toast";
 import { Tooltip } from "@plane/propel/tooltip";
 import type { IProject } from "@plane/types";
-import { CycleIcon, IntakeIcon, ModuleIcon, PageIcon, ViewsIcon } from "@plane/propel/icons";
+import { CycleIcon, IntakeIcon, ModuleIcon, PageIcon, ViewsIcon, MilestoneIcon, ProjectUpdateIcon, ClockIcon } from "@plane/propel/icons";
 // components
 import { SettingsBoxedControlItem } from "@/components/settings/boxed-control-item";
 import { SettingsHeading } from "@/components/settings/heading";
@@ -70,6 +70,33 @@ const PROJECT_FEATURES_LIST = {
     title: "Intake",
     description: "Consider and discuss work items before you add them to your project.",
     icon: <IntakeIcon className="h-5 w-5 flex-shrink-0 text-tertiary" />,
+    isPro: false,
+    isEnabled: true,
+  },
+  milestones: {
+    key: "milestones",
+    property: "milestone_view",
+    title: "Milestones",
+    description: "Track project milestones and goals.",
+    icon: <MilestoneIcon className="h-5 w-5 flex-shrink-0 text-tertiary" />,
+    isPro: false,
+    isEnabled: true,
+  },
+  updates: {
+    key: "updates",
+    property: "project_update_view",
+    title: "Project Updates",
+    description: "Share progress updates with your team.",
+    icon: <ProjectUpdateIcon className="h-5 w-5 flex-shrink-0 text-tertiary" />,
+    isPro: false,
+    isEnabled: true,
+  },
+  time_tracking: {
+    key: "time_tracking",
+    property: "is_time_tracking_enabled",
+    title: "Time Tracking",
+    description: "Log and track time spent on issues.",
+    icon: <ClockIcon className="h-5 w-5 flex-shrink-0 text-tertiary" />,
     isPro: false,
     isEnabled: true,
   },

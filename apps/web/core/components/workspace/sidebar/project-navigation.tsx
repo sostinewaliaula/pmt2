@@ -137,7 +137,7 @@ export const ProjectNavigation = observer(function ProjectNavigation(props: TPro
         href: `/${workspaceSlug}/projects/${projectId}/milestones`,
         icon: MilestoneIcon,
         access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
-        shouldRender: true,
+        shouldRender: project?.milestone_view ?? false,
         sortOrder: 7,
       },
       {
@@ -147,7 +147,7 @@ export const ProjectNavigation = observer(function ProjectNavigation(props: TPro
         href: `/${workspaceSlug}/projects/${projectId}/updates`,
         icon: ProjectUpdateIcon,
         access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
-        shouldRender: true,
+        shouldRender: project?.project_update_view ?? false,
         sortOrder: 8,
       },
     ],

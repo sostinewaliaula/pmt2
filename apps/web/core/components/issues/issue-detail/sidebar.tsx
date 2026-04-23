@@ -259,12 +259,14 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
               />
             </SidebarPropertyListItem>
 
-            <IssueWorklogProperty
-              workspaceSlug={workspaceSlug}
-              projectId={projectId}
-              issueId={issueId}
-              disabled={!isEditable}
-            />
+            {projectDetails?.is_time_tracking_enabled && (
+              <IssueWorklogProperty
+                workspaceSlug={workspaceSlug}
+                projectId={projectId}
+                issueId={issueId}
+                disabled={!isEditable}
+              />
+            )}
 
             <WorkItemAdditionalSidebarProperties
               workItemId={issue.id}
