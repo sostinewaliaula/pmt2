@@ -10,7 +10,8 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { EUserPermissionsLevel, EUserPermissions } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
-import { CycleIcon, IntakeIcon, ModuleIcon, PageIcon, ViewsIcon, WorkItemsIcon, MilestoneIcon, ProjectUpdateIcon } from "@plane/propel/icons";
+import { CycleIcon, IntakeIcon, ModuleIcon, PageIcon, ViewsIcon, WorkItemsIcon, UpdatesIcon } from "@plane/propel/icons";
+import { Target } from "lucide-react";
 import type { EUserProjectRoles } from "@plane/types";
 // plane ui
 // components
@@ -135,7 +136,7 @@ export const ProjectNavigation = observer(function ProjectNavigation(props: TPro
         key: "milestones",
         name: "Milestones",
         href: `/${workspaceSlug}/projects/${projectId}/milestones`,
-        icon: MilestoneIcon,
+        icon: Target,
         access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
         shouldRender: project?.milestone_view ?? false,
         sortOrder: 7,
@@ -145,7 +146,7 @@ export const ProjectNavigation = observer(function ProjectNavigation(props: TPro
         key: "updates",
         name: "Updates",
         href: `/${workspaceSlug}/projects/${projectId}/updates`,
-        icon: ProjectUpdateIcon,
+        icon: UpdatesIcon,
         access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
         shouldRender: project?.project_update_view ?? false,
         sortOrder: 8,
