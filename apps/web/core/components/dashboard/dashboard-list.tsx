@@ -36,6 +36,11 @@ export const DashboardList = observer(function DashboardList() {
     dashboard.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const tr = (key: string, fallback: string) => {
+    const v = t(key);
+    return v && v !== key ? v : fallback;
+  };
+
   if (isLoading) {
     return (
       <div className="flex h-full items-center justify-center">
@@ -49,14 +54,14 @@ export const DashboardList = observer(function DashboardList() {
       <div className="flex items-center justify-between border-b border-subtle px-5 py-4">
         <div className="flex items-center gap-2">
           <LayoutGrid className="h-5 w-5 text-secondary" />
-          <h1 className="text-xl font-semibold">{t("dashboards.title")}</h1>
+          <h1 className="text-xl font-semibold">{tr("dashboards.title", "Dashboards")}</h1>
         </div>
         <div className="flex items-center gap-4">
           <div className="relative flex items-center gap-2 rounded-md border border-subtle bg-surface-2 px-3 py-1.5 focus-within:border-accent-primary">
             <Search className="h-4 w-4 text-secondary" />
             <input
               type="text"
-              placeholder={t("dashboards.search_placeholder") || "Search dashboards..."}
+              placeholder={tr("dashboards.search_placeholder", "Search dashboards...")}
               className="bg-transparent text-sm outline-none placeholder:text-tertiary"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -68,7 +73,7 @@ export const DashboardList = observer(function DashboardList() {
             prependIcon={<Plus className="h-4 w-4" />}
             onClick={() => setIsCreateOpen(true)}
           >
-            {t("dashboards.create_button")}
+            {tr("dashboards.create_button", "Create dashboard")}
           </Button>
         </div>
       </div>
@@ -111,7 +116,7 @@ export const DashboardList = observer(function DashboardList() {
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-tertiary/10 text-tertiary">
               <Plus className="h-6 w-6" />
             </div>
-            <span className="text-sm font-medium text-secondary">{t("dashboards.create_new")}</span>
+            <span className="text-sm font-medium text-secondary">{tr("dashboards.create_new", "Create new dashboard")}</span>
           </button>
         </div>
       </div>

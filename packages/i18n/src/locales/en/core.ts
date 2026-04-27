@@ -24,6 +24,19 @@ export default {
     pro: "Pro",
     upgrade: "Upgrade",
     stickies: "Stickies",
+    milestones: "Milestones",
+    updates: "Updates",
+    pi_chat: "Pi Chat",
+    worklogs: "Worklogs",
+  },
+
+  workspace_dashboards: "Dashboards",
+
+  dashboards: {
+    title: "Dashboards",
+    search_placeholder: "Search dashboards...",
+    create_button: "Create dashboard",
+    create_new: "Create new dashboard",
   },
 
   auth: {

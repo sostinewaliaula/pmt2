@@ -146,6 +146,7 @@ export default {
   projects: "Projects",
   views: "Views",
   workspace: "Workspace",
+  workspace_dashboards: "Dashboards",
   archives: "Archives",
   settings: "Settings",
   failed_to_move_favorite: "Failed to move favorite",
