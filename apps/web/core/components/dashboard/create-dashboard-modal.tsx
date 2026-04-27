@@ -8,69 +8,73 @@ import { Fragment } from "react";
 import { observer } from "mobx-react";
 import { useForm } from "react-hook-form";
 import { Dialog, Transition } from "@headlessui/react";
-import { X, CheckCircle2, AlertTriangle, AlertCircle } from "lucide-react";
+import { X } from "lucide-react";
 // plane package imports
 import { Button } from "@plane/propel/button";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
 // types
-import { TProjectUpdate } from "@plane/types";
+import type { TDashboard } from "@plane/types";
 // hooks
-import { useProjectUpdate } from "@/hooks/store/use-project-update";
+import { useDashboard } from "@/hooks/store/use-dashboard";
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
   workspaceSlug: string;
-  projectId: string;
+  onCreated?: (dashboard: TDashboard) => void;
 };
 
-const STATUS_OPTIONS: { label: string; value: TProjectUpdate["status"]; icon: any; color: string }[] = [
-  { label: "On Track", value: "on-track", icon: CheckCircle2, color: "text-green-500" },
-  { label: "At Risk", value: "at-risk", icon: AlertTriangle, color: "text-orange-500" },
-  { label: "Off Track", value: "off-track", icon: AlertCircle, color: "text-red-500" },
-];
+type FormValues = {
+  name: string;
+  description: string;
+  is_public: boolean;
+};
 
-export const CreateProjectUpdateModal = observer(function CreateProjectUpdateModal({ isOpen, onClose, workspaceSlug, projectId }: Props) {
-  const { createProjectUpdate } = useProjectUpdate();
+export const CreateDashboardModal = observer(function CreateDashboardModal({
+  isOpen,
+  onClose,
+  workspaceSlug,
+  onCreated,
+}: Props) {
+  const { createDashboard } = useDashboard();
 
   const {
     register,
     handleSubmit,
     reset,
-    watch,
-    setValue,
     formState: { errors, isSubmitting },
-  } = useForm<Partial<TProjectUpdate>>({
-    defaultValues: {
-      status: "on-track",
-      content: "",
-    },
+  } = useForm<FormValues>({
+    defaultValues: { name: "", description: "", is_public: false },
   });
 
-  const selectedStatus = watch("status");
+  const handleClose = () => {
+    reset();
+    onClose();
+  };
 
-  const onSubmit = async (data: Partial<TProjectUpdate>) => {
+  const onSubmit = async (data: FormValues) => {
     try {
-      await createProjectUpdate(workspaceSlug, projectId, data);
+      const dashboard = await createDashboard(workspaceSlug, data);
       setToast({
         type: TOAST_TYPE.SUCCESS,
         title: "Success!",
-        message: "Update posted successfully.",
+        message: "Dashboard created.",
       });
       reset();
+      onCreated?.(dashboard);
       onClose();
-    } catch (error) {
+    } catch {
       setToast({
         type: TOAST_TYPE.ERROR,
         title: "Error!",
-        message: "Failed to post update. Please try again.",
+        message: "Failed to create dashboard.",
       });
     }
   };
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={onClose}>
+      <Dialog as="div" className="relative z-50" onClose={handleClose}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -99,7 +103,7 @@ export const CreateProjectUpdateModal = observer(function CreateProjectUpdateMod
                   <button
                     type="button"
                     className="rounded-md bg-surface-2 text-secondary hover:text-primary outline-none"
-                    onClick={onClose}
+                    onClick={handleClose}
                   >
                     <X className="h-6 w-6" />
                   </button>
@@ -107,43 +111,45 @@ export const CreateProjectUpdateModal = observer(function CreateProjectUpdateMod
                 <div className="sm:flex sm:items-start">
                   <div className="mt-3 w-full text-center sm:mt-0 sm:text-left">
                     <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-primary">
-                      Post Progress Update
+                      Create Dashboard
                     </Dialog.Title>
-                    <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-6">
-                      <div className="grid grid-cols-3 gap-3">
-                        {STATUS_OPTIONS.map((option) => (
-                          <button
-                            key={option.value}
-                            type="button"
-                            onClick={() => setValue("status", option.value)}
-                            className={`flex flex-col items-center justify-center gap-2 p-3 rounded-lg border transition-all ${
-                              selectedStatus === option.value
-                                ? `bg-surface-1 border-accent-primary shadow-sm`
-                                : "bg-surface-2 border-subtle hover:border-accent-primary"
-                            }`}
-                          >
-                            <option.icon className={`h-5 w-5 ${option.color}`} />
-                            <span className="text-xs font-medium text-secondary">{option.label}</span>
-                          </button>
-                        ))}
-                      </div>
-
+                    <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-secondary mb-2">Content</label>
-                        <textarea
-                          {...register("content", { required: true })}
-                          rows={5}
-                          className="mt-1 block w-full rounded-md border border-subtle bg-surface-1 px-3 py-2 text-sm text-primary shadow-sm focus:border-accent-primary outline-none placeholder:text-tertiary"
-                          placeholder="Summarize the latest progress, achievements, and blockers..."
+                        <label className="block text-sm font-medium text-secondary">Name</label>
+                        <input
+                          type="text"
+                          {...register("name", { required: true, maxLength: 255 })}
+                          className="mt-1 block w-full rounded-md border border-subtle bg-surface-1 px-3 py-2 text-sm text-primary shadow-sm focus:border-accent-primary outline-none"
+                          placeholder="My Dashboard"
+                          autoFocus
                         />
-                        {errors.content && <span className="text-xs text-red-500">Content is required.</span>}
+                        {errors.name && <span className="text-xs text-red-500">Name is required.</span>}
                       </div>
-
+                      <div>
+                        <label className="block text-sm font-medium text-secondary">Description</label>
+                        <textarea
+                          {...register("description")}
+                          rows={3}
+                          className="mt-1 block w-full rounded-md border border-subtle bg-surface-1 px-3 py-2 text-sm text-primary shadow-sm focus:border-accent-primary outline-none"
+                          placeholder="What is this dashboard about?"
+                        />
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <input
+                          id="dashboard-is-public"
+                          type="checkbox"
+                          {...register("is_public")}
+                          className="h-4 w-4 rounded border-subtle"
+                        />
+                        <label htmlFor="dashboard-is-public" className="text-sm text-secondary">
+                          Make this dashboard public to the workspace
+                        </label>
+                      </div>
                       <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse gap-2">
                         <Button type="submit" variant="primary" loading={isSubmitting}>
-                          Post Update
+                          Create
                         </Button>
-                        <Button type="button" variant="secondary" onClick={onClose}>
+                        <Button type="button" variant="secondary" onClick={handleClose}>
                           Cancel
                         </Button>
                       </div>

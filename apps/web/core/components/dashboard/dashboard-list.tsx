@@ -17,6 +17,7 @@ import { useTranslation } from "@plane/i18n";
 import { useDashboard } from "@/hooks/store/use-dashboard";
 // components
 import { LogoSpinner } from "@/components/common/logo-spinner";
+import { CreateDashboardModal } from "./create-dashboard-modal";
 
 export const DashboardList = observer(function DashboardList() {
   const { workspaceSlug } = useParams();
@@ -24,6 +25,7 @@ export const DashboardList = observer(function DashboardList() {
   const { dashboards, fetchDashboards } = useDashboard();
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   const { isLoading } = useSWR(
     workspaceSlug ? `DASHBOARDS_LIST_${workspaceSlug}` : null,
@@ -60,7 +62,12 @@ export const DashboardList = observer(function DashboardList() {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <Button variant="primary" size="sm" prependIcon={<Plus className="h-4 w-4" />}>
+          <Button
+            variant="primary"
+            size="sm"
+            prependIcon={<Plus className="h-4 w-4" />}
+            onClick={() => setIsCreateOpen(true)}
+          >
             {t("dashboards.create_button")}
           </Button>
         </div>
@@ -96,7 +103,11 @@ export const DashboardList = observer(function DashboardList() {
             </Link>
           ))}
 
-          <button className="flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-subtle bg-surface-1 p-5 transition-all hover:border-accent-primary hover:bg-surface-2">
+          <button
+            type="button"
+            onClick={() => setIsCreateOpen(true)}
+            className="flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-subtle bg-surface-1 p-5 transition-all hover:border-accent-primary hover:bg-surface-2"
+          >
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-tertiary/10 text-tertiary">
               <Plus className="h-6 w-6" />
             </div>
@@ -104,6 +115,12 @@ export const DashboardList = observer(function DashboardList() {
           </button>
         </div>
       </div>
+
+      <CreateDashboardModal
+        isOpen={isCreateOpen}
+        onClose={() => setIsCreateOpen(false)}
+        workspaceSlug={workspaceSlug.toString()}
+      />
     </div>
   );
 });

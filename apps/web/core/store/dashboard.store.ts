@@ -6,7 +6,7 @@
 
 import { action, makeObservable, observable, runInAction } from "mobx";
 // types
-import type { TDashboard, TWidget, TWidgetStatsResponse } from "@plane/types";
+import type { TDashboard, TWidget, TWidgetCatalogItem, TWidgetStatsResponse } from "@plane/types";
 // services
 import { DashboardService } from "@/services/dashboard.service";
 // plane web store
@@ -17,6 +17,7 @@ export interface IDashboardStore {
   dashboards: { [workspaceSlug: string]: TDashboard[] };
   dashboardDetails: { [workspaceSlug: string]: Record<string, TDashboard> };
   widgetStats: { [workspaceSlug: string]: Record<string, Record<string, TWidgetStatsResponse>> };
+  availableWidgets: TWidgetCatalogItem[];
 
   // actions
   fetchDashboards: (workspaceSlug: string) => Promise<TDashboard[]>;
@@ -25,7 +26,12 @@ export interface IDashboardStore {
   updateDashboard: (workspaceSlug: string, dashboardId: string, data: Partial<TDashboard>) => Promise<TDashboard>;
   deleteDashboard: (workspaceSlug: string, dashboardId: string) => Promise<void>;
 
-  createDashboardWidget: (workspaceSlug: string, dashboardId: string, data: Partial<TWidget>) => Promise<TWidget>;
+  fetchAvailableWidgets: () => Promise<TWidgetCatalogItem[]>;
+  createDashboardWidget: (
+    workspaceSlug: string,
+    dashboardId: string,
+    data: Partial<TWidget> & { widget: string }
+  ) => Promise<TWidget>;
   updateDashboardWidget: (
     workspaceSlug: string,
     dashboardId: string,
@@ -41,6 +47,7 @@ export class DashboardStore implements IDashboardStore {
   dashboards: { [workspaceSlug: string]: TDashboard[] } = {};
   dashboardDetails: { [workspaceSlug: string]: Record<string, TDashboard> } = {};
   widgetStats: { [workspaceSlug: string]: Record<string, Record<string, TWidgetStatsResponse>> } = {};
+  availableWidgets: TWidgetCatalogItem[] = [];
 
   // services
   dashboardService;
@@ -50,16 +57,33 @@ export class DashboardStore implements IDashboardStore {
       dashboards: observable,
       dashboardDetails: observable,
       widgetStats: observable,
+      availableWidgets: observable,
       fetchDashboards: action,
       createDashboard: action,
       fetchDashboardDetails: action,
       updateDashboard: action,
       deleteDashboard: action,
+      fetchAvailableWidgets: action,
+      createDashboardWidget: action,
+      updateDashboardWidget: action,
+      deleteDashboardWidget: action,
       fetchWidgetStats: action,
     });
 
     this.dashboardService = new DashboardService();
   }
+
+  fetchAvailableWidgets = async () => {
+    try {
+      const response = await this.dashboardService.getAvailableWidgets();
+      runInAction(() => {
+        this.availableWidgets = response;
+      });
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
 
   fetchDashboards = async (workspaceSlug: string) => {
     try {
@@ -133,12 +157,18 @@ export class DashboardStore implements IDashboardStore {
     }
   };
 
-  createDashboardWidget = async (workspaceSlug: string, dashboardId: string, data: Partial<TWidget>) => {
+  createDashboardWidget = async (
+    workspaceSlug: string,
+    dashboardId: string,
+    data: Partial<TWidget> & { widget: string }
+  ) => {
     try {
       const response = await this.dashboardService.createDashboardWidget(workspaceSlug, dashboardId, data);
       runInAction(() => {
-        if (this.dashboardDetails[workspaceSlug]?.[dashboardId]) {
-          this.dashboardDetails[workspaceSlug][dashboardId].widgets.push(response);
+        const detail = this.dashboardDetails[workspaceSlug]?.[dashboardId];
+        if (detail) {
+          if (!detail.widgets) detail.widgets = [];
+          detail.widgets.push(response);
         }
       });
       return response;

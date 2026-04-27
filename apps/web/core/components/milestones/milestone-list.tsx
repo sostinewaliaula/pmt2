@@ -4,21 +4,23 @@
  * See the LICENSE file for details.
  */
 
+import { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-import { Target, Calendar, CheckCircle2 } from "lucide-react";
+import { Target, Calendar, CheckCircle2, Plus } from "lucide-react";
 // plane package imports
-import { useTranslation } from "@plane/i18n";
+import { Button } from "@plane/propel/button";
 // hooks
 import { useMilestone } from "@/hooks/store/use-milestone";
 // components
 import { LogoSpinner } from "@/components/common/logo-spinner";
+import { CreateMilestoneModal } from "./create-milestone-modal";
 
 export const MilestoneList = observer(function MilestoneList() {
   const { workspaceSlug, projectId } = useParams();
-  const { t } = useTranslation();
   const { projectMilestones, fetchMilestones } = useMilestone();
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   const { isLoading } = useSWR(
     workspaceSlug && projectId ? `PROJECT_MILESTONES_${projectId}` : null,
@@ -33,12 +35,18 @@ export const MilestoneList = observer(function MilestoneList() {
     <div className="space-y-4 p-6">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold text-primary">Milestones</h2>
+        <Button variant="primary" size="sm" prependIcon={<Plus className="h-4 w-4" />} onClick={() => setIsCreateOpen(true)}>
+          New Milestone
+        </Button>
       </div>
 
       {milestones.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-subtle py-12">
           <Target className="h-12 w-12 text-tertiary mb-4" />
-          <p className="text-secondary">No milestones created yet.</p>
+          <p className="text-secondary mb-4">No milestones created yet.</p>
+          <Button variant="primary" size="sm" prependIcon={<Plus className="h-4 w-4" />} onClick={() => setIsCreateOpen(true)}>
+            Create your first milestone
+          </Button>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -89,6 +97,13 @@ export const MilestoneList = observer(function MilestoneList() {
           ))}
         </div>
       )}
+
+      <CreateMilestoneModal
+        isOpen={isCreateOpen}
+        onClose={() => setIsCreateOpen(false)}
+        workspaceSlug={workspaceSlug?.toString()}
+        projectId={projectId?.toString()}
+      />
     </div>
   );
 });

@@ -73,11 +73,20 @@ export type TWidget = {
   filters: any;
   config: any;
   widget_detail?: {
+    id: string;
     key: string;
     name: string;
     description: string;
     category: string;
   };
+};
+
+export type TWidgetCatalogItem = {
+  id: string;
+  key: TWidgetKeys;
+  name: string;
+  description: string;
+  category: string;
 };
 
 export type TWidgetStatsRequestParams =

@@ -5,12 +5,7 @@
  */
 
 import { API_BASE_URL } from "@plane/constants";
-import type {
-  TDashboard,
-  TWidget,
-  TWidgetStatsResponse,
-  TWidgetStatsRequestParams,
-} from "@plane/types";
+import type { TDashboard, TWidget, TWidgetCatalogItem, TWidgetStatsResponse } from "@plane/types";
 import { APIService } from "@/services/api.service";
 
 export class DashboardService extends APIService {
@@ -58,7 +53,19 @@ export class DashboardService extends APIService {
       });
   }
 
-  async createDashboardWidget(workspaceSlug: string, dashboardId: string, data: Partial<TWidget>): Promise<TWidget> {
+  async getAvailableWidgets(): Promise<TWidgetCatalogItem[]> {
+    return this.get(`/api/widgets/`)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async createDashboardWidget(
+    workspaceSlug: string,
+    dashboardId: string,
+    data: Partial<TWidget> & { widget: string }
+  ): Promise<TWidget> {
     return this.post(`/api/workspaces/${workspaceSlug}/dashboards/${dashboardId}/widgets/`, data)
       .then((response) => response?.data)
       .catch((error) => {

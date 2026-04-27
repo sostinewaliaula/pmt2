@@ -8,7 +8,6 @@ import { observer } from "mobx-react";
 import useSWR from "swr";
 import { Trash2 } from "lucide-react";
 // plane package imports
-import { useTranslation } from "@plane/i18n";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
 // hooks
 import { useWorklog } from "@/hooks/store/use-worklog";
@@ -22,7 +21,6 @@ type Props = {
 };
 
 export const IssueWorklogList = observer(function IssueWorklogList({ workspaceSlug, projectId, issueId }: Props) {
-  const { t } = useTranslation();
   const { issueWorklogs, fetchIssueWorklogs, deleteWorklog } = useWorklog();
 
   const { isLoading } = useSWR(

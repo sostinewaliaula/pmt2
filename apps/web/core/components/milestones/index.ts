@@ -5,3 +5,4 @@
  */
 
 export * from "./milestone-list";
+export * from "./create-milestone-modal";

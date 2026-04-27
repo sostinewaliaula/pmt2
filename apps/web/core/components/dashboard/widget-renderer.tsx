@@ -7,9 +7,7 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
-// plane package imports
-import { useTranslation } from "@plane/i18n";
+import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 // hooks
 import { useDashboard } from "@/hooks/store/use-dashboard";
 // components
@@ -23,7 +21,6 @@ const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8"];
 
 export const DashboardWidgetRenderer = observer(function DashboardWidgetRenderer({ widget }: Props) {
   const { workspaceSlug, dashboardId } = useParams();
-  const { t } = useTranslation();
   const { widgetStats, fetchWidgetStats } = useDashboard();
 
   const { isLoading } = useSWR(

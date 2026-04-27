@@ -35,13 +35,13 @@ class WorklogViewSet(BaseViewSet):
                 workspace__slug=self.kwargs.get("slug"),
                 project_id=self.kwargs.get("project_id"),
             )
-            .select_related("issue", "user", "project", "workspace")
+            .select_related("issue", "issue__project", "user", "project", "workspace")
         )
-        
+
         issue_id = self.kwargs.get("issue_id")
         if issue_id:
             queryset = queryset.filter(issue_id=issue_id)
-            
+
         return queryset
 
     def perform_create(self, serializer):
@@ -81,7 +81,7 @@ class WorkspaceWorklogViewSet(BaseViewSet):
     def list(self, request, slug):
         queryset = (
             IssueWorklog.objects.filter(workspace__slug=slug)
-            .select_related("issue", "user", "project", "workspace")
+            .select_related("issue", "issue__project", "user", "project", "workspace")
             .order_by("-date", "-created_at")
         )
         
@@ -89,10 +89,18 @@ class WorkspaceWorklogViewSet(BaseViewSet):
         user_id = request.GET.get("user_id")
         if user_id:
             queryset = queryset.filter(user_id=user_id)
-            
+
         project_id = request.GET.get("project_id")
         if project_id:
             queryset = queryset.filter(project_id=project_id)
-            
+
+        date_from = request.GET.get("date_from")
+        if date_from:
+            queryset = queryset.filter(date__gte=date_from)
+
+        date_to = request.GET.get("date_to")
+        if date_to:
+            queryset = queryset.filter(date__lte=date_to)
+
         serializer = WorklogSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

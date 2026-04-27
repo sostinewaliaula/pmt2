@@ -4,8 +4,19 @@
  * See the LICENSE file for details.
  */
 
-import { TIssue } from "./issues";
 import { IUserLite } from "./users";
+
+export type TWorklogIssueDetail = {
+  id: string;
+  name: string;
+  sequence_id: number;
+  project_id: string;
+  project_detail?: {
+    id: string;
+    name: string;
+    identifier: string;
+  } | null;
+};
 
 export type TWorklog = {
   id: string;
@@ -18,12 +29,12 @@ export type TWorklog = {
   workspace: string;
   duration: number;
   date: string;
-  comment: string;
-  issue_detail: TIssue;
+  description: string;
+  issue_detail: TWorklogIssueDetail;
 };
 
 export type TWorklogCreate = {
   duration: number;
   date: string;
-  comment: string;
+  description: string;
 };

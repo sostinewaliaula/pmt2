@@ -7,3 +7,5 @@
 export * from "./dashboard-list";
 export * from "./dashboard-detail";
 export * from "./widget-renderer";
+export * from "./create-dashboard-modal";
+export * from "./add-widget-modal";

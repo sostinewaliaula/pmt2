@@ -7,9 +7,7 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-import { Info, MessageSquare, TrendingUp, AlertTriangle, AlertCircle, CheckCircle2 } from "lucide-react";
-// plane package imports
-import { useTranslation } from "@plane/i18n";
+import { MessageSquare, AlertTriangle, AlertCircle, CheckCircle2 } from "lucide-react";
 // hooks
 import { useProjectUpdate } from "@/hooks/store/use-project-update";
 // components
@@ -25,7 +23,6 @@ const STATUS_ICONS = {
 
 export const ProjectUpdateList = observer(function ProjectUpdateList() {
   const { workspaceSlug, projectId } = useParams();
-  const { t } = useTranslation();
   const { projectUpdates, fetchProjectUpdates } = useProjectUpdate();
 
   const { isLoading } = useSWR(

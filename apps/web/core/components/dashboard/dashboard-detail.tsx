@@ -4,23 +4,25 @@
  * See the LICENSE file for details.
  */
 
+import { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-import { LayoutGrid, Plus, Settings } from "lucide-react";
+import { LayoutGrid, Plus, Trash2 } from "lucide-react";
 // plane package imports
 import { Button } from "@plane/propel/button";
-import { useTranslation } from "@plane/i18n";
+import { TOAST_TYPE, setToast } from "@plane/propel/toast";
 // hooks
 import { useDashboard } from "@/hooks/store/use-dashboard";
 // components
 import { LogoSpinner } from "@/components/common/logo-spinner";
+import { AddWidgetModal } from "./add-widget-modal";
 import { DashboardWidgetRenderer } from "./widget-renderer";
 
 export const DashboardDetail = observer(function DashboardDetail() {
   const { workspaceSlug, dashboardId } = useParams();
-  const { t } = useTranslation();
-  const { dashboardDetails, fetchDashboardDetails } = useDashboard();
+  const { dashboardDetails, fetchDashboardDetails, deleteDashboardWidget } = useDashboard();
+  const [isAddWidgetOpen, setIsAddWidgetOpen] = useState(false);
 
   const { isLoading } = useSWR(
     workspaceSlug && dashboardId ? `DASHBOARD_DETAIL_${dashboardId}` : null,
@@ -61,11 +63,13 @@ export const DashboardDetail = observer(function DashboardDetail() {
           )}
         </div>
         <div className="flex items-center gap-4">
-          <Button variant="secondary" size="sm" prependIcon={<Plus className="h-4 w-4" />}>
+          <Button
+            variant="primary"
+            size="sm"
+            prependIcon={<Plus className="h-4 w-4" />}
+            onClick={() => setIsAddWidgetOpen(true)}
+          >
             Add Widget
-          </Button>
-          <Button variant="secondary" size="sm" prependIcon={<Settings className="h-4 w-4" />}>
-            Settings
           </Button>
         </div>
       </div>
@@ -79,25 +83,64 @@ export const DashboardDetail = observer(function DashboardDetail() {
                 gridColumn: `span ${widget.width || 4}`,
                 gridRow: `span ${widget.height || 3}`,
               }}
-              className="relative overflow-hidden rounded-xl border border-subtle bg-surface-2 shadow-sm transition-all hover:shadow-md"
+              className="group relative overflow-hidden rounded-xl border border-subtle bg-surface-2 shadow-sm transition-all hover:shadow-md"
             >
+              <button
+                type="button"
+                onClick={async () => {
+                  if (!window.confirm("Remove this widget from the dashboard?")) return;
+                  try {
+                    await deleteDashboardWidget(workspaceSlug.toString(), dashboardId.toString(), widget.id);
+                    setToast({
+                      type: TOAST_TYPE.SUCCESS,
+                      title: "Success!",
+                      message: "Widget removed.",
+                    });
+                  } catch {
+                    setToast({
+                      type: TOAST_TYPE.ERROR,
+                      title: "Error!",
+                      message: "Failed to remove widget.",
+                    });
+                  }
+                }}
+                className="absolute right-2 top-2 z-10 rounded-md bg-surface-1/80 p-1 text-tertiary opacity-0 transition-opacity hover:text-red-500 group-hover:opacity-100"
+                aria-label="Remove widget"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
               <DashboardWidgetRenderer widget={widget} />
             </div>
           ))}
-          
+
           {(!dashboard.widgets || dashboard.widgets.length === 0) && (
             <div className="col-span-12 flex h-64 flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-subtle bg-surface-1">
               <div className="text-center">
                 <h3 className="text-base font-medium text-primary">No widgets added yet</h3>
                 <p className="text-sm text-secondary text-tertiary">Start building your dashboard by adding widgets.</p>
               </div>
-              <Button variant="primary" size="sm" prependIcon={<Plus className="h-4 w-4" />}>
+              <Button
+                variant="primary"
+                size="sm"
+                prependIcon={<Plus className="h-4 w-4" />}
+                onClick={() => setIsAddWidgetOpen(true)}
+              >
                 Add Your First Widget
               </Button>
             </div>
           )}
         </div>
       </div>
+
+      <AddWidgetModal
+        isOpen={isAddWidgetOpen}
+        onClose={() => setIsAddWidgetOpen(false)}
+        workspaceSlug={workspaceSlug.toString()}
+        dashboardId={dashboardId.toString()}
+        existingWidgetIds={
+          (dashboard.widgets ?? []).map((w) => w.widget_detail?.id).filter((id): id is string => Boolean(id))
+        }
+      />
     </div>
   );
 });
