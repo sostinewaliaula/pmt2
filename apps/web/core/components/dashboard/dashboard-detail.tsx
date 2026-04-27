@@ -20,21 +20,41 @@ import { AddWidgetModal } from "./add-widget-modal";
 import { DashboardWidgetRenderer } from "./widget-renderer";
 
 export const DashboardDetail = observer(function DashboardDetail() {
-  const { workspaceSlug, dashboardId } = useParams();
-  const { dashboardDetails, fetchDashboardDetails, deleteDashboardWidget } = useDashboard();
+  const params = useParams();
+  const workspaceSlug = params?.workspaceSlug ? String(params.workspaceSlug) : "";
+  const dashboardId = params?.dashboardId ? String(params.dashboardId) : "";
+  const dashboardStore = useDashboard();
+  const dashboardDetails = dashboardStore?.dashboardDetails ?? {};
+  const fetchDashboardDetails = dashboardStore?.fetchDashboardDetails;
+  const deleteDashboardWidget = dashboardStore?.deleteDashboardWidget;
   const [isAddWidgetOpen, setIsAddWidgetOpen] = useState(false);
 
-  const { isLoading } = useSWR(
+  const { isLoading, error } = useSWR(
     workspaceSlug && dashboardId ? `DASHBOARD_DETAIL_${dashboardId}` : null,
-    workspaceSlug && dashboardId ? () => fetchDashboardDetails(workspaceSlug.toString(), dashboardId.toString()) : null
+    workspaceSlug && dashboardId && fetchDashboardDetails
+      ? () => fetchDashboardDetails(workspaceSlug, dashboardId)
+      : null
   );
 
-  const dashboard = dashboardDetails[workspaceSlug?.toString()]?.[dashboardId?.toString()];
+  const dashboard = workspaceSlug && dashboardId ? dashboardDetails[workspaceSlug]?.[dashboardId] : undefined;
 
   if (isLoading) {
     return (
       <div className="flex h-full items-center justify-center">
         <LogoSpinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    const message =
+      (typeof error === "object" && error && "detail" in error && typeof (error as any).detail === "string"
+        ? (error as any).detail
+        : null) || "Could not load this dashboard. Please refresh the page.";
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-3 p-5 text-center">
+        <h3 className="text-lg font-medium text-primary">Something went wrong</h3>
+        <p className="max-w-md text-sm text-secondary">{message}</p>
       </div>
     );
   }
@@ -88,9 +108,10 @@ export const DashboardDetail = observer(function DashboardDetail() {
               <button
                 type="button"
                 onClick={async () => {
+                  if (!deleteDashboardWidget || !workspaceSlug || !dashboardId) return;
                   if (!window.confirm("Remove this widget from the dashboard?")) return;
                   try {
-                    await deleteDashboardWidget(workspaceSlug.toString(), dashboardId.toString(), widget.id);
+                    await deleteDashboardWidget(workspaceSlug, dashboardId, widget.id);
                     setToast({
                       type: TOAST_TYPE.SUCCESS,
                       title: "Success!",
@@ -132,15 +153,17 @@ export const DashboardDetail = observer(function DashboardDetail() {
         </div>
       </div>
 
-      <AddWidgetModal
-        isOpen={isAddWidgetOpen}
-        onClose={() => setIsAddWidgetOpen(false)}
-        workspaceSlug={workspaceSlug.toString()}
-        dashboardId={dashboardId.toString()}
-        existingWidgetIds={
-          (dashboard.widgets ?? []).map((w) => w.widget_detail?.id).filter((id): id is string => Boolean(id))
-        }
-      />
+      {workspaceSlug && dashboardId && (
+        <AddWidgetModal
+          isOpen={isAddWidgetOpen}
+          onClose={() => setIsAddWidgetOpen(false)}
+          workspaceSlug={workspaceSlug}
+          dashboardId={dashboardId}
+          existingWidgetIds={(dashboard.widgets ?? [])
+            .map((w) => w.widget_detail?.id)
+            .filter((id): id is string => Boolean(id))}
+        />
+      )}
     </div>
   );
 });

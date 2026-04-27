@@ -20,20 +20,25 @@ import { LogoSpinner } from "@/components/common/logo-spinner";
 import { CreateDashboardModal } from "./create-dashboard-modal";
 
 export const DashboardList = observer(function DashboardList() {
-  const { workspaceSlug } = useParams();
+  const params = useParams();
+  const workspaceSlug = params?.workspaceSlug ? String(params.workspaceSlug) : "";
   const { t } = useTranslation();
-  const { dashboards, fetchDashboards } = useDashboard();
+  const dashboardStore = useDashboard();
+  const dashboards = dashboardStore?.dashboards ?? {};
+  const fetchDashboards = dashboardStore?.fetchDashboards;
 
   const [searchQuery, setSearchQuery] = useState("");
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
-  const { isLoading } = useSWR(
+  const { isLoading, error } = useSWR(
     workspaceSlug ? `DASHBOARDS_LIST_${workspaceSlug}` : null,
-    workspaceSlug ? () => fetchDashboards(workspaceSlug.toString()) : null
+    workspaceSlug && fetchDashboards ? () => fetchDashboards(workspaceSlug) : null
   );
 
-  const filteredDashboards = dashboards[workspaceSlug.toString()]?.filter((dashboard) =>
-    dashboard.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const rawList = workspaceSlug ? dashboards[workspaceSlug] : undefined;
+  const list = Array.isArray(rawList) ? rawList : [];
+  const filteredDashboards = list.filter((dashboard) =>
+    dashboard?.name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const tr = (key: string, fallback: string) => {
@@ -45,6 +50,19 @@ export const DashboardList = observer(function DashboardList() {
     return (
       <div className="flex h-full items-center justify-center">
         <LogoSpinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    const message =
+      (typeof error === "object" && error && "detail" in error && typeof (error as any).detail === "string"
+        ? (error as any).detail
+        : null) || "Could not load dashboards. Please refresh the page.";
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-3 p-5 text-center">
+        <h3 className="text-lg font-medium text-primary">Something went wrong</h3>
+        <p className="max-w-md text-sm text-secondary">{message}</p>
       </div>
     );
   }
@@ -121,11 +139,13 @@ export const DashboardList = observer(function DashboardList() {
         </div>
       </div>
 
-      <CreateDashboardModal
-        isOpen={isCreateOpen}
-        onClose={() => setIsCreateOpen(false)}
-        workspaceSlug={workspaceSlug.toString()}
-      />
+      {workspaceSlug && (
+        <CreateDashboardModal
+          isOpen={isCreateOpen}
+          onClose={() => setIsCreateOpen(false)}
+          workspaceSlug={workspaceSlug}
+        />
+      )}
     </div>
   );
 });
