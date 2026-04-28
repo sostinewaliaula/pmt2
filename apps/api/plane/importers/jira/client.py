@@ -77,12 +77,20 @@ class JiraClient:
         resp.raise_for_status()
         return resp.json()
 
-    def _search(self, jql: str, start_at: int, fields: list[str], expand: list[str] | None = None) -> dict:
-        """POST /rest/api/3/search — Atlassian deprecated the GET form (410 Gone)."""
-        body: dict = {"jql": jql, "startAt": start_at, "maxResults": self.PAGE_SIZE, "fields": fields}
+    def _search(
+        self,
+        jql: str,
+        fields: list[str],
+        expand: list[str] | None = None,
+        next_page_token: str | None = None,
+    ) -> dict:
+        """POST /rest/api/3/search/jql — cursor-based pagination, replaces deprecated /search."""
+        body: dict = {"jql": jql, "maxResults": self.PAGE_SIZE, "fields": fields}
         if expand:
             body["expand"] = expand
-        return self._post(f"{self._base_v3}/search", body)
+        if next_page_token:
+            body["nextPageToken"] = next_page_token
+        return self._post(f"{self._base_v3}/search/jql", body)
 
     def _paginate(self, url: str, params: dict | None = None, result_key: str = "values") -> Generator:
         """Yield individual items from a paginated Jira endpoint."""
@@ -164,13 +172,13 @@ class JiraClient:
     def get_issues(self, project_key: str) -> Generator[dict, None, None]:
         """Yield all issues for a project (includes inline comments + attachments)."""
         jql = f"project = {project_key} ORDER BY created ASC"
-        start_at = 0
+        next_page_token: str | None = None
         while True:
-            data = self._search(jql, start_at, self._ISSUE_FIELDS.split(","), expand=["renderedFields"])
+            data = self._search(jql, self._ISSUE_FIELDS.split(","), expand=["renderedFields"], next_page_token=next_page_token)
             issues = data.get("issues", [])
             yield from issues
-            start_at += len(issues)
-            if start_at >= data.get("total", 0) or not issues:
+            next_page_token = data.get("nextPageToken")
+            if not issues or not next_page_token:
                 break
 
     # ------------------------------------------------------------------ #
@@ -180,15 +188,15 @@ class JiraClient:
     def get_epics(self, project_key: str) -> list[dict]:
         jql = f"project = {project_key} AND issuetype = Epic ORDER BY created ASC"
         results = []
-        start_at = 0
+        next_page_token: str | None = None
         while True:
             data = self._search(
-                jql, start_at, ["summary", "description", "status", "assignee", "created", "updated"]
+                jql, ["summary", "description", "status", "assignee", "created", "updated"], next_page_token=next_page_token
             )
             batch = data.get("issues", [])
             results.extend(batch)
-            start_at += len(batch)
-            if start_at >= data.get("total", 0) or not batch:
+            next_page_token = data.get("nextPageToken")
+            if not batch or not next_page_token:
                 break
         return results
 
