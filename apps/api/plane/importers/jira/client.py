@@ -74,20 +74,21 @@ class JiraClient:
     def _post(self, url: str, body: dict) -> Any:
         self._limiter.acquire()
         resp = self._session.post(url, json=body, timeout=30)
-        resp.raise_for_status()
+        if not resp.ok:
+            raise requests.HTTPError(
+                f"{resp.status_code} Client Error: {resp.reason} for url: {url} — {resp.text[:500]}",
+                response=resp,
+            )
         return resp.json()
 
     def _search(
         self,
         jql: str,
         fields: list[str],
-        expand: list[str] | None = None,
         next_page_token: str | None = None,
     ) -> dict:
         """POST /rest/api/3/search/jql — cursor-based pagination, replaces deprecated /search."""
         body: dict = {"jql": jql, "maxResults": self.PAGE_SIZE, "fields": fields}
-        if expand:
-            body["expand"] = expand
         if next_page_token:
             body["nextPageToken"] = next_page_token
         return self._post(f"{self._base_v3}/search/jql", body)
@@ -174,7 +175,7 @@ class JiraClient:
         jql = f"project = {project_key} ORDER BY created ASC"
         next_page_token: str | None = None
         while True:
-            data = self._search(jql, self._ISSUE_FIELDS.split(","), expand=["renderedFields"], next_page_token=next_page_token)
+            data = self._search(jql, self._ISSUE_FIELDS.split(","), next_page_token=next_page_token)
             issues = data.get("issues", [])
             yield from issues
             next_page_token = data.get("nextPageToken")
