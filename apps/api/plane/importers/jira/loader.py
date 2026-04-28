@@ -287,18 +287,26 @@ def _load_labels(
     label_map: dict[str, Label] = {}
     for name in label_names:
         color = _pick_color(name, _LABEL_COLORS)
-        label, _ = Label.objects.update_or_create(
-            project=project,
-            external_source=_JIRA,
-            external_id=name,
-            defaults={
-                "workspace": workspace,
-                "name": name,
-                "color": color,
-                "created_by": actor,
-                "updated_by": actor,
-            },
-        )
+
+        label = Label.objects.filter(project=project, external_source=_JIRA, external_id=name).first()
+        if label is None:
+            label = Label.objects.filter(project=project, name=name).first()
+
+        if label is not None:
+            Label.objects.filter(pk=label.pk).update(
+                external_source=_JIRA, external_id=name, color=color
+            )
+        else:
+            label = Label.objects.create(
+                workspace=workspace,
+                project=project,
+                name=name,
+                color=color,
+                external_source=_JIRA,
+                external_id=name,
+                created_by=actor,
+                updated_by=actor,
+            )
         label_map[name] = label
 
     return label_map
@@ -322,18 +330,16 @@ def _load_modules(
         fields = epic.get("fields", {})
         name = fields.get("summary") or key
 
-        # update_or_create won't call Module.save() on update — that's fine
-        # because sort_order is only set on first create.
-        existing = Module.objects.filter(
-            project=project,
-            external_source=_JIRA,
-            external_id=key,
-        ).first()
+        existing = Module.objects.filter(project=project, external_source=_JIRA, external_id=key).first()
+        if existing is None:
+            existing = Module.objects.filter(project=project, name=name).first()
 
         if existing:
-            existing.name = name
-            existing.updated_by = actor
-            existing.save(update_fields=["name", "updated_by", "updated_at"])
+            Module.objects.filter(pk=existing.pk).update(
+                external_source=_JIRA, external_id=key, name=name
+            )
+            existing.external_source = _JIRA
+            existing.external_id = key
             module_map[key] = existing
         else:
             module = Module(
@@ -372,18 +378,20 @@ def _load_cycles(
         name = sprint.get("name") or f"Sprint {sid}"
         start_raw, end_raw = sprint_dates(sprint)
 
-        existing = Cycle.objects.filter(
-            project=project,
-            external_source=_JIRA,
-            external_id=str(sid),
-        ).first()
+        existing = Cycle.objects.filter(project=project, external_source=_JIRA, external_id=str(sid)).first()
+        if existing is None:
+            existing = Cycle.objects.filter(project=project, name=name).first()
 
         if existing:
-            existing.name = name
-            existing.start_date = _safe_datetime(start_raw)
-            existing.end_date = _safe_datetime(end_raw)
-            existing.updated_by = actor
-            existing.save(update_fields=["name", "start_date", "end_date", "updated_by", "updated_at"])
+            Cycle.objects.filter(pk=existing.pk).update(
+                external_source=_JIRA,
+                external_id=str(sid),
+                name=name,
+                start_date=_safe_datetime(start_raw),
+                end_date=_safe_datetime(end_raw),
+            )
+            existing.external_source = _JIRA
+            existing.external_id = str(sid)
             cycle_map[sid] = existing
         else:
             cycle = Cycle(
