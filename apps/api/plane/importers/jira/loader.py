@@ -209,30 +209,49 @@ def _load_states(
     """Returns {jira_status_id: State}."""
     state_map: dict[str, State] = {}
 
-    # Check for an existing default state to use as fallback
     fallback_state = State.objects.filter(project=project, default=True).first()
 
     for status in statuses:
         sid = status["id"]
+        name = status["name"]
         group = status_category_to_state_group(status.get("category", ""))
         color = _STATE_COLORS.get(group, "#60646C")
-        state, _ = State.all_state_objects.update_or_create(
-            project=project,
-            external_source=_JIRA,
-            external_id=sid,
-            defaults={
-                "workspace": workspace,
-                "name": status["name"],
-                "group": group,
-                "color": color,
-                "created_by": actor,
-                "updated_by": actor,
-            },
-        )
+
+        # 1. Already tagged from a previous import run — find by external_id
+        state = State.all_state_objects.filter(
+            project=project, external_source=_JIRA, external_id=sid
+        ).first()
+
+        # 2. Default state with the same name already exists (e.g. "Done", "In Progress")
+        if state is None:
+            state = State.all_state_objects.filter(project=project, name=name).first()
+
+        if state is not None:
+            # Tag it so future re-runs find it by external_id, and align group/color
+            State.all_state_objects.filter(pk=state.pk).update(
+                external_source=_JIRA,
+                external_id=sid,
+                group=group,
+                color=color,
+            )
+            state.external_source = _JIRA
+            state.external_id = sid
+        else:
+            state = State.all_state_objects.create(
+                project=project,
+                workspace=workspace,
+                name=name,
+                group=group,
+                color=color,
+                external_source=_JIRA,
+                external_id=sid,
+                created_by=actor,
+                updated_by=actor,
+            )
+
         state_map[sid] = state
 
     if not state_map and fallback_state:
-        # No statuses in blob — map every issue to the project default
         state_map["__default__"] = fallback_state
 
     return state_map
