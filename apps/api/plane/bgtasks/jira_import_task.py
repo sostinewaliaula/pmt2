@@ -44,7 +44,8 @@ def jira_fetch_task(importer_id: str) -> None:
         try:
             importer.refresh_from_db()
             importer.status = "failed"
-            importer.save(update_fields=["status"])
+            importer.error_message = str(exc)
+            importer.save(update_fields=["status", "error_message"])
         except Exception:
             pass
 
@@ -80,6 +81,7 @@ def jira_load_task(importer_id: str) -> None:
         try:
             importer.refresh_from_db()
             importer.status = "failed"
-            importer.save(update_fields=["status"])
+            importer.error_message = str(exc)
+            importer.save(update_fields=["status", "error_message"])
         except Exception:
             pass

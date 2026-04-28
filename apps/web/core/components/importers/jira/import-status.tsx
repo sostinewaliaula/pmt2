@@ -29,6 +29,12 @@ type Props = {
   onReset: () => void;
 };
 
+type ImporterResponse = {
+  status: ImportStatus;
+  summary?: Summary;
+  error_message?: string | null;
+};
+
 const POLL_INTERVAL = 4000; // ms
 
 const jiraService = new JiraImporterService();
@@ -45,14 +51,16 @@ const STATUS_LABEL: Record<ImportStatus, string> = {
 export function JiraImportStatus({ workspaceSlug, projectId, importerId, onReset }: Props) {
   const [status, setStatus] = useState<ImportStatus>("queued");
   const [summary, setSummary] = useState<Summary | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isStartingLoad, setIsStartingLoad] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const poll = useCallback(async () => {
     try {
-      const data = await jiraService.getImporter(workspaceSlug, projectId, importerId);
+      const data: ImporterResponse = await jiraService.getImporter(workspaceSlug, projectId, importerId);
       setStatus(data.status as ImportStatus);
       if (data.summary) setSummary(data.summary as Summary);
+      if (data.error_message) setErrorMessage(data.error_message);
 
       if (data.status !== "completed" && data.status !== "failed") {
         timerRef.current = setTimeout(poll, POLL_INTERVAL);
@@ -126,6 +134,14 @@ export function JiraImportStatus({ workspaceSlug, projectId, importerId, onReset
               </ul>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Error detail */}
+      {status === "failed" && errorMessage && (
+        <div className="border-red-500/30 bg-red-500/5 rounded-md border px-4 py-3">
+          <p className="text-xs text-red-400 mb-1 font-medium">Error detail</p>
+          <p className="text-xs text-custom-text-200 font-mono break-all">{errorMessage}</p>
         </div>
       )}
 

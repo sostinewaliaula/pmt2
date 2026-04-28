@@ -30,6 +30,7 @@ class Importer(ProjectBaseModel):
     data = models.JSONField(default=dict)
     token = models.ForeignKey("db.APIToken", on_delete=models.CASCADE, related_name="importer")
     imported_data = models.JSONField(null=True)
+    error_message = models.TextField(null=True, blank=True)
 
     class Meta:
         verbose_name = "Importer"

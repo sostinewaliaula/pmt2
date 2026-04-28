@@ -113,6 +113,7 @@ class JiraImporterDetailEndpoint(BaseAPIView):
             "epics": len(blob.get("epics", [])),
             "users": blob.get("users", []),
         }
+        data["error_message"] = importer.error_message
 
         return Response(data, status=status.HTTP_200_OK)
 
@@ -144,3 +145,36 @@ class JiraImporterLoadEndpoint(BaseAPIView):
         jira_load_task.delay(str(importer.id))
 
         return Response({"message": "Load started"}, status=status.HTTP_200_OK)
+
+
+class JiraProjectListEndpoint(BaseAPIView):
+    """
+    POST /workspaces/{slug}/importers/jira/list-projects/
+    Validates credentials and returns the list of Jira projects the user has access to.
+    Body: { cloud_hostname, email, api_token }
+    """
+
+    @allow_permission(allowed_roles=[ROLE.ADMIN, ROLE.MEMBER], level="WORKSPACE")
+    def post(self, request, slug):
+        cloud_hostname = request.data.get("cloud_hostname", "").strip()
+        email = request.data.get("email", "").strip()
+        api_token = request.data.get("api_token", "").strip()
+
+        if not all([cloud_hostname, email, api_token]):
+            return Response(
+                {"error": "cloud_hostname, email, and api_token are required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            client = JiraClient(cloud_hostname, email, api_token)
+            projects = client.get_projects()
+            return Response(
+                [{"key": p["key"], "name": p["name"]} for p in projects],
+                status=status.HTTP_200_OK,
+            )
+        except Exception as exc:
+            return Response(
+                {"error": f"Could not connect to Jira: {exc}"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )

@@ -4,9 +4,15 @@
 
 from django.urls import path
 
-from plane.app.views import JiraImporterDetailEndpoint, JiraImporterEndpoint, JiraImporterLoadEndpoint
+from plane.app.views import JiraImporterDetailEndpoint, JiraImporterEndpoint, JiraImporterLoadEndpoint, JiraProjectListEndpoint
 
 urlpatterns = [
+    # List Jira projects (credential check before creating an importer)
+    path(
+        "workspaces/<str:slug>/importers/jira/list-projects/",
+        JiraProjectListEndpoint.as_view(),
+        name="jira-list-projects",
+    ),
     # List / create importers for a project
     path(
         "workspaces/<str:slug>/projects/<uuid:project_id>/importers/jira/",

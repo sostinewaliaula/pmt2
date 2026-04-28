@@ -248,4 +248,4 @@ from .user.base import AccountEndpoint, ProfileEndpoint, UserSessionEndpoint
 
 from .timezone.base import TimezoneEndpoint
 
-from .importer.jira import JiraImporterEndpoint, JiraImporterDetailEndpoint, JiraImporterLoadEndpoint
+from .importer.jira import JiraImporterEndpoint, JiraImporterDetailEndpoint, JiraImporterLoadEndpoint, JiraProjectListEndpoint

@@ -48,4 +48,16 @@ export class JiraImporterService extends APIService {
         throw err?.response?.data;
       });
   }
+
+  /** List Jira projects accessible with the given credentials. */
+  async listJiraProjects(
+    workspaceSlug: string,
+    credentials: { cloud_hostname: string; email: string; api_token: string }
+  ): Promise<Array<{ key: string; name: string }>> {
+    return this.post(`/api/workspaces/${workspaceSlug}/importers/jira/list-projects/`, credentials)
+      .then((res) => res?.data ?? [])
+      .catch((err) => {
+        throw err?.response?.data;
+      });
+  }
 }
