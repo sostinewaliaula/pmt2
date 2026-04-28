@@ -4,11 +4,8 @@
 
 import csv
 import io
-from datetime import datetime
+import uuid
 
-import jwt
-
-from django.conf import settings
 from django.db.models.functions import Lower
 
 from rest_framework import status
@@ -17,10 +14,8 @@ from rest_framework.response import Response
 
 from plane.app.permissions import WorkSpaceAdminPermission
 from plane.app.views.base import BaseAPIView
-from plane.bgtasks.workspace_invitation_task import workspace_invitation
-from plane.db.models import User, Workspace, WorkspaceMember, WorkspaceMemberInvite
+from plane.db.models import User, Workspace, WorkspaceMember
 from plane.utils.exception_logger import log_exception
-from plane.utils.host import base_host
 
 
 _EMAIL_COLS = {"email", "emailaddress", "email address", "user email", "useremail"}
@@ -72,8 +67,7 @@ class WorkspaceCsvMemberImportEndpoint(BaseAPIView):
             .values_list("lower_email", flat=True)
         )
 
-        current_site = base_host(request=request, is_app=True)
-        added, invited, skipped, invalid = [], [], [], []
+        added, skipped, invalid = [], [], []
 
         for email in emails:
             if not email or "@" not in email:
@@ -85,33 +79,25 @@ class WorkspaceCsvMemberImportEndpoint(BaseAPIView):
                 continue
 
             try:
-                user = User.objects.annotate(lower_email=Lower("email")).get(lower_email=email)
+                # Get existing PMT user or create a new pre-provisioned account
+                try:
+                    user = User.objects.annotate(lower_email=Lower("email")).get(lower_email=email)
+                except User.DoesNotExist:
+                    user = User(email=email, username=uuid.uuid4().hex)
+                    # Random unknown password; is_password_autoset=True means they'll
+                    # use the magic-code flow to set their own password on first login
+                    user.set_password(uuid.uuid4().hex)
+                    user.is_password_autoset = True
+                    user.is_email_verified = True
+                    user.display_name = User.get_display_name(email)
+                    user.save()
+
                 WorkspaceMember.objects.get_or_create(
                     workspace=workspace,
                     member=user,
                     defaults={"role": 5},
                 )
                 added.append(email)
-            except User.DoesNotExist:
-                token = jwt.encode(
-                    {"email": email, "timestamp": datetime.now().timestamp()},
-                    settings.SECRET_KEY,
-                    algorithm="HS256",
-                )
-                invite, created = WorkspaceMemberInvite.objects.get_or_create(
-                    workspace=workspace,
-                    email=email,
-                    defaults={"role": 5, "token": token},
-                )
-                if created:
-                    workspace_invitation.delay(
-                        invite.email,
-                        workspace.id,
-                        invite.token,
-                        current_site,
-                        request.user.email,
-                    )
-                invited.append(email)
             except Exception as exc:
                 log_exception(exc)
                 invalid.append(email)
@@ -119,12 +105,11 @@ class WorkspaceCsvMemberImportEndpoint(BaseAPIView):
         return Response(
             {
                 "added": added,
-                "invited": invited,
                 "skipped": skipped,
                 "invalid": invalid,
                 "summary": {
                     "added": len(added),
-                    "invited": len(invited),
+                    "invited": 0,
                     "skipped": len(skipped),
                     "invalid": len(invalid),
                     "total_parsed": len(emails),

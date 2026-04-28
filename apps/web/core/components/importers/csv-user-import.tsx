@@ -7,7 +7,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Upload, CheckCircle, UserPlus, SkipForward, XCircle } from "lucide-react";
+import { Upload, UserPlus, SkipForward, XCircle } from "lucide-react";
 import { Button } from "@plane/propel/button";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
 import { API_BASE_URL } from "@plane/constants";
@@ -15,7 +15,6 @@ import { APIService } from "@/services/api.service";
 
 type ImportSummary = {
   added: string[];
-  invited: string[];
   skipped: string[];
   invalid: string[];
   summary: { added: number; invited: number; skipped: number; invalid: number; total_parsed: number };
@@ -53,7 +52,7 @@ export function CsvUserImport({ workspaceSlug }: Props) {
       setToast({
         type: TOAST_TYPE.SUCCESS,
         title: "CSV processed",
-        message: `${res.data.summary.added} added, ${res.data.summary.invited} invited, ${res.data.summary.skipped} skipped.`,
+        message: `${res.data.summary.added} added, ${res.data.summary.skipped} skipped.`,
       });
     } catch (err: any) {
       setToast({
@@ -77,7 +76,8 @@ export function CsvUserImport({ workspaceSlug }: Props) {
       <div className="mb-4">
         <h3 className="text-sm text-custom-text-100 font-semibold">Import users from CSV</h3>
         <p className="text-xs text-custom-text-400 mt-1">
-          Upload a Jira user export CSV. Users already in PMT are added directly; new users receive an invitation email.
+          Upload a Jira user export CSV. All users are added directly to the workspace. New accounts are pre-provisioned
+          — users set their password on first login.
         </p>
       </div>
 
@@ -111,16 +111,11 @@ export function CsvUserImport({ workspaceSlug }: Props) {
         </div>
       ) : (
         <div className="flex flex-col gap-y-4">
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="grid grid-cols-3 gap-3">
             <StatCard
               icon={<UserPlus className="text-green-500 size-4" />}
               label="Added"
               value={result.summary.added}
-            />
-            <StatCard
-              icon={<CheckCircle className="text-blue-500 size-4" />}
-              label="Invited"
-              value={result.summary.invited}
             />
             <StatCard
               icon={<SkipForward className="text-custom-text-400 size-4" />}
@@ -136,9 +131,6 @@ export function CsvUserImport({ workspaceSlug }: Props) {
 
           {result.added.length > 0 && (
             <EmailList title="Added to workspace" emails={result.added} color="text-green-600" />
-          )}
-          {result.invited.length > 0 && (
-            <EmailList title="Invitation sent" emails={result.invited} color="text-blue-600" />
           )}
           {result.invalid.length > 0 && (
             <EmailList title="Invalid / failed" emails={result.invalid} color="text-red-500" />
