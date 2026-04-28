@@ -14,6 +14,7 @@ import { PageHead } from "@/components/core/page-title";
 import { SettingsContentWrapper } from "@/components/settings/content-wrapper";
 import { SettingsHeading } from "@/components/settings/heading";
 import { JiraImportGuide } from "@/components/importers/jira/guide";
+import { CsvUserImport } from "@/components/importers/csv-user-import";
 // hooks
 import { useWorkspace } from "@/hooks/store/use-workspace";
 import { useUserPermissions } from "@/hooks/store/user";
@@ -43,6 +44,11 @@ function ImportsPage() {
           description="Migrate your Jira project — issues, sprints, epics, and comments — into this workspace."
         />
         {workspaceSlug && <JiraImportGuide workspaceSlug={workspaceSlug} />}
+        <SettingsHeading
+          title="Import users from CSV"
+          description="Bulk-add Jira users to this workspace from a Jira user export CSV file."
+        />
+        {workspaceSlug && <CsvUserImport workspaceSlug={workspaceSlug} />}
       </div>
     </SettingsContentWrapper>
   );

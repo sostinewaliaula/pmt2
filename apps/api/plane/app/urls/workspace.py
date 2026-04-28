@@ -7,6 +7,7 @@ from django.urls import path
 
 from plane.app.views import (
     UserWorkspaceInvitationsViewSet,
+    WorkspaceCsvMemberImportEndpoint,
     WorkSpaceViewSet,
     WorkspaceJoinEndpoint,
     WorkSpaceMemberViewSet,
@@ -298,5 +299,11 @@ urlpatterns = [
         "workspaces/<str:slug>/worklogs/",
         WorkspaceWorklogViewSet.as_view({"get": "list"}),
         name="workspace-worklogs",
+    ),
+    # CSV member import
+    path(
+        "workspaces/<str:slug>/members/csv-import/",
+        WorkspaceCsvMemberImportEndpoint.as_view(),
+        name="workspace-members-csv-import",
     ),
 ]
