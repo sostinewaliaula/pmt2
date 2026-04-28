@@ -135,8 +135,9 @@ def fetch_jira_data(importer_id: str) -> None:
     importer.save(update_fields=["imported_data"])
 
     # ------------------------------------------------------------------ #
-    # 7. Sprints via Agile API
+    # 7. Sprints — Agile API first, fall back to customfield_10020 on issues
     # ------------------------------------------------------------------ #
+    boards: list[dict] = []
     sprints: list[dict] = []
     try:
         boards = client.get_boards(project_key)
@@ -147,10 +148,30 @@ def fetch_jira_data(importer_id: str) -> None:
                 sprint_copy["issue_keys"] = client.get_sprint_issues(board_id, sprint["id"])
                 sprints.append(sprint_copy)
         logger.info("jira_fetch: fetched %d sprints across %d boards", len(sprints), len(boards))
-    except Exception:
-        # Agile API absent on some Jira Software plans — not fatal
-        logger.warning("jira_fetch: could not fetch sprints/boards, continuing without them")
-        boards = []
+    except Exception as agile_exc:
+        logger.warning("jira_fetch: Agile API unavailable (%s) — extracting sprints from issue fields", agile_exc)
+
+    if not sprints:
+        # Next-gen (team-managed) projects embed sprint data in customfield_10020 on each issue
+        sprint_map: dict[int, dict] = {}
+        for issue in issues:
+            raw_sprints = issue.get("fields", {}).get("customfield_10020") or []
+            for s in raw_sprints:
+                sid = s.get("id")
+                if sid is None:
+                    continue
+                if sid not in sprint_map:
+                    sprint_map[sid] = {
+                        "id": sid,
+                        "name": s.get("name", f"Sprint {sid}"),
+                        "state": s.get("state", ""),
+                        "startDate": s.get("startDate", ""),
+                        "endDate": s.get("endDate", s.get("completeDate", "")),
+                        "issue_keys": [],
+                    }
+                sprint_map[sid]["issue_keys"].append(issue["key"])
+        sprints = list(sprint_map.values())
+        logger.info("jira_fetch: extracted %d sprints from issue fields", len(sprints))
 
     # ------------------------------------------------------------------ #
     # 8. Persist final blob
