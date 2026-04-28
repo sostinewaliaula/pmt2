@@ -26,7 +26,7 @@ class JiraImporterEndpoint(BaseAPIView):
 
     @allow_permission(allowed_roles=[ROLE.ADMIN, ROLE.MEMBER], level="PROJECT")
     def get(self, request, slug, project_id):
-        importers = Importer.objects.filter(
+        importers = Importer.objects.defer("imported_data").filter(
             workspace__slug=slug,
             project_id=project_id,
             service="jira",
@@ -94,7 +94,9 @@ class JiraImporterDetailEndpoint(BaseAPIView):
     @allow_permission(allowed_roles=[ROLE.ADMIN, ROLE.MEMBER], level="PROJECT")
     def get(self, request, slug, project_id, importer_id):
         try:
-            importer = Importer.objects.get(
+            # Defer imported_data — it can be hundreds of MB and is never
+            # needed for the status poll; only the load task reads it.
+            importer = Importer.objects.defer("imported_data").get(
                 pk=importer_id,
                 workspace__slug=slug,
                 project_id=project_id,
@@ -105,13 +107,12 @@ class JiraImporterDetailEndpoint(BaseAPIView):
 
         data = ImporterSerializer(importer).data
 
-        # Attach a lightweight summary of the fetched blob for the dry-run UI
-        blob = importer.imported_data or {}
+        summary = importer.fetch_summary or {}
         data["summary"] = {
-            "issues": len(blob.get("issues", [])),
-            "sprints": len(blob.get("sprints", [])),
-            "epics": len(blob.get("epics", [])),
-            "users": blob.get("users", []),
+            "issues": summary.get("issues", 0),
+            "sprints": summary.get("sprints", 0),
+            "epics": summary.get("epics", 0),
+            "users": summary.get("users", []),
         }
         data["error_message"] = importer.error_message
 

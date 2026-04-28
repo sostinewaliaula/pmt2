@@ -130,10 +130,6 @@ def fetch_jira_data(importer_id: str) -> None:
     issues = list(client.get_issues(project_key))
     logger.info("jira_fetch: fetched %d issues", len(issues))
 
-    # Persist a running count so the UI can show progress
-    importer.imported_data = {"_fetch_progress": {"issues_fetched": len(issues)}}
-    importer.save(update_fields=["imported_data"])
-
     # ------------------------------------------------------------------ #
     # 7. Sprints — Agile API first, fall back to customfield_10020 on issues
     # ------------------------------------------------------------------ #
@@ -188,7 +184,13 @@ def fetch_jira_data(importer_id: str) -> None:
     }
 
     importer.imported_data = blob
-    importer.save(update_fields=["imported_data"])
+    importer.fetch_summary = {
+        "issues": len(issues),
+        "sprints": len(sprints),
+        "epics": len(epics),
+        "users": users,
+    }
+    importer.save(update_fields=["imported_data", "fetch_summary"])
     logger.info(
         "jira_fetch: complete — %d issues, %d users, %d sprints",
         len(issues),
