@@ -37,7 +37,7 @@ const jiraService = new JiraImporterService();
 
 export const JiraCredentialsForm = observer(function JiraCredentialsForm({ workspaceSlug, onImporterCreated }: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { workspaceProjects } = useProject();
+  const { workspaceProjectIds, projectMap } = useProject();
 
   const {
     register,
@@ -48,7 +48,7 @@ export const JiraCredentialsForm = observer(function JiraCredentialsForm({ works
     defaultValues: { epics_to_modules: true },
   });
 
-  const projects = workspaceProjects?.[workspaceSlug] ?? [];
+  const projects = workspaceProjectIds?.map((id) => projectMap[id]).filter(Boolean) ?? [];
 
   const onSubmit = async (values: FormValues) => {
     setIsSubmitting(true);
