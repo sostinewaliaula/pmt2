@@ -17,6 +17,8 @@ class Importer(ProjectBaseModel):
         choices=(
             ("queued", "Queued"),
             ("processing", "Processing"),
+            ("fetched", "Fetched"),
+            ("loading", "Loading"),
             ("completed", "Completed"),
             ("failed", "Failed"),
         ),

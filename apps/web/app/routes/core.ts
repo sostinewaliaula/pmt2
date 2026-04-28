@@ -103,12 +103,18 @@ export const coreRoutes: RouteConfigEntry[] = [
 
         // Milestones
         layout("./(all)/[workspaceSlug]/(projects)/[projectId]/milestones/layout.tsx", [
-          route(":workspaceSlug/projects/:projectId/milestones", "./(all)/[workspaceSlug]/(projects)/[projectId]/milestones/page.tsx"),
+          route(
+            ":workspaceSlug/projects/:projectId/milestones",
+            "./(all)/[workspaceSlug]/(projects)/[projectId]/milestones/page.tsx"
+          ),
         ]),
 
         // Project Updates
         layout("./(all)/[workspaceSlug]/(projects)/[projectId]/updates/layout.tsx", [
-          route(":workspaceSlug/projects/:projectId/updates", "./(all)/[workspaceSlug]/(projects)/[projectId]/updates/page.tsx"),
+          route(
+            ":workspaceSlug/projects/:projectId/updates",
+            "./(all)/[workspaceSlug]/(projects)/[projectId]/updates/page.tsx"
+          ),
         ]),
 
         // Profile
@@ -297,6 +303,10 @@ export const coreRoutes: RouteConfigEntry[] = [
           route(
             ":workspaceSlug/settings/exports",
             "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/exports/page.tsx"
+          ),
+          route(
+            ":workspaceSlug/settings/imports",
+            "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/imports/page.tsx"
           ),
           route(
             ":workspaceSlug/settings/webhooks",

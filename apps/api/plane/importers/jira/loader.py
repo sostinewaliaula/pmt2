@@ -1,0 +1,709 @@
+# Copyright (c) 2023-present Plane Software, Inc. and contributors
+# SPDX-License-Identifier: AGPL-3.0-only
+# See the LICENSE file for details.
+
+"""
+Phase 2 — Transform & Load.
+
+Reads the JSON blob stored in Importer.imported_data and bulk-writes to
+Postgres using direct ORM calls (not REST endpoints).
+
+Load order (respects FK dependencies):
+  States → Labels → Modules (epics) → Cycles (sprints)
+  → Issues (first pass, no parent) → Issue parents (second pass)
+  → IssueAssignees → IssueLabels → ModuleIssues → CycleIssues
+  → IssueComments
+
+Idempotency: every entity is written via update_or_create keyed on
+  (project, external_source="jira", external_id=<jira_id>).
+
+Important: Issue.save() acquires a per-project advisory lock and creates
+an IssueSequence row, so issues and comments must be saved individually —
+bulk_create would bypass this logic. Simple junction tables (IssueAssignee,
+IssueLabel, etc.) use bulk_create(update_conflicts=True/ignore_conflicts=True).
+"""
+
+from __future__ import annotations
+
+import logging
+from datetime import datetime, date
+
+from crum import impersonate
+from django.utils.dateparse import parse_date, parse_datetime
+
+from plane.db.models import (
+    Cycle,
+    CycleIssue,
+    Importer,
+    Issue,
+    IssueAssignee,
+    IssueComment,
+    IssueLabel,
+    Label,
+    Module,
+    ModuleIssue,
+    Project,
+    State,
+    User,
+    Workspace,
+)
+from plane.importers.jira.transformer import (
+    adf_to_html,
+    jira_priority_to_pmt,
+    sprint_dates,
+    status_category_to_state_group,
+)
+
+logger = logging.getLogger(__name__)
+
+_JIRA = "jira"
+# Colour palette for auto-created states/labels
+_STATE_COLORS = {
+    "backlog": "#60646C",
+    "unstarted": "#60646C",
+    "started": "#F59E0B",
+    "completed": "#46A758",
+    "cancelled": "#9AA4BC",
+}
+_LABEL_COLORS = [
+    "#FF6B6B", "#FFA94D", "#FFD43B", "#A9E34B", "#63E6BE",
+    "#4DABF7", "#748FFC", "#DA77F2", "#F783AC", "#ADB5BD",
+]
+
+
+# --------------------------------------------------------------------------- #
+# Helpers
+# --------------------------------------------------------------------------- #
+
+def _safe_date(value: str | None) -> date | None:
+    if not value:
+        return None
+    try:
+        return parse_date(value[:10])
+    except Exception:
+        return None
+
+
+def _safe_datetime(value: str | None) -> datetime | None:
+    if not value:
+        return None
+    try:
+        return parse_datetime(value)
+    except Exception:
+        return None
+
+
+def _pick_color(name: str, palette: list[str]) -> str:
+    return palette[hash(name) % len(palette)]
+
+
+# --------------------------------------------------------------------------- #
+# Main entry point
+# --------------------------------------------------------------------------- #
+
+def load_jira_data(importer_id: str) -> None:
+    """
+    Entry point called from the Celery task after fetch completes.
+
+    Runs the full transform+load pipeline.  Status transitions:
+    fetched → loading → completed | failed.
+    """
+    importer = Importer.objects.select_related("project", "workspace", "initiated_by").get(pk=importer_id)
+    blob: dict = importer.imported_data or {}
+    project: Project = importer.project
+    workspace: Workspace = importer.workspace
+    actor: User = importer.initiated_by
+    config: dict = importer.config
+
+    logger.info("jira_load: starting load for project %s", project.id)
+
+    # Rebuild the Jira client from stored credentials for attachment downloads
+    meta = importer.metadata
+    from plane.importers.jira.client import JiraClient
+    jira_client = JiraClient(meta["cloud_hostname"], meta["email"], meta["api_token"])
+
+    # Impersonate the initiating user so BaseModel.save() sets created_by/updated_by
+    # correctly throughout all ORM writes (get_current_user() returns None in Celery).
+    with impersonate(actor):
+        _run_load(blob, project, workspace, actor, config, jira_client)
+
+
+def _run_load(
+    blob: dict,
+    project: Project,
+    workspace: Workspace,
+    actor: User,
+    config: dict,
+    jira_client=None,
+) -> None:
+    epics_to_modules: bool = config.get("epics_to_modules", True)
+
+    # ------------------------------------------------------------------ #
+    # 1. States
+    # ------------------------------------------------------------------ #
+    state_map = _load_states(blob.get("statuses", []), project, workspace, actor)
+
+    # ------------------------------------------------------------------ #
+    # 2. Labels  (Jira labels + issue types as labels)
+    # ------------------------------------------------------------------ #
+    label_map = _load_labels(blob, project, workspace, actor)
+
+    # ------------------------------------------------------------------ #
+    # 3. Modules (Jira epics → PMT modules)
+    # ------------------------------------------------------------------ #
+    module_map: dict[str, Module] = {}
+    if epics_to_modules:
+        module_map = _load_modules(blob.get("epics", []), project, workspace, actor)
+
+    # ------------------------------------------------------------------ #
+    # 4. Cycles (Jira sprints → PMT cycles)
+    # ------------------------------------------------------------------ #
+    cycle_map = _load_cycles(blob.get("sprints", []), project, workspace, actor)
+
+    # ------------------------------------------------------------------ #
+    # 5. User map — Jira accountId → PMT User (matched by email)
+    # ------------------------------------------------------------------ #
+    user_map = _build_user_map(blob.get("users", []))
+
+    # ------------------------------------------------------------------ #
+    # 6. Issues — first pass (no parent)
+    # ------------------------------------------------------------------ #
+    issues = blob.get("issues", [])
+    issue_map = _load_issues(
+        issues, project, workspace, actor, state_map, user_map, label_map,
+        module_map, cycle_map, epics_to_modules,
+        raw_sprints=blob.get("sprints", []),
+        jira_client=jira_client,
+    )
+
+    # ------------------------------------------------------------------ #
+    # 7. Issue parents — second pass
+    # ------------------------------------------------------------------ #
+    _link_parents(issues, issue_map, project, workspace, actor)
+
+    # ------------------------------------------------------------------ #
+    # 8. Comments
+    # ------------------------------------------------------------------ #
+    _load_comments(issues, issue_map, project, workspace, actor, user_map)
+
+    logger.info(
+        "jira_load: done — %d issues, %d states, %d labels, %d modules, %d cycles",
+        len(issue_map),
+        len(state_map),
+        len(label_map),
+        len(module_map),
+        len(cycle_map),
+    )
+
+
+# --------------------------------------------------------------------------- #
+# States
+# --------------------------------------------------------------------------- #
+
+def _load_states(
+    statuses: list[dict],
+    project: Project,
+    workspace: Workspace,
+    actor: User,
+) -> dict[str, State]:
+    """Returns {jira_status_id: State}."""
+    state_map: dict[str, State] = {}
+
+    # Check for an existing default state to use as fallback
+    fallback_state = State.objects.filter(project=project, default=True).first()
+
+    for status in statuses:
+        sid = status["id"]
+        group = status_category_to_state_group(status.get("category", ""))
+        color = _STATE_COLORS.get(group, "#60646C")
+        state, _ = State.all_state_objects.update_or_create(
+            project=project,
+            external_source=_JIRA,
+            external_id=sid,
+            defaults={
+                "workspace": workspace,
+                "name": status["name"],
+                "group": group,
+                "color": color,
+                "created_by": actor,
+                "updated_by": actor,
+            },
+        )
+        state_map[sid] = state
+
+    if not state_map and fallback_state:
+        # No statuses in blob — map every issue to the project default
+        state_map["__default__"] = fallback_state
+
+    return state_map
+
+
+# --------------------------------------------------------------------------- #
+# Labels
+# --------------------------------------------------------------------------- #
+
+def _load_labels(
+    blob: dict,
+    project: Project,
+    workspace: Workspace,
+    actor: User,
+) -> dict[str, Label]:
+    """
+    Returns {label_name: Label}.
+    Sources: Jira text labels (from issues) + issue types.
+    """
+    label_names: set[str] = set()
+
+    # Collect all unique label strings from issues
+    for issue in blob.get("issues", []):
+        for lbl in issue.get("fields", {}).get("labels", []):
+            if lbl:
+                label_names.add(lbl)
+
+    # Also treat issue types as labels (for grouping by Bug/Story/Task)
+    for it in blob.get("issue_types", []):
+        if it.get("name"):
+            label_names.add(it["name"])
+
+    label_map: dict[str, Label] = {}
+    for name in label_names:
+        color = _pick_color(name, _LABEL_COLORS)
+        label, _ = Label.objects.update_or_create(
+            project=project,
+            external_source=_JIRA,
+            external_id=name,
+            defaults={
+                "workspace": workspace,
+                "name": name,
+                "color": color,
+                "created_by": actor,
+                "updated_by": actor,
+            },
+        )
+        label_map[name] = label
+
+    return label_map
+
+
+# --------------------------------------------------------------------------- #
+# Modules (epics)
+# --------------------------------------------------------------------------- #
+
+def _load_modules(
+    epics: list[dict],
+    project: Project,
+    workspace: Workspace,
+    actor: User,
+) -> dict[str, Module]:
+    """Returns {jira_epic_key: Module}."""
+    module_map: dict[str, Module] = {}
+
+    for epic in epics:
+        key = epic.get("key", "")
+        fields = epic.get("fields", {})
+        name = fields.get("summary") or key
+
+        # update_or_create won't call Module.save() on update — that's fine
+        # because sort_order is only set on first create.
+        existing = Module.objects.filter(
+            project=project,
+            external_source=_JIRA,
+            external_id=key,
+        ).first()
+
+        if existing:
+            existing.name = name
+            existing.updated_by = actor
+            existing.save(update_fields=["name", "updated_by", "updated_at"])
+            module_map[key] = existing
+        else:
+            module = Module(
+                workspace=workspace,
+                project=project,
+                name=name,
+                status="planned",
+                external_source=_JIRA,
+                external_id=key,
+                created_by=actor,
+                updated_by=actor,
+            )
+            module.save()
+            module_map[key] = module
+
+    return module_map
+
+
+# --------------------------------------------------------------------------- #
+# Cycles (sprints)
+# --------------------------------------------------------------------------- #
+
+def _load_cycles(
+    sprints: list[dict],
+    project: Project,
+    workspace: Workspace,
+    actor: User,
+) -> dict[int, Cycle]:
+    """Returns {jira_sprint_id: Cycle}."""
+    cycle_map: dict[int, Cycle] = {}
+
+    for sprint in sprints:
+        sid = sprint.get("id")
+        if sid is None:
+            continue
+        name = sprint.get("name") or f"Sprint {sid}"
+        start_raw, end_raw = sprint_dates(sprint)
+
+        existing = Cycle.objects.filter(
+            project=project,
+            external_source=_JIRA,
+            external_id=str(sid),
+        ).first()
+
+        if existing:
+            existing.name = name
+            existing.start_date = _safe_datetime(start_raw)
+            existing.end_date = _safe_datetime(end_raw)
+            existing.updated_by = actor
+            existing.save(update_fields=["name", "start_date", "end_date", "updated_by", "updated_at"])
+            cycle_map[sid] = existing
+        else:
+            cycle = Cycle(
+                workspace=workspace,
+                project=project,
+                name=name,
+                start_date=_safe_datetime(start_raw),
+                end_date=_safe_datetime(end_raw),
+                owned_by=actor,
+                external_source=_JIRA,
+                external_id=str(sid),
+                created_by=actor,
+                updated_by=actor,
+            )
+            cycle.save()
+            cycle_map[sid] = cycle
+
+    return cycle_map
+
+
+# --------------------------------------------------------------------------- #
+# User map
+# --------------------------------------------------------------------------- #
+
+def _build_user_map(users: list[dict]) -> dict[str, User]:
+    """Returns {jira_accountId: PMT User} for matched users only."""
+    emails = {u["emailAddress"]: u["accountId"] for u in users if u.get("emailAddress")}
+    pmt_users = User.objects.filter(email__in=emails.keys())
+    account_to_user: dict[str, User] = {}
+    for user in pmt_users:
+        account_id = emails.get(user.email)
+        if account_id:
+            account_to_user[account_id] = user
+    return account_to_user
+
+
+# --------------------------------------------------------------------------- #
+# Issues
+# --------------------------------------------------------------------------- #
+
+def _get_epic_key(fields: dict) -> str | None:
+    """Extract epic key from Jira next-gen or classic fields."""
+    # next-gen: issue type "Epic" — key is in the issue itself
+    # classic epic link: customfield_10014
+    return fields.get("customfield_10014") or None
+
+
+def _load_issues(
+    issues: list[dict],
+    project: Project,
+    workspace: Workspace,
+    actor: User,
+    state_map: dict[str, State],
+    user_map: dict[str, User],
+    label_map: dict[str, Label],
+    module_map: dict[str, Module],
+    cycle_map: dict[int, Cycle],
+    epics_to_modules: bool,
+    raw_sprints: list[dict] | None = None,
+    jira_client=None,
+) -> dict[str, Issue]:
+    """
+    First pass: create/update Issue rows without parent links.
+    Returns {jira_issue_key: Issue}.
+    """
+    issue_map: dict[str, Issue] = {}
+
+    # Pre-build sprint membership lookup: issue_key → list of sprint ids
+    sprint_issues: dict[str, list[int]] = {}
+    for sprint in (raw_sprints or []):
+        for ikey in sprint.get("issue_keys", []):
+            sprint_issues.setdefault(ikey, []).append(sprint["id"])
+
+    for jira_issue in issues:
+        key = jira_issue.get("key", "")
+        fields = jira_issue.get("fields", {})
+
+        # State
+        status = fields.get("status", {})
+        status_id = status.get("id", "")
+        state = state_map.get(status_id) or state_map.get("__default__")
+
+        # Reporter / assignee
+        reporter = _user(fields.get("reporter"), user_map)
+        assignee = _user(fields.get("assignee"), user_map)
+        created_by = reporter or actor
+        updated_by = actor
+
+        # Description
+        desc_html = adf_to_html(fields.get("description"))
+
+        # Priority
+        priority_name = (fields.get("priority") or {}).get("name")
+        priority = jira_priority_to_pmt(priority_name)
+
+        existing = Issue.objects.filter(
+            project=project,
+            external_source=_JIRA,
+            external_id=key,
+        ).first()
+
+        if existing:
+            existing.name = fields.get("summary", key)[:255]
+            existing.description_html = desc_html
+            existing.state = state
+            existing.priority = priority
+            existing.target_date = _safe_date(fields.get("duedate"))
+            existing.updated_by = updated_by
+            existing.save(
+                update_fields=[
+                    "name", "description_html", "description_stripped",
+                    "state", "priority", "target_date", "updated_by", "updated_at",
+                ]
+            )
+            issue = existing
+        else:
+            issue = Issue(
+                workspace=workspace,
+                project=project,
+                name=fields.get("summary", key)[:255],
+                description_html=desc_html,
+                state=state,
+                priority=priority,
+                target_date=_safe_date(fields.get("duedate")),
+                external_source=_JIRA,
+                external_id=key,
+                created_by=created_by,
+                updated_by=updated_by,
+            )
+            issue.save()
+
+        issue_map[key] = issue
+
+        # Attachments (Phase 4)
+        if jira_client is not None:
+            try:
+                from plane.importers.jira.attachment_uploader import upload_issue_attachments
+                upload_issue_attachments(jira_issue, issue, project, workspace, actor, jira_client)
+            except Exception as exc:
+                logger.warning("jira_load: attachment upload failed for %s: %s", key, exc)
+
+        # Assignees
+        _upsert_assignees(issue, fields, user_map, project, workspace, actor)
+
+        # Labels (text labels + issue type label)
+        _upsert_labels(issue, fields, label_map, project, workspace, actor)
+
+        # Module membership (epic link)
+        if epics_to_modules:
+            epic_key = _get_epic_key(fields)
+            if epic_key and epic_key in module_map:
+                _upsert_module_issue(module_map[epic_key], issue, project, workspace, actor)
+
+        # Cycle membership (sprint)
+        for sprint_id in sprint_issues.get(key, []):
+            if sprint_id in cycle_map:
+                _upsert_cycle_issue(cycle_map[sprint_id], issue, project, workspace, actor)
+
+    return issue_map
+
+
+def _user(jira_user: dict | None, user_map: dict[str, User]) -> User | None:
+    if not jira_user:
+        return None
+    return user_map.get(jira_user.get("accountId", ""))
+
+
+# --------------------------------------------------------------------------- #
+# Parent linking (second pass)
+# --------------------------------------------------------------------------- #
+
+def _link_parents(
+    issues: list[dict],
+    issue_map: dict[str, Issue],
+    project: Project,
+    workspace: Workspace,
+    actor: User,
+) -> None:
+    for jira_issue in issues:
+        key = jira_issue.get("key", "")
+        fields = jira_issue.get("fields", {})
+        parent_field = fields.get("parent") or {}
+        parent_key = parent_field.get("key")
+
+        if not parent_key or key not in issue_map:
+            continue
+        parent_issue = issue_map.get(parent_key)
+        if not parent_issue:
+            continue
+
+        issue = issue_map[key]
+        if issue.parent_id != parent_issue.id:
+            issue.parent = parent_issue
+            issue.updated_by = actor
+            issue.save(update_fields=["parent", "updated_by", "updated_at"])
+
+
+# --------------------------------------------------------------------------- #
+# Comments
+# --------------------------------------------------------------------------- #
+
+def _load_comments(
+    issues: list[dict],
+    issue_map: dict[str, Issue],
+    project: Project,
+    workspace: Workspace,
+    actor: User,
+    user_map: dict[str, User],
+) -> None:
+    for jira_issue in issues:
+        key = jira_issue.get("key", "")
+        pmt_issue = issue_map.get(key)
+        if not pmt_issue:
+            continue
+
+        comments_block = jira_issue.get("fields", {}).get("comment", {})
+        comments = comments_block.get("comments", []) if isinstance(comments_block, dict) else []
+
+        for comment in comments:
+            cid = comment.get("id", "")
+            author = _user(comment.get("author"), user_map)
+            comment_html = adf_to_html(comment.get("body"))
+
+            existing = IssueComment.objects.filter(
+                issue=pmt_issue,
+                external_source=_JIRA,
+                external_id=cid,
+            ).first()
+
+            if existing:
+                existing.comment_html = comment_html
+                existing.updated_by = actor
+                existing.save(update_fields=["comment_html", "comment_stripped", "updated_by", "updated_at"])
+            else:
+                IssueComment(
+                    workspace=workspace,
+                    project=project,
+                    issue=pmt_issue,
+                    comment_html=comment_html,
+                    actor=author or actor,
+                    external_source=_JIRA,
+                    external_id=cid,
+                    created_by=author or actor,
+                    updated_by=actor,
+                ).save()
+
+
+# --------------------------------------------------------------------------- #
+# Junction table helpers
+# --------------------------------------------------------------------------- #
+
+def _upsert_assignees(
+    issue: Issue,
+    fields: dict,
+    user_map: dict[str, User],
+    project: Project,
+    workspace: Workspace,
+    actor: User,
+) -> None:
+    assignee_field = fields.get("assignee")
+    if not assignee_field:
+        return
+    user = _user(assignee_field, user_map)
+    if not user:
+        return
+    IssueAssignee.objects.get_or_create(
+        issue=issue,
+        assignee=user,
+        defaults={
+            "workspace": workspace,
+            "project": project,
+            "created_by": actor,
+            "updated_by": actor,
+        },
+    )
+
+
+def _upsert_labels(
+    issue: Issue,
+    fields: dict,
+    label_map: dict[str, Label],
+    project: Project,
+    workspace: Workspace,
+    actor: User,
+) -> None:
+    names: list[str] = list(fields.get("labels", []))
+    issue_type_name = (fields.get("issuetype") or {}).get("name")
+    if issue_type_name and issue_type_name in label_map:
+        names.append(issue_type_name)
+
+    for name in names:
+        label = label_map.get(name)
+        if not label:
+            continue
+        IssueLabel.objects.get_or_create(
+            issue=issue,
+            label=label,
+            defaults={
+                "workspace": workspace,
+                "project": project,
+                "created_by": actor,
+                "updated_by": actor,
+            },
+        )
+
+
+def _upsert_module_issue(
+    module: Module,
+    issue: Issue,
+    project: Project,
+    workspace: Workspace,
+    actor: User,
+) -> None:
+    ModuleIssue.objects.get_or_create(
+        module=module,
+        issue=issue,
+        defaults={
+            "workspace": workspace,
+            "project": project,
+            "created_by": actor,
+            "updated_by": actor,
+        },
+    )
+
+
+def _upsert_cycle_issue(
+    cycle: Cycle,
+    issue: Issue,
+    project: Project,
+    workspace: Workspace,
+    actor: User,
+) -> None:
+    CycleIssue.objects.get_or_create(
+        cycle=cycle,
+        issue=issue,
+        defaults={
+            "workspace": workspace,
+            "project": project,
+            "created_by": actor,
+            "updated_by": actor,
+        },
+    )
