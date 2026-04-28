@@ -31,6 +31,8 @@ from datetime import datetime, date
 from crum import impersonate
 from django.utils.dateparse import parse_date, parse_datetime
 
+from django.db.models.functions import Lower
+
 from plane.db.models import (
     Cycle,
     CycleIssue,
@@ -46,6 +48,7 @@ from plane.db.models import (
     State,
     User,
     Workspace,
+    WorkspaceMember,
 )
 from plane.importers.jira.transformer import (
     adf_to_html,
@@ -163,7 +166,7 @@ def _run_load(
     # ------------------------------------------------------------------ #
     # 5. User map — Jira accountId → PMT User (matched by email)
     # ------------------------------------------------------------------ #
-    user_map = _build_user_map(blob.get("users", []))
+    user_map = _build_user_map(blob.get("users", []), workspace)
 
     # ------------------------------------------------------------------ #
     # 6. Issues — first pass (no parent)
@@ -416,15 +419,47 @@ def _load_cycles(
 # User map
 # --------------------------------------------------------------------------- #
 
-def _build_user_map(users: list[dict]) -> dict[str, User]:
-    """Returns {jira_accountId: PMT User} for matched users only."""
-    emails = {u["emailAddress"]: u["accountId"] for u in users if u.get("emailAddress")}
-    pmt_users = User.objects.filter(email__in=emails.keys())
+def _build_user_map(users: list[dict], workspace: Workspace) -> dict[str, User]:
+    """
+    Returns {jira_accountId: PMT User} for workspace members whose email
+    matches a Jira user email (case-insensitive).
+    """
+    # Build lowercase-email → accountId lookup
+    email_to_account: dict[str, str] = {
+        u["emailAddress"].lower(): u["accountId"]
+        for u in users
+        if u.get("emailAddress")
+    }
+    if not email_to_account:
+        logger.warning("jira_load: no user emails available — assignees will not be mapped")
+        return {}
+
+    # Restrict to current workspace members only
+    member_ids = WorkspaceMember.objects.filter(
+        workspace=workspace, is_active=True
+    ).values_list("member_id", flat=True)
+
+    pmt_users = (
+        User.objects.filter(id__in=member_ids)
+        .annotate(email_lower=Lower("email"))
+        .filter(email_lower__in=email_to_account.keys())
+    )
+
     account_to_user: dict[str, User] = {}
     for user in pmt_users:
-        account_id = emails.get(user.email)
+        account_id = email_to_account.get(user.email_lower)  # type: ignore[attr-defined]
         if account_id:
             account_to_user[account_id] = user
+
+    unmatched = set(email_to_account.keys()) - {u.email_lower for u in pmt_users}  # type: ignore[attr-defined]
+    if unmatched:
+        logger.info(
+            "jira_load: %d Jira user(s) have no matching workspace member: %s",
+            len(unmatched),
+            ", ".join(sorted(unmatched)[:10]),
+        )
+
+    logger.info("jira_load: matched %d/%d Jira users to PMT accounts", len(account_to_user), len(email_to_account))
     return account_to_user
 
 
