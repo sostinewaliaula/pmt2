@@ -71,6 +71,19 @@ class JiraClient:
         resp.raise_for_status()
         return resp.json()
 
+    def _post(self, url: str, body: dict) -> Any:
+        self._limiter.acquire()
+        resp = self._session.post(url, json=body, timeout=30)
+        resp.raise_for_status()
+        return resp.json()
+
+    def _search(self, jql: str, start_at: int, fields: list[str], expand: list[str] | None = None) -> dict:
+        """POST /rest/api/3/search — Atlassian deprecated the GET form (410 Gone)."""
+        body: dict = {"jql": jql, "startAt": start_at, "maxResults": self.PAGE_SIZE, "fields": fields}
+        if expand:
+            body["expand"] = expand
+        return self._post(f"{self._base_v3}/search", body)
+
     def _paginate(self, url: str, params: dict | None = None, result_key: str = "values") -> Generator:
         """Yield individual items from a paginated Jira endpoint."""
         start_at = 0
@@ -151,19 +164,9 @@ class JiraClient:
     def get_issues(self, project_key: str) -> Generator[dict, None, None]:
         """Yield all issues for a project (includes inline comments + attachments)."""
         jql = f"project = {project_key} ORDER BY created ASC"
-        url = f"{self._base_v3}/search"
         start_at = 0
         while True:
-            data = self._get(
-                url,
-                params={
-                    "jql": jql,
-                    "startAt": start_at,
-                    "maxResults": self.PAGE_SIZE,
-                    "fields": self._ISSUE_FIELDS,
-                    "expand": "renderedFields",
-                },
-            )
+            data = self._search(jql, start_at, self._ISSUE_FIELDS.split(","), expand=["renderedFields"])
             issues = data.get("issues", [])
             yield from issues
             start_at += len(issues)
@@ -175,19 +178,12 @@ class JiraClient:
     # ------------------------------------------------------------------ #
 
     def get_epics(self, project_key: str) -> list[dict]:
-        jql = f'project = {project_key} AND issuetype = Epic ORDER BY created ASC'
-        url = f"{self._base_v3}/search"
+        jql = f"project = {project_key} AND issuetype = Epic ORDER BY created ASC"
         results = []
         start_at = 0
         while True:
-            data = self._get(
-                url,
-                params={
-                    "jql": jql,
-                    "startAt": start_at,
-                    "maxResults": self.PAGE_SIZE,
-                    "fields": "summary,description,status,assignee,created,updated",
-                },
+            data = self._search(
+                jql, start_at, ["summary", "description", "status", "assignee", "created", "updated"]
             )
             batch = data.get("issues", [])
             results.extend(batch)
