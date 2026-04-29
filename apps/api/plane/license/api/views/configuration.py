@@ -41,6 +41,16 @@ class InstanceConfigurationEndpoint(BaseAPIView):
     @invalidate_cache(path="/api/instances/configurations/", user=False)
     @invalidate_cache(path="/api/instances/", user=False)
     def patch(self, request):
+        # Auth-provider toggle keys may be absent on instances that were set up
+        # before the configure_instance command created them. Upsert them so the
+        # toggle is never silently ignored.
+        UPSERT_KEYS = {"IS_GOOGLE_ENABLED", "IS_GITHUB_ENABLED", "IS_GITLAB_ENABLED", "IS_GITEA_ENABLED"}
+        for key in set(request.data.keys()) & UPSERT_KEYS:
+            InstanceConfiguration.objects.get_or_create(
+                key=key,
+                defaults={"value": "0", "category": "AUTHENTICATION", "is_encrypted": False},
+            )
+
         configurations = InstanceConfiguration.objects.filter(key__in=request.data.keys())
 
         bulk_configurations = []
