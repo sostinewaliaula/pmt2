@@ -19,7 +19,7 @@ from plane.app.serializers import (
     IssueStateSerializer,
 )
 from plane.app.views.base import BaseViewSet, BaseAPIView
-from plane.db.models import Dashboard, Widget, DashboardWidget, Issue, Project, WorkspaceMember
+from plane.db.models import Dashboard, Widget, DashboardWidget, Issue, Project, WorkspaceMember, Workspace
 
 
 class DashboardViewSet(BaseViewSet):
@@ -37,8 +37,9 @@ class DashboardViewSet(BaseViewSet):
         )
 
     def perform_create(self, serializer):
+        workspace = Workspace.objects.get(slug=self.workspace_slug)
         serializer.save(
-            workspace_id=self.workspace_id,
+            workspace_id=workspace.id,
             owned_by=self.request.user,
         )
 
@@ -69,8 +70,9 @@ class DashboardWidgetViewSet(BaseViewSet):
         )
 
     def perform_create(self, serializer):
+        workspace = Workspace.objects.get(slug=self.workspace_slug)
         serializer.save(
-            workspace_id=self.workspace_id,
+            workspace_id=workspace.id,
             dashboard_id=self.kwargs.get("dashboard_id"),
         )
 
