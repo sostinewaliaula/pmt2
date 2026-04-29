@@ -13,34 +13,26 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.SeparateDatabaseAndState(
-            state_operations=[
-                migrations.CreateModel(
-                    name='ProjectUpdate',
-                    fields=[
-                        ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Created At')),
-                        ('updated_at', models.DateTimeField(auto_now=True, verbose_name='Last Modified At')),
-                        ('deleted_at', models.DateTimeField(blank=True, null=True, verbose_name='Deleted At')),
-                        ('id', models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
-                        ('content', models.TextField()),
-                        ('status', models.CharField(choices=[('on-track', 'On Track'), ('at-risk', 'At Risk'), ('off-track', 'Off Track'), ('completed', 'Completed')], default='on-track', max_length=20)),
-                        ('created_by', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='%(class)s_created_by', to=settings.AUTH_USER_MODEL, verbose_name='Created By')),
-                        ('project', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='project_projectupdate', to='db.project')),
-                        ('updated_by', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='%(class)s_updated_by', to=settings.AUTH_USER_MODEL, verbose_name='Last Modified By')),
-                        ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='project_updates', to=settings.AUTH_USER_MODEL)),
-                        ('workspace', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='workspace_projectupdate', to='db.workspace')),
-                    ],
-                    options={
-                        'verbose_name': 'Project Update',
-                        'verbose_name_plural': 'Project Updates',
-                        'db_table': 'project_updates',
-                        'ordering': ('-created_at',),
-                    },
-                ),
+        migrations.CreateModel(
+            name='ProjectUpdate',
+            fields=[
+                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Created At')),
+                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='Last Modified At')),
+                ('deleted_at', models.DateTimeField(blank=True, null=True, verbose_name='Deleted At')),
+                ('id', models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
+                ('content', models.TextField()),
+                ('status', models.CharField(choices=[('on-track', 'On Track'), ('at-risk', 'At Risk'), ('off-track', 'Off Track'), ('completed', 'Completed')], default='on-track', max_length=20)),
+                ('created_by', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='%(class)s_created_by', to=settings.AUTH_USER_MODEL, verbose_name='Created By')),
+                ('project', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='project_projectupdate', to='db.project')),
+                ('updated_by', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='%(class)s_updated_by', to=settings.AUTH_USER_MODEL, verbose_name='Last Modified By')),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='project_updates', to=settings.AUTH_USER_MODEL)),
+                ('workspace', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='workspace_projectupdate', to='db.workspace')),
             ],
-            database_operations=[
-                # Table already exists in the database from a previous run.
-                # This migration only updates Django's internal migration state tracker.
-            ],
+            options={
+                'verbose_name': 'Project Update',
+                'verbose_name_plural': 'Project Updates',
+                'db_table': 'project_updates',
+                'ordering': ('-created_at',),
+            },
         ),
     ]
