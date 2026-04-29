@@ -511,9 +511,11 @@ def _load_issues(
 
         # Reporter / assignee
         reporter = _user(fields.get("reporter"), user_map)
-        assignee = _user(fields.get("assignee"), user_map)
         created_by = reporter or actor
-        updated_by = actor
+
+        # Timestamps from Jira — preserved via queryset.update() after save
+        jira_created = _safe_datetime(fields.get("created"))
+        jira_updated = _safe_datetime(fields.get("updated"))
 
         # Description
         desc_html = adf_to_html(fields.get("description"))
@@ -521,6 +523,9 @@ def _load_issues(
         # Priority
         priority_name = (fields.get("priority") or {}).get("name")
         priority = jira_priority_to_pmt(priority_name)
+
+        # Start date — Jira stores this in customfield_10015
+        start_date = _safe_date(fields.get("customfield_10015"))
 
         existing = Issue.objects.filter(
             project=project,
@@ -533,14 +538,19 @@ def _load_issues(
             existing.description_html = desc_html
             existing.state = state
             existing.priority = priority
+            existing.start_date = start_date
             existing.target_date = _safe_date(fields.get("duedate"))
-            existing.updated_by = updated_by
+            existing.updated_by = created_by
             existing.save(
                 update_fields=[
                     "name", "description_html", "description_stripped",
-                    "state", "priority", "target_date", "updated_by", "updated_at",
-                ]
+                    "state", "priority", "start_date", "target_date",
+                    "updated_by", "updated_at",
+                ],
+                disable_auto_set_user=True,
             )
+            if jira_updated:
+                Issue.objects.filter(pk=existing.pk).update(updated_at=jira_updated)
             issue = existing
         else:
             issue = Issue(
@@ -550,13 +560,23 @@ def _load_issues(
                 description_html=desc_html,
                 state=state,
                 priority=priority,
+                start_date=start_date,
                 target_date=_safe_date(fields.get("duedate")),
                 external_source=_JIRA,
                 external_id=key,
                 created_by=created_by,
-                updated_by=updated_by,
+                updated_by=created_by,
             )
-            issue.save()
+            # disable_auto_set_user=True so BaseModel.save() does not override
+            # created_by/updated_by with the Celery actor (the admin who ran the import)
+            issue.save(disable_auto_set_user=True)
+            ts_update: dict = {}
+            if jira_created:
+                ts_update["created_at"] = jira_created
+            if jira_updated:
+                ts_update["updated_at"] = jira_updated
+            if ts_update:
+                Issue.objects.filter(pk=issue.pk).update(**ts_update)
 
         issue_map[key] = issue
 
@@ -648,7 +668,10 @@ def _load_comments(
         for comment in comments:
             cid = comment.get("id", "")
             author = _user(comment.get("author"), user_map)
+            comment_author = author or actor
             comment_html = adf_to_html(comment.get("body"))
+            comment_created = _safe_datetime(comment.get("created"))
+            comment_updated = _safe_datetime(comment.get("updated"))
 
             existing = IssueComment.objects.filter(
                 issue=pmt_issue,
@@ -658,20 +681,33 @@ def _load_comments(
 
             if existing:
                 existing.comment_html = comment_html
-                existing.updated_by = actor
-                existing.save(update_fields=["comment_html", "comment_stripped", "updated_by", "updated_at"])
+                existing.updated_by = comment_author
+                existing.save(
+                    update_fields=["comment_html", "comment_stripped", "updated_by", "updated_at"],
+                    disable_auto_set_user=True,
+                )
+                if comment_updated:
+                    IssueComment.objects.filter(pk=existing.pk).update(updated_at=comment_updated)
             else:
-                IssueComment(
+                c = IssueComment(
                     workspace=workspace,
                     project=project,
                     issue=pmt_issue,
                     comment_html=comment_html,
-                    actor=author or actor,
+                    actor=comment_author,
                     external_source=_JIRA,
                     external_id=cid,
-                    created_by=author or actor,
-                    updated_by=actor,
-                ).save()
+                    created_by=comment_author,
+                    updated_by=comment_author,
+                )
+                c.save(disable_auto_set_user=True)
+                ts: dict = {}
+                if comment_created:
+                    ts["created_at"] = comment_created
+                if comment_updated:
+                    ts["updated_at"] = comment_updated
+                if ts:
+                    IssueComment.objects.filter(pk=c.pk).update(**ts)
 
 
 # --------------------------------------------------------------------------- #

@@ -135,13 +135,30 @@ class JiraClient:
     # ------------------------------------------------------------------ #
 
     def get_assignable_users(self, project_key: str) -> list[dict]:
-        return list(
-            self._paginate(
+        """Returns all users assignable to the project.
+
+        Jira's assignable-user search returns a raw JSON array (not the usual
+        paginated object), so we can't use _paginate here.
+        """
+        all_users: list[dict] = []
+        start_at = 0
+        while True:
+            self._limiter.acquire()
+            resp = self._session.get(
                 f"{self._base_v3}/user/assignable/search",
-                params={"project": project_key},
-                result_key="$list",
+                params={"project": project_key, "startAt": start_at, "maxResults": self.PAGE_SIZE},
+                timeout=30,
             )
-        )
+            resp.raise_for_status()
+            data = resp.json()
+            batch: list[dict] = data if isinstance(data, list) else data.get("values", [])
+            if not batch:
+                break
+            all_users.extend(batch)
+            if len(batch) < self.PAGE_SIZE:
+                break
+            start_at += len(batch)
+        return all_users
 
     # ------------------------------------------------------------------ #
     # Issues
@@ -165,6 +182,7 @@ class JiraClient:
             "updated",
             "duedate",
             "customfield_10014",  # Epic Link (classic)
+            "customfield_10015",  # Start date
             "customfield_10016",  # Story Points
             "customfield_10020",  # Sprint (next-gen)
         ]

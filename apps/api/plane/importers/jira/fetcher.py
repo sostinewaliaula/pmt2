@@ -115,6 +115,10 @@ def fetch_jira_data(importer_id: str) -> None:
         logger.warning("jira_fetch: could not fetch users, continuing without them")
         users = []
 
+    # Supplement: pull reporter/assignee emails directly from issues in case
+    # the assignable-users API missed them (privacy settings, 403, etc.)
+    # Done after issue fetch below — placeholder list merged later.
+
     # ------------------------------------------------------------------ #
     # 5. Epics (only when mapping epics → modules)
     # ------------------------------------------------------------------ #
@@ -136,6 +140,27 @@ def fetch_jira_data(importer_id: str) -> None:
             importer.save(update_fields=["fetch_summary"])
             logger.info("jira_fetch: %d issues fetched so far", len(issues))
     logger.info("jira_fetch: fetched %d issues", len(issues))
+
+    # Supplement the users list with reporter/assignee data embedded in each
+    # issue.  This covers cases where get_assignable_users returned nothing
+    # (Jira privacy restrictions, 403, etc.).
+    user_by_id: dict[str, dict] = {u["accountId"]: u for u in users if u.get("accountId")}
+    for issue in issues:
+        for field_name in ("reporter", "assignee", "creator"):
+            jira_user = (issue.get("fields") or {}).get(field_name)
+            if not jira_user:
+                continue
+            aid = jira_user.get("accountId")
+            email = jira_user.get("emailAddress")
+            if aid and email and aid not in user_by_id:
+                user_by_id[aid] = {
+                    "accountId": aid,
+                    "emailAddress": email,
+                    "displayName": jira_user.get("displayName", ""),
+                    "avatarUrl": (jira_user.get("avatarUrls") or {}).get("48x48", ""),
+                }
+    users = list(user_by_id.values())
+    logger.info("jira_fetch: %d users after supplementing from issue fields", len(users))
 
     # ------------------------------------------------------------------ #
     # 7. Sprints — Agile API first, fall back to customfield_10020 on issues
