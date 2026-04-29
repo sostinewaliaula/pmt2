@@ -46,7 +46,10 @@ export function JiraImportStatus({ workspaceSlug, projectId, importerId, onReset
   const [fetchProgress, setFetchProgress] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isStartingLoad, setIsStartingLoad] = useState(false);
+  const [isRetrying, setIsRetrying] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Track how long we've been in processing/queued so we can show Retry after 60s
+  const stuckSinceRef = useRef<number | null>(null);
 
   const poll = useCallback(async () => {
     try {
@@ -56,11 +59,17 @@ export function JiraImportStatus({ workspaceSlug, projectId, importerId, onReset
       if (data.fetch_progress != null) setFetchProgress(data.fetch_progress);
       if (data.error_message) setErrorMessage(data.error_message);
 
+      // Track how long we've been stuck without progress
+      if (data.status === "queued" || (data.status === "processing" && !data.fetch_progress)) {
+        if (stuckSinceRef.current === null) stuckSinceRef.current = Date.now();
+      } else {
+        stuckSinceRef.current = null;
+      }
+
       if (data.status !== "completed" && data.status !== "failed") {
         timerRef.current = setTimeout(poll, POLL_INTERVAL);
       }
     } catch {
-      // swallow transient poll errors — will retry
       timerRef.current = setTimeout(poll, POLL_INTERVAL);
     }
   }, [workspaceSlug, projectId, importerId]);
@@ -88,6 +97,28 @@ export function JiraImportStatus({ workspaceSlug, projectId, importerId, onReset
       setIsStartingLoad(false);
     }
   };
+
+  const handleRetry = async () => {
+    setIsRetrying(true);
+    try {
+      await jiraService.retryFetch(workspaceSlug, projectId, importerId);
+      setStatus("queued");
+      setFetchProgress(null);
+      setErrorMessage(null);
+      stuckSinceRef.current = null;
+      timerRef.current = setTimeout(poll, POLL_INTERVAL);
+    } catch (err: any) {
+      setToast({
+        type: TOAST_TYPE.ERROR,
+        title: "Retry failed",
+        message: err?.error ?? "Could not re-queue the fetch task.",
+      });
+    } finally {
+      setIsRetrying(false);
+    }
+  };
+
+  const isStuck = stuckSinceRef.current !== null && Date.now() - stuckSinceRef.current > 60_000;
 
   const statusLabel = () => {
     if (status === "processing") {
@@ -162,6 +193,11 @@ export function JiraImportStatus({ workspaceSlug, projectId, importerId, onReset
         {status === "fetched" && (
           <Button onClick={handleLoad} loading={isStartingLoad}>
             {isStartingLoad ? "Starting…" : "Start import"}
+          </Button>
+        )}
+        {(status === "failed" || isStuck) && (
+          <Button variant="neutral-primary" onClick={handleRetry} loading={isRetrying}>
+            {isRetrying ? "Retrying…" : "Retry fetch"}
           </Button>
         )}
         {(status === "completed" || status === "failed") && (

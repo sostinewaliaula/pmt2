@@ -248,5 +248,5 @@ from .user.base import AccountEndpoint, ProfileEndpoint, UserSessionEndpoint
 
 from .timezone.base import TimezoneEndpoint
 
-from .importer.jira import JiraImporterEndpoint, JiraImporterDetailEndpoint, JiraImporterLoadEndpoint, JiraProjectListEndpoint
+from .importer.jira import JiraImporterEndpoint, JiraImporterDetailEndpoint, JiraImporterLoadEndpoint, JiraImporterRetryEndpoint, JiraProjectListEndpoint
 from .workspace.csv_member_import import WorkspaceCsvMemberImportEndpoint

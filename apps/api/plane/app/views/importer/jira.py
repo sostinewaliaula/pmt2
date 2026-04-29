@@ -149,6 +149,40 @@ class JiraImporterLoadEndpoint(BaseAPIView):
         return Response({"message": "Load started"}, status=status.HTTP_200_OK)
 
 
+class JiraImporterRetryEndpoint(BaseAPIView):
+    """
+    POST /workspaces/{slug}/projects/{project_id}/importers/jira/{importer_id}/retry/
+    Reset a stuck or failed fetch back to queued and re-fire jira_fetch_task.
+    """
+
+    @allow_permission(allowed_roles=[ROLE.ADMIN, ROLE.MEMBER], level="PROJECT")
+    def post(self, request, slug, project_id, importer_id):
+        try:
+            importer = Importer.objects.defer("imported_data").get(
+                pk=importer_id,
+                workspace__slug=slug,
+                project_id=project_id,
+                service="jira",
+            )
+        except Importer.DoesNotExist:
+            return Response({"error": "Importer not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        if importer.status not in ("processing", "failed", "queued"):
+            return Response(
+                {"error": f"Cannot retry: importer is '{importer.status}'. Only stuck/failed fetches can be retried."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        importer.status = "queued"
+        importer.error_message = None
+        importer.fetch_summary = None
+        importer.save(update_fields=["status", "error_message", "fetch_summary"])
+
+        jira_fetch_task.delay(str(importer.id))
+
+        return Response({"message": "Fetch re-queued"}, status=status.HTTP_200_OK)
+
+
 class JiraProjectListEndpoint(BaseAPIView):
     """
     POST /workspaces/{slug}/importers/jira/list-projects/

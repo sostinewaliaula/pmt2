@@ -4,7 +4,7 @@
 
 from django.urls import path
 
-from plane.app.views import JiraImporterDetailEndpoint, JiraImporterEndpoint, JiraImporterLoadEndpoint, JiraProjectListEndpoint
+from plane.app.views import JiraImporterDetailEndpoint, JiraImporterEndpoint, JiraImporterLoadEndpoint, JiraImporterRetryEndpoint, JiraProjectListEndpoint
 
 urlpatterns = [
     # List Jira projects (credential check before creating an importer)
@@ -30,5 +30,11 @@ urlpatterns = [
         "workspaces/<str:slug>/projects/<uuid:project_id>/importers/jira/<uuid:importer_id>/load/",
         JiraImporterLoadEndpoint.as_view(),
         name="jira-importer-load",
+    ),
+    # Retry a stuck/failed fetch
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/importers/jira/<uuid:importer_id>/retry/",
+        JiraImporterRetryEndpoint.as_view(),
+        name="jira-importer-retry",
     ),
 ]

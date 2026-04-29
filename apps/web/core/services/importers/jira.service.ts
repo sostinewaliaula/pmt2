@@ -49,6 +49,15 @@ export class JiraImporterService extends APIService {
       });
   }
 
+  /** Reset a stuck/failed fetch and re-queue the fetch task. */
+  async retryFetch(workspaceSlug: string, projectId: string, importerId: string): Promise<any> {
+    return this.post(`/api/workspaces/${workspaceSlug}/projects/${projectId}/importers/jira/${importerId}/retry/`, {})
+      .then((res) => res?.data)
+      .catch((err) => {
+        throw err?.response?.data;
+      });
+  }
+
   /** List Jira projects accessible with the given credentials. */
   async listJiraProjects(
     workspaceSlug: string,
