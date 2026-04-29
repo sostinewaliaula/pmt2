@@ -127,7 +127,14 @@ def fetch_jira_data(importer_id: str) -> None:
     # 6. Issues (includes comments + attachments inline from Jira)
     # ------------------------------------------------------------------ #
     logger.info("jira_fetch: fetching issues for project %s", project_key)
-    issues = list(client.get_issues(project_key))
+    issues = []
+    for issue in client.get_issues(project_key):
+        issues.append(issue)
+        # Write a cheap progress update every 100 issues so the UI shows life
+        if len(issues) % 100 == 0:
+            importer.fetch_summary = {"_progress": len(issues)}
+            importer.save(update_fields=["fetch_summary"])
+            logger.info("jira_fetch: %d issues fetched so far", len(issues))
     logger.info("jira_fetch: fetched %d issues", len(issues))
 
     # ------------------------------------------------------------------ #

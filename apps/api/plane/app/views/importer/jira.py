@@ -114,6 +114,7 @@ class JiraImporterDetailEndpoint(BaseAPIView):
             "epics": summary.get("epics", 0),
             "users": summary.get("users", []),
         }
+        data["fetch_progress"] = summary.get("_progress")
         data["error_message"] = importer.error_message
 
         return Response(data, status=status.HTTP_200_OK)

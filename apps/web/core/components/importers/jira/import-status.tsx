@@ -32,6 +32,7 @@ type Props = {
 type ImporterResponse = {
   status: ImportStatus;
   summary?: Summary;
+  fetch_progress?: number | null;
   error_message?: string | null;
 };
 
@@ -39,18 +40,10 @@ const POLL_INTERVAL = 4000; // ms
 
 const jiraService = new JiraImporterService();
 
-const STATUS_LABEL: Record<ImportStatus, string> = {
-  queued: "Queued — waiting for a worker…",
-  processing: "Fetching data from Jira…",
-  fetched: "Fetch complete — ready to import",
-  loading: "Importing into your project…",
-  completed: "Import complete!",
-  failed: "Import failed",
-};
-
 export function JiraImportStatus({ workspaceSlug, projectId, importerId, onReset }: Props) {
   const [status, setStatus] = useState<ImportStatus>("queued");
   const [summary, setSummary] = useState<Summary | null>(null);
+  const [fetchProgress, setFetchProgress] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isStartingLoad, setIsStartingLoad] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -60,6 +53,7 @@ export function JiraImportStatus({ workspaceSlug, projectId, importerId, onReset
       const data: ImporterResponse = await jiraService.getImporter(workspaceSlug, projectId, importerId);
       setStatus(data.status as ImportStatus);
       if (data.summary) setSummary(data.summary as Summary);
+      if (data.fetch_progress != null) setFetchProgress(data.fetch_progress);
       if (data.error_message) setErrorMessage(data.error_message);
 
       if (data.status !== "completed" && data.status !== "failed") {
@@ -95,6 +89,24 @@ export function JiraImportStatus({ workspaceSlug, projectId, importerId, onReset
     }
   };
 
+  const statusLabel = () => {
+    if (status === "processing") {
+      if (fetchProgress != null && fetchProgress > 0) {
+        return `Fetching data from Jira… (${fetchProgress.toLocaleString()} issues retrieved so far)`;
+      }
+      return "Fetching data from Jira… (this can take several minutes for large projects)";
+    }
+    const labels: Record<ImportStatus, string> = {
+      queued: "Queued — waiting for a worker…",
+      processing: "Fetching data from Jira…",
+      fetched: "Fetch complete — ready to import",
+      loading: "Importing into your project…",
+      completed: "Import complete!",
+      failed: "Import failed",
+    };
+    return labels[status];
+  };
+
   return (
     <div className="flex max-w-lg flex-col gap-y-6">
       {/* Status indicator */}
@@ -106,7 +118,7 @@ export function JiraImportStatus({ workspaceSlug, projectId, importerId, onReset
         ) : (
           <Loader className="text-custom-primary-100 size-5 shrink-0 animate-spin" />
         )}
-        <span className="text-sm text-custom-text-100">{STATUS_LABEL[status]}</span>
+        <span className="text-sm text-custom-text-100">{statusLabel()}</span>
       </div>
 
       {/* Dry-run summary (shown after fetch) */}
