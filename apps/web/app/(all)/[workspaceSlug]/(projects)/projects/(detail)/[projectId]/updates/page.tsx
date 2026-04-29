@@ -4,28 +4,22 @@
  * See the LICENSE file for details.
  */
 
-"use client";
-
+import { observer } from "mobx-react";
 import { useState } from "react";
-import { useParams } from "next/navigation";
 import { Plus } from "lucide-react";
-// components
-import { ProjectUpdateList, CreateProjectUpdateModal } from "@/components/project-updates";
 import { Button } from "@plane/propel/button";
+import { ProjectUpdateList, CreateProjectUpdateModal } from "@/components/project-updates";
+import type { Route } from "./+types/page";
 
-export default function ProjectUpdatesPage() {
-  const { workspaceSlug, projectId } = useParams();
+function ProjectUpdatesPage({ params }: Route.ComponentProps) {
+  const { workspaceSlug, projectId } = params;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div className="flex h-full w-full flex-col overflow-hidden bg-surface-1">
       <div className="flex items-center justify-between border-b border-subtle px-6 py-4">
         <h1 className="text-xl font-semibold text-primary">Status Updates</h1>
-        <Button
-          variant="primary"
-          prependIcon={<Plus className="h-4 w-4" />}
-          onClick={() => setIsModalOpen(true)}
-        >
+        <Button variant="primary" prependIcon={<Plus className="h-4 w-4" />} onClick={() => setIsModalOpen(true)}>
           Post Update
         </Button>
       </div>
@@ -37,9 +31,11 @@ export default function ProjectUpdatesPage() {
       <CreateProjectUpdateModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        workspaceSlug={workspaceSlug.toString()}
-        projectId={projectId.toString()}
+        workspaceSlug={workspaceSlug}
+        projectId={projectId}
       />
     </div>
   );
 }
+
+export default observer(ProjectUpdatesPage);

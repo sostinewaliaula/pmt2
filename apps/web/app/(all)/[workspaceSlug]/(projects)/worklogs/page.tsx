@@ -4,8 +4,11 @@
  * See the LICENSE file for details.
  */
 
+import { observer } from "mobx-react";
 import { WorkspaceWorklogView } from "@/components/worklog";
 
-export default function WorkspaceWorklogPage() {
+function WorkspaceWorklogPage() {
   return <WorkspaceWorklogView />;
 }
+
+export default observer(WorkspaceWorklogPage);

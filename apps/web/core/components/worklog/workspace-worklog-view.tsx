@@ -6,7 +6,7 @@
 
 import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
-import { useParams } from "next/navigation";
+import { useParams } from "react-router";
 import useSWR from "swr";
 import { Clock, Download, Search } from "lucide-react";
 // plane package imports
@@ -22,6 +22,12 @@ const csvEscape = (value: unknown): string => {
   const s = value === null || value === undefined ? "" : String(value);
   if (/[",\n\r]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
   return s;
+};
+
+const formatDuration = (mins: number) => {
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  return `${h}h ${m}m`;
 };
 
 const exportFilteredToCSV = (rows: TWorklog[]) => {
@@ -74,20 +80,18 @@ export const WorkspaceWorklogView = observer(function WorkspaceWorklogView() {
     return p;
   }, [userFilter, projectFilter, dateFrom, dateTo]);
 
-  const swrKey = workspaceSlug
-    ? `WORKSPACE_WORKLOGS_${workspaceSlug}_${JSON.stringify(params)}`
-    : null;
+  const swrKey = workspaceSlug ? `WORKSPACE_WORKLOGS_${workspaceSlug}_${JSON.stringify(params)}` : null;
 
   const { isLoading } = useSWR(
     swrKey,
     workspaceSlug ? () => fetchWorkspaceWorklogs(workspaceSlug.toString(), params) : null
   );
 
-  const worklogs = workspaceWorklogs[workspaceSlug.toString()] || [];
+  const worklogs = workspaceWorklogs[workspaceSlug.toString()];
 
   const userOptions = useMemo(() => {
     const seen = new Map<string, string>();
-    worklogs.forEach((w) => {
+    (worklogs ?? []).forEach((w) => {
       if (w.user && !seen.has(w.user)) {
         seen.set(w.user, w.user_detail?.display_name || w.user_detail?.email || "Unknown");
       }
@@ -97,7 +101,7 @@ export const WorkspaceWorklogView = observer(function WorkspaceWorklogView() {
 
   const projectOptions = useMemo(() => {
     const seen = new Map<string, string>();
-    worklogs.forEach((w) => {
+    (worklogs ?? []).forEach((w) => {
       const projectId = w.project;
       const projectName = w.issue_detail?.project_detail?.name;
       if (projectId && !seen.has(projectId)) {
@@ -107,7 +111,7 @@ export const WorkspaceWorklogView = observer(function WorkspaceWorklogView() {
     return Array.from(seen.entries()).map(([id, label]) => ({ id, label }));
   }, [worklogs]);
 
-  const filteredWorklogs = worklogs.filter((worklog) => {
+  const filteredWorklogs = (worklogs ?? []).filter((worklog) => {
     if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
     return (
@@ -119,12 +123,6 @@ export const WorkspaceWorklogView = observer(function WorkspaceWorklogView() {
 
   const totalDuration = filteredWorklogs.reduce((acc, curr) => acc + curr.duration, 0);
 
-  const formatDuration = (mins: number) => {
-    const h = Math.floor(mins / 60);
-    const m = mins % 60;
-    return `${h}h ${m}m`;
-  };
-
   return (
     <div className="flex h-full w-full flex-col overflow-hidden bg-surface-1">
       <div className="flex flex-col gap-3 border-b border-subtle px-5 py-4">
@@ -134,12 +132,12 @@ export const WorkspaceWorklogView = observer(function WorkspaceWorklogView() {
             <h1 className="text-xl font-semibold">Worklogs (Timesheets)</h1>
           </div>
           <div className="flex items-center gap-4">
-            <div className="relative flex items-center gap-2 rounded-md border border-subtle bg-surface-2 px-3 py-1.5 focus-within:border-accent-primary">
+            <div className="focus-within:border-accent-primary relative flex items-center gap-2 rounded-md border border-subtle bg-surface-2 px-3 py-1.5">
               <Search className="h-4 w-4 text-secondary" />
               <input
                 type="text"
                 placeholder="Search worklogs..."
-                className="bg-transparent text-sm outline-none placeholder:text-tertiary"
+                className="text-sm bg-transparent outline-none placeholder:text-tertiary"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -159,7 +157,7 @@ export const WorkspaceWorklogView = observer(function WorkspaceWorklogView() {
           <select
             value={userFilter}
             onChange={(e) => setUserFilter(e.target.value)}
-            className="rounded-md border border-subtle bg-surface-2 px-2 py-1 text-sm text-primary outline-none focus:border-accent-primary"
+            className="text-sm focus:border-accent-primary rounded-md border border-subtle bg-surface-2 px-2 py-1 text-primary outline-none"
           >
             <option value="">All users</option>
             {userOptions.map((u) => (
@@ -171,7 +169,7 @@ export const WorkspaceWorklogView = observer(function WorkspaceWorklogView() {
           <select
             value={projectFilter}
             onChange={(e) => setProjectFilter(e.target.value)}
-            className="rounded-md border border-subtle bg-surface-2 px-2 py-1 text-sm text-primary outline-none focus:border-accent-primary"
+            className="text-sm focus:border-accent-primary rounded-md border border-subtle bg-surface-2 px-2 py-1 text-primary outline-none"
           >
             <option value="">All projects</option>
             {projectOptions.map((p) => (
@@ -180,22 +178,22 @@ export const WorkspaceWorklogView = observer(function WorkspaceWorklogView() {
               </option>
             ))}
           </select>
-          <label className="flex items-center gap-1 text-xs text-tertiary">
+          <label className="text-xs flex items-center gap-1 text-tertiary">
             From
             <input
               type="date"
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
-              className="rounded-md border border-subtle bg-surface-2 px-2 py-1 text-sm text-primary outline-none focus:border-accent-primary"
+              className="text-sm focus:border-accent-primary rounded-md border border-subtle bg-surface-2 px-2 py-1 text-primary outline-none"
             />
           </label>
-          <label className="flex items-center gap-1 text-xs text-tertiary">
+          <label className="text-xs flex items-center gap-1 text-tertiary">
             To
             <input
               type="date"
               value={dateTo}
               onChange={(e) => setDateTo(e.target.value)}
-              className="rounded-md border border-subtle bg-surface-2 px-2 py-1 text-sm text-primary outline-none focus:border-accent-primary"
+              className="text-sm focus:border-accent-primary rounded-md border border-subtle bg-surface-2 px-2 py-1 text-primary outline-none"
             />
           </label>
           {(userFilter || projectFilter || dateFrom || dateTo) && (
@@ -216,12 +214,12 @@ export const WorkspaceWorklogView = observer(function WorkspaceWorklogView() {
       </div>
 
       <div className="flex items-center gap-4 border-b border-subtle bg-surface-2 px-5 py-2">
-        <div className="flex items-center gap-1 text-sm text-secondary font-medium">
+        <div className="text-sm flex items-center gap-1 font-medium text-secondary">
           <span className="text-tertiary">Total Time:</span>
           <span>{formatDuration(totalDuration)}</span>
         </div>
-        <div className="h-4 w-[1px] bg-subtle" />
-        <div className="flex items-center gap-1 text-sm text-secondary font-medium">
+        <div className="bg-subtle h-4 w-[1px]" />
+        <div className="text-sm flex items-center gap-1 font-medium text-secondary">
           <span className="text-tertiary">Entries:</span>
           <span>{filteredWorklogs.length}</span>
         </div>
@@ -233,9 +231,9 @@ export const WorkspaceWorklogView = observer(function WorkspaceWorklogView() {
             <LogoSpinner />
           </div>
         ) : (
-          <table className="w-full text-left border-collapse">
-            <thead className="sticky top-0 z-10 bg-surface-1 border-b border-subtle">
-              <tr className="text-xs uppercase tracking-wider text-tertiary">
+          <table className="w-full border-collapse text-left">
+            <thead className="sticky top-0 z-10 border-b border-subtle bg-surface-1">
+              <tr className="text-xs tracking-wider text-tertiary uppercase">
                 <th className="px-5 py-3 font-semibold">Date</th>
                 <th className="px-5 py-3 font-semibold">User</th>
                 <th className="px-5 py-3 font-semibold">Issue</th>
@@ -245,17 +243,25 @@ export const WorkspaceWorklogView = observer(function WorkspaceWorklogView() {
             </thead>
             <tbody className="divide-y divide-subtle bg-surface-2">
               {filteredWorklogs.map((worklog) => (
-                <tr key={worklog.id} className="hover:bg-layer-1 transition-colors group">
-                  <td className="px-5 py-3 text-sm text-secondary">{new Date(worklog.date).toLocaleDateString()}</td>
-                  <td className="px-5 py-3 text-sm text-primary font-medium">{worklog.user_detail?.display_name || worklog.user_detail?.email}</td>
-                  <td className="px-5 py-3 text-sm text-primary">
+                <tr key={worklog.id} className="group transition-colors hover:bg-layer-1">
+                  <td className="text-sm px-5 py-3 text-secondary">{new Date(worklog.date).toLocaleDateString()}</td>
+                  <td className="text-sm px-5 py-3 font-medium text-primary">
+                    {worklog.user_detail?.display_name || worklog.user_detail?.email}
+                  </td>
+                  <td className="text-sm px-5 py-3 text-primary">
                     <div className="flex flex-col">
-                      <span className="font-medium group-hover:text-accent-primary transition-colors">{worklog.issue_detail?.name}</span>
-                      <span className="text-xs text-tertiary uppercase">{worklog.issue_detail?.project_detail?.identifier}-{worklog.issue_detail?.sequence_id}</span>
+                      <span className="font-medium transition-colors group-hover:text-accent-primary">
+                        {worklog.issue_detail?.name}
+                      </span>
+                      <span className="text-xs text-tertiary uppercase">
+                        {worklog.issue_detail?.project_detail?.identifier}-{worklog.issue_detail?.sequence_id}
+                      </span>
                     </div>
                   </td>
-                  <td className="px-5 py-3 text-sm text-secondary font-medium">{formatDuration(worklog.duration)}</td>
-                  <td className="px-5 py-3 text-sm text-tertiary truncate max-w-[200px]">{worklog.description || "-"}</td>
+                  <td className="text-sm px-5 py-3 font-medium text-secondary">{formatDuration(worklog.duration)}</td>
+                  <td className="text-sm max-w-[200px] truncate px-5 py-3 text-tertiary">
+                    {worklog.description || "-"}
+                  </td>
                 </tr>
               ))}
               {filteredWorklogs.length === 0 && (

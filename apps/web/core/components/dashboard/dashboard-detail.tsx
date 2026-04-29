@@ -6,7 +6,7 @@
 
 import { useState } from "react";
 import { observer } from "mobx-react";
-import { useParams } from "next/navigation";
+import { useParams } from "react-router";
 import useSWR from "swr";
 import { LayoutGrid, Plus, Trash2 } from "lucide-react";
 // plane package imports
@@ -54,7 +54,7 @@ export const DashboardDetail = observer(function DashboardDetail() {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-3 p-5 text-center">
         <h3 className="text-lg font-medium text-primary">Something went wrong</h3>
-        <p className="max-w-md text-sm text-secondary">{message}</p>
+        <p className="text-sm max-w-md text-secondary">{message}</p>
       </div>
     );
   }
@@ -64,7 +64,9 @@ export const DashboardDetail = observer(function DashboardDetail() {
       <div className="flex h-full items-center justify-center">
         <div className="text-center">
           <h3 className="text-lg font-medium text-primary">Dashboard not found</h3>
-          <p className="text-sm text-secondary">The dashboard you are looking for does not exist or has been deleted.</p>
+          <p className="text-sm text-secondary">
+            The dashboard you are looking for does not exist or has been deleted.
+          </p>
         </div>
       </div>
     );
@@ -77,7 +79,7 @@ export const DashboardDetail = observer(function DashboardDetail() {
           <LayoutGrid className="h-5 w-5 text-secondary" />
           <h1 className="text-xl font-semibold">{dashboard.name}</h1>
           {dashboard.is_public && (
-            <span className="ml-2 rounded-full bg-green-500/10 px-2 py-0.5 text-xs font-medium text-green-500">
+            <span className="bg-green-500/10 text-xs text-green-500 ml-2 rounded-full px-2 py-0.5 font-medium">
               Public
             </span>
           )}
@@ -95,7 +97,7 @@ export const DashboardDetail = observer(function DashboardDetail() {
       </div>
 
       <div className="flex-grow overflow-y-auto p-5">
-        <div className="grid grid-cols-12 gap-6 auto-rows-[100px]">
+        <div className="grid auto-rows-[100px] grid-cols-12 gap-6">
           {dashboard.widgets?.map((widget) => (
             <div
               key={widget.id}
@@ -103,7 +105,7 @@ export const DashboardDetail = observer(function DashboardDetail() {
                 gridColumn: `span ${widget.width || 4}`,
                 gridRow: `span ${widget.height || 3}`,
               }}
-              className="group relative overflow-hidden rounded-xl border border-subtle bg-surface-2 shadow-sm transition-all hover:shadow-md"
+              className="group shadow-sm hover:shadow-md relative overflow-hidden rounded-xl border border-subtle bg-surface-2 transition-all"
             >
               <button
                 type="button"
@@ -125,7 +127,7 @@ export const DashboardDetail = observer(function DashboardDetail() {
                     });
                   }
                 }}
-                className="absolute right-2 top-2 z-10 rounded-md bg-surface-1/80 p-1 text-tertiary opacity-0 transition-opacity hover:text-red-500 group-hover:opacity-100"
+                className="hover:text-red-500 absolute top-2 right-2 z-10 rounded-md bg-surface-1/80 p-1 text-tertiary opacity-0 transition-opacity group-hover:opacity-100"
                 aria-label="Remove widget"
               >
                 <Trash2 className="h-4 w-4" />

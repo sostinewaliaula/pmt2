@@ -4,8 +4,12 @@
  * See the LICENSE file for details.
  */
 
+import { observer } from "mobx-react";
 import { MilestoneList } from "@/components/milestones";
+import type { Route } from "./+types/page";
 
-export default function MilestonePage() {
+function MilestonePage(_props: Route.ComponentProps) {
   return <MilestoneList />;
 }
+
+export default observer(MilestonePage);

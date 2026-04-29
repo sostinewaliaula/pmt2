@@ -5,7 +5,7 @@
  */
 
 import { observer } from "mobx-react";
-import { useParams } from "next/navigation";
+import { useParams } from "react-router";
 import useSWR from "swr";
 import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 // hooks
@@ -45,13 +45,13 @@ export const DashboardWidgetRenderer = observer(function DashboardWidgetRenderer
   return (
     <div className="flex h-full flex-col">
       <div className="flex items-center justify-between border-b border-subtle bg-surface-1 px-4 py-2">
-        <h4 className="text-xs font-semibold uppercase tracking-wider text-secondary">
+        <h4 className="text-xs tracking-wider font-semibold text-secondary uppercase">
           {widget.widget_detail?.name || widget.key}
         </h4>
       </div>
       <div className="flex-grow p-4">
         {!stats ? (
-          <div className="flex h-full items-center justify-center text-xs text-tertiary">No data available</div>
+          <div className="text-xs flex h-full items-center justify-center text-tertiary">No data available</div>
         ) : (
           <div className="h-full w-full">
             {widgetKey === "overview_stats" && (
@@ -80,7 +80,10 @@ export const DashboardWidgetRenderer = observer(function DashboardWidgetRenderer
                 <BarChart data={stats}>
                   <XAxis dataKey="state_group" fontSize={10} />
                   <Tooltip
-                    contentStyle={{ backgroundColor: "var(--color-surface-2)", border: "1px solid var(--color-border-subtle)" }}
+                    contentStyle={{
+                      backgroundColor: "var(--color-surface-2)",
+                      border: "1px solid var(--color-border-subtle)",
+                    }}
                     itemStyle={{ color: "var(--color-text-primary)" }}
                   />
                   <Bar dataKey="count" fill="var(--color-accent-primary)" radius={[4, 4, 0, 0]} />
@@ -103,20 +106,25 @@ export const DashboardWidgetRenderer = observer(function DashboardWidgetRenderer
                     nameKey="priority"
                   >
                     {stats.map((entry: any, index: number) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      <Cell
+                        key={entry.priority ?? entry.state_group ?? entry.name}
+                        fill={COLORS[index % COLORS.length]}
+                      />
                     ))}
                   </Pie>
                   <Tooltip />
                 </PieChart>
               </ResponsiveContainer>
             )}
-            
+
             {/* Fallback for other keys */}
-            {widgetKey !== "overview_stats" && widgetKey !== "issues_by_state_groups" && widgetKey !== "issues_by_priority" && (
-              <div className="flex h-full items-center justify-center text-xs text-tertiary">
-                Renderer for {widgetKey} not implemented.
-              </div>
-            )}
+            {widgetKey !== "overview_stats" &&
+              widgetKey !== "issues_by_state_groups" &&
+              widgetKey !== "issues_by_priority" && (
+                <div className="text-xs flex h-full items-center justify-center text-tertiary">
+                  Renderer for {widgetKey} not implemented.
+                </div>
+              )}
           </div>
         )}
       </div>

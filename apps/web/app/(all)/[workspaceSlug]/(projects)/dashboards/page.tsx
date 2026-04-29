@@ -4,8 +4,11 @@
  * See the LICENSE file for details.
  */
 
+import { observer } from "mobx-react";
 import { DashboardList } from "@/components/dashboard";
 
-export default function DashboardsPage() {
+function DashboardsPage() {
   return <DashboardList />;
 }
+
+export default observer(DashboardsPage);

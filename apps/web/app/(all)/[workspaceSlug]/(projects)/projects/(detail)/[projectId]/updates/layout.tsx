@@ -6,7 +6,7 @@
 
 import { Outlet } from "react-router";
 
-export default function WorkspaceWorklogLayout() {
+export default function ProjectUpdatesLayout() {
   return (
     <div className="flex h-full w-full overflow-hidden">
       <Outlet />

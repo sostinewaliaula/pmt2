@@ -4,8 +4,12 @@
  * See the LICENSE file for details.
  */
 
-import { ReactNode } from "react";
+import { Outlet } from "react-router";
 
-export default function DashboardsLayout({ children }: { children: ReactNode }) {
-  return <div className="flex h-full w-full flex-col overflow-hidden">{children}</div>;
+export default function DashboardsLayout() {
+  return (
+    <div className="flex h-full w-full flex-col overflow-hidden">
+      <Outlet />
+    </div>
+  );
 }

@@ -7,7 +7,7 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams } from "react-router";
 import useSWR from "swr";
 import { LayoutGrid, Plus, Search } from "lucide-react";
 // plane package imports
@@ -62,7 +62,7 @@ export const DashboardList = observer(function DashboardList() {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-3 p-5 text-center">
         <h3 className="text-lg font-medium text-primary">Something went wrong</h3>
-        <p className="max-w-md text-sm text-secondary">{message}</p>
+        <p className="text-sm max-w-md text-secondary">{message}</p>
       </div>
     );
   }
@@ -75,12 +75,12 @@ export const DashboardList = observer(function DashboardList() {
           <h1 className="text-xl font-semibold">{tr("dashboards.title", "Dashboards")}</h1>
         </div>
         <div className="flex items-center gap-4">
-          <div className="relative flex items-center gap-2 rounded-md border border-subtle bg-surface-2 px-3 py-1.5 focus-within:border-accent-primary">
+          <div className="focus-within:border-accent-primary relative flex items-center gap-2 rounded-md border border-subtle bg-surface-2 px-3 py-1.5">
             <Search className="h-4 w-4 text-secondary" />
             <input
               type="text"
               placeholder={tr("dashboards.search_placeholder", "Search dashboards...")}
-              className="bg-transparent text-sm outline-none placeholder:text-tertiary"
+              className="text-sm bg-transparent outline-none placeholder:text-tertiary"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -102,25 +102,25 @@ export const DashboardList = observer(function DashboardList() {
             <Link
               key={dashboard.id}
               href={`/${workspaceSlug}/dashboards/${dashboard.id}`}
-              className="group flex flex-col gap-4 rounded-xl border border-subtle bg-surface-2 p-5 transition-all hover:border-accent-primary hover:shadow-lg"
+              className="group hover:border-accent-primary hover:shadow-lg flex flex-col gap-4 rounded-xl border border-subtle bg-surface-2 p-5 transition-all"
             >
               <div className="flex items-start justify-between">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent-primary/10 text-accent-primary">
                   <LayoutGrid className="h-6 w-6" />
                 </div>
                 {dashboard.is_public && (
-                  <span className="rounded-full bg-green-500/10 px-2 py-0.5 text-xs font-medium text-green-500">
+                  <span className="bg-green-500/10 text-xs text-green-500 rounded-full px-2 py-0.5 font-medium">
                     Public
                   </span>
                 )}
               </div>
               <div>
                 <h3 className="text-base font-medium text-primary group-hover:text-accent-primary">{dashboard.name}</h3>
-                <p className="mt-1 line-clamp-2 text-sm text-secondary">
+                <p className="text-sm mt-1 line-clamp-2 text-secondary">
                   {dashboard.description || "No description provided."}
                 </p>
               </div>
-              <div className="mt-auto flex items-center gap-2 text-xs text-tertiary">
+              <div className="text-xs mt-auto flex items-center gap-2 text-tertiary">
                 <span>Updated {new Date(dashboard.updated_at).toLocaleDateString()}</span>
               </div>
             </Link>
@@ -129,12 +129,14 @@ export const DashboardList = observer(function DashboardList() {
           <button
             type="button"
             onClick={() => setIsCreateOpen(true)}
-            className="flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-subtle bg-surface-1 p-5 transition-all hover:border-accent-primary hover:bg-surface-2"
+            className="hover:border-accent-primary flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-subtle bg-surface-1 p-5 transition-all hover:bg-surface-2"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-tertiary/10 text-tertiary">
+            <div className="bg-tertiary/10 flex h-10 w-10 items-center justify-center rounded-full text-tertiary">
               <Plus className="h-6 w-6" />
             </div>
-            <span className="text-sm font-medium text-secondary">{tr("dashboards.create_new", "Create new dashboard")}</span>
+            <span className="text-sm font-medium text-secondary">
+              {tr("dashboards.create_new", "Create new dashboard")}
+            </span>
           </button>
         </div>
       </div>
