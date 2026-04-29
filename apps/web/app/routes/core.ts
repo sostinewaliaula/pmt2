@@ -102,18 +102,18 @@ export const coreRoutes: RouteConfigEntry[] = [
         ]),
 
         // Milestones
-        layout("./(all)/[workspaceSlug]/(projects)/[projectId]/milestones/layout.tsx", [
+        layout("./(all)/[workspaceSlug]/(projects)/projects/(detail)/[projectId]/milestones/layout.tsx", [
           route(
             ":workspaceSlug/projects/:projectId/milestones",
-            "./(all)/[workspaceSlug]/(projects)/[projectId]/milestones/page.tsx"
+            "./(all)/[workspaceSlug]/(projects)/projects/(detail)/[projectId]/milestones/page.tsx"
           ),
         ]),
 
         // Project Updates
-        layout("./(all)/[workspaceSlug]/(projects)/[projectId]/updates/layout.tsx", [
+        layout("./(all)/[workspaceSlug]/(projects)/projects/(detail)/[projectId]/updates/layout.tsx", [
           route(
             ":workspaceSlug/projects/:projectId/updates",
-            "./(all)/[workspaceSlug]/(projects)/[projectId]/updates/page.tsx"
+            "./(all)/[workspaceSlug]/(projects)/projects/(detail)/[projectId]/updates/page.tsx"
           ),
         ]),
 
