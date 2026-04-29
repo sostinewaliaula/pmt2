@@ -3,11 +3,22 @@
 # See the LICENSE file for details.
 
 import base64
+import logging
 import time
 import threading
 from typing import Any, Generator
 
 import requests
+
+logger = logging.getLogger(__name__)
+
+# Connect timeout (seconds) — how long to wait for the TCP handshake
+_CONNECT_TIMEOUT = 30
+# Read timeout (seconds) — max silence between bytes from Jira.
+# Set high so large comment-heavy issue pages never get cut off mid-stream.
+_READ_TIMEOUT = 600
+# How many times to retry a request on 429 / 5xx / network error
+_MAX_RETRIES = 5
 
 
 class JiraRateLimiter:
@@ -65,15 +76,54 @@ class JiraClient:
     # Internal helpers
     # ------------------------------------------------------------------ #
 
+    def _with_retry(self, fn, *args, **kwargs) -> Any:
+        """
+        Call fn(*args, **kwargs) with exponential-backoff retry.
+
+        Retries on:
+        - 429 Too Many Requests — honours Retry-After header when present
+        - 5xx server errors — transient Jira Cloud hiccups
+        - requests.Timeout / requests.ConnectionError — network blips
+        """
+        delay = 2.0
+        for attempt in range(_MAX_RETRIES):
+            try:
+                resp = fn(*args, **kwargs)
+                if resp.status_code == 429:
+                    wait = float(resp.headers.get("Retry-After", delay))
+                    logger.warning("jira: rate-limited (429), sleeping %.0fs (attempt %d)", wait, attempt + 1)
+                    time.sleep(wait)
+                    delay = min(delay * 2, 60)
+                    continue
+                if resp.status_code >= 500:
+                    logger.warning("jira: server error %d, retrying in %.0fs (attempt %d)", resp.status_code, delay, attempt + 1)
+                    time.sleep(delay)
+                    delay = min(delay * 2, 60)
+                    continue
+                return resp
+            except (requests.Timeout, requests.ConnectionError) as exc:
+                if attempt == _MAX_RETRIES - 1:
+                    raise
+                logger.warning("jira: network error (%s), retrying in %.0fs (attempt %d)", exc, delay, attempt + 1)
+                time.sleep(delay)
+                delay = min(delay * 2, 60)
+        raise RuntimeError(f"jira: gave up after {_MAX_RETRIES} retries")
+
     def _get(self, url: str, params: dict | None = None) -> Any:
         self._limiter.acquire()
-        resp = self._session.get(url, params=params, timeout=30)
+        resp = self._with_retry(
+            self._session.get, url, params=params,
+            timeout=(_CONNECT_TIMEOUT, _READ_TIMEOUT),
+        )
         resp.raise_for_status()
         return resp.json()
 
     def _post(self, url: str, body: dict) -> Any:
         self._limiter.acquire()
-        resp = self._session.post(url, json=body, timeout=30)
+        resp = self._with_retry(
+            self._session.post, url, json=body,
+            timeout=(_CONNECT_TIMEOUT, _READ_TIMEOUT),
+        )
         if not resp.ok:
             raise requests.HTTPError(
                 f"{resp.status_code} Client Error: {resp.reason} for url: {url} — {resp.text[:500]}",
@@ -144,10 +194,11 @@ class JiraClient:
         start_at = 0
         while True:
             self._limiter.acquire()
-            resp = self._session.get(
+            resp = self._with_retry(
+                self._session.get,
                 f"{self._base_v3}/user/assignable/search",
                 params={"project": project_key, "startAt": start_at, "maxResults": self.PAGE_SIZE},
-                timeout=30,
+                timeout=(_CONNECT_TIMEOUT, _READ_TIMEOUT),
             )
             resp.raise_for_status()
             data = resp.json()
