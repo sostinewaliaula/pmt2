@@ -31,7 +31,7 @@ def create_missing_feature_tables(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("db", "0126_project_feature_views"),
+        ("db", "0129_importer_fetch_summary"),
     ]
 
     operations = [
