@@ -234,19 +234,19 @@ class ProjectMemberViewSet(BaseViewSet):
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
-            # Cannot modify a member whose role is equal to or higher than your own
-            if project_member.role >= requested_project_member.role and not is_workspace_admin:
+            # Cannot modify a member whose role is strictly higher than your own
+            if project_member.role > requested_project_member.role and not is_workspace_admin:
                 return Response(
-                    {"error": "You cannot update the role of a member with a role equal to or higher than your own"},
+                    {"error": "You cannot update the role of a member with a role higher than your own"},
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
             new_role = int(request.data.get("role"))
 
-            # Cannot assign a role equal to or higher than your own
-            if new_role >= requested_project_member.role and not is_workspace_admin:
+            # Cannot assign a role strictly higher than your own
+            if new_role > requested_project_member.role and not is_workspace_admin:
                 return Response(
-                    {"error": "You cannot assign a role equal to or higher than your own"},
+                    {"error": "You cannot assign a role higher than your own"},
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
