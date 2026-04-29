@@ -45,6 +45,7 @@ from plane.db.models import (
     Module,
     ModuleIssue,
     Project,
+    ProjectMember,
     State,
     User,
     Workspace,
@@ -167,6 +168,11 @@ def _run_load(
     # 5. User map — Jira accountId → PMT User (matched by email)
     # ------------------------------------------------------------------ #
     user_map = _build_user_map(blob.get("users", []), workspace)
+
+    # ------------------------------------------------------------------ #
+    # 5a. Add matched users as project members (role: Member)
+    # ------------------------------------------------------------------ #
+    _add_project_members(user_map, project)
 
     # ------------------------------------------------------------------ #
     # 6. Issues — first pass (no parent)
@@ -461,6 +467,46 @@ def _build_user_map(users: list[dict], workspace: Workspace) -> dict[str, User]:
 
     logger.info("jira_load: matched %d/%d Jira users to PMT accounts", len(account_to_user), len(email_to_account))
     return account_to_user
+
+
+def _add_project_members(user_map: dict[str, User], project: Project) -> int:
+    """
+    Ensures every matched Jira user is an active member of the target project.
+    Existing members are left untouched (role preserved).
+    Returns the number of newly added members.
+    """
+    if not user_map:
+        return 0
+
+    users = list(user_map.values())
+
+    existing_member_ids = set(
+        ProjectMember.objects.filter(
+            project=project, member__in=users, deleted_at__isnull=True
+        ).values_list("member_id", flat=True)
+    )
+
+    added = 0
+    for user in users:
+        if user.id in existing_member_ids:
+            continue
+        try:
+            ProjectMember(
+                project=project,
+                member=user,
+                role=15,  # Member
+                is_active=True,
+            ).save()
+            added += 1
+        except Exception as exc:
+            logger.warning("jira_load: could not add %s as project member — %s", user.email, exc)
+
+    logger.info(
+        "jira_load: %d user(s) added as project members, %d already present",
+        added,
+        len(existing_member_ids),
+    )
+    return added
 
 
 # --------------------------------------------------------------------------- #

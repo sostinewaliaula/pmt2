@@ -165,7 +165,8 @@ export function JiraImportStatus({ workspaceSlug, projectId, importerId, onReset
           {summary.users.length > 0 && (
             <div className="mt-2">
               <p className="text-xs text-custom-text-200 mb-1 font-medium">
-                {summary.users.length} Jira user{summary.users.length !== 1 ? "s" : ""} found
+                {summary.users.length} Jira user{summary.users.length !== 1 ? "s" : ""} found — workspace members with a
+                matching email will be added to this project
               </p>
               <ul className="flex max-h-32 flex-col gap-y-1 overflow-y-auto">
                 {summary.users.map((u) => (
