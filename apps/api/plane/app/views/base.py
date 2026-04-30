@@ -126,6 +126,10 @@ class BaseViewSet(TimezoneMixin, ReadReplicaControlMixin, ModelViewSet, BasePagi
     def workspace_slug(self):
         return self.kwargs.get("slug", None)
 
+    def get_workspace_id(self):
+        from plane.db.models import Workspace
+        return Workspace.objects.values_list("id", flat=True).get(slug=self.workspace_slug)
+
     @property
     def project_id(self):
         project_id = self.kwargs.get("project_id", None)

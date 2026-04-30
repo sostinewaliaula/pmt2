@@ -33,4 +33,8 @@ class MilestoneIssueSerializer(BaseSerializer):
         read_only_fields = [
             "workspace",
             "project",
+            "milestone",
         ]
+        # milestone comes from the URL kwargs (not request body); suppress the
+        # auto-generated UniqueTogetherValidator so DRF doesn't demand it.
+        validators = []
