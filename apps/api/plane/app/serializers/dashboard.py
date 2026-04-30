@@ -25,6 +25,12 @@ class DashboardWidgetSerializer(BaseSerializer):
             "project",
             "dashboard",
         ]
+        # Suppress the auto-generated UniqueTogetherValidator for
+        # (dashboard, widget, deleted_at) — "dashboard" is read-only and
+        # not present in request data, which causes DRF to raise a spurious
+        # "This field is required" error. The DB constraint still enforces
+        # uniqueness where needed.
+        validators = []
 
 
 class DashboardSerializer(BaseSerializer):
